@@ -61,6 +61,42 @@ const defaultState = {
       petBox: true,
       petFood: true
     }
+  },
+  admin: {
+    pin: '7272',
+    authenticated: false,
+    posts: [
+      {
+        id: 'adm_demo_1',
+        type: 'alerta',
+        title: 'Boletim Meteorológico #182 - Ciclone Extratropical',
+        desc: 'Rajadas de vento de até 85 km/h previstas nas próximas 24 horas. Evitem áreas baixas, encostas e mantenham powerbanks carregados.',
+        link: 'sms:40199?body=Cadastrar',
+        coupon: '',
+        price: '',
+        imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDrzy_3mS0R8jALras9v7s9V3yKWfuxLz_OZUIncjHGfGJ5TBqffPAi0UlhI1YfXlo09cyHk5YRVkkBjiMPs_DjZh9vJoLb98Y-h8ovRSKMsVF_PvIAJDNwHPEkrvdQ2keNYHt_ZEVMGVKb-T8U0BmkLO0M4tRRpYmRbgSyxhfc78cgjBX7NoOZhoYtM-v7LrbYiemcVmzaRpwL-H3cYx8pvqBqBM25-vrarhZMoZP3eX4_ZwutB2phqQ',
+        urgency: 'imediata',
+        status: 'active',
+        createdAt: 'Hoje • 10:45',
+        views: 1412,
+        clicks: 86
+      },
+      {
+        id: 'adm_demo_2',
+        type: 'oferta',
+        title: 'Lanterna Tática 1200 Lumens IP68',
+        desc: 'Autonomia contínua de 18 horas em modo econômico, zoom focal ajustável, estanque à prova d\'água e bateria 18650 recarregável.',
+        link: 'https://amzn.to/3lanterna',
+        coupon: 'PROT15',
+        price: 'R$ 149,90',
+        imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCdiAOfIegNlFu5yLcS_Xl_OgoxN6adkom5_KmBNE9cX4GvQYtvOXhV2zW-EiG0lX2bXDwZja7R1hcezE3Jx9wFovL42FjMM6V2_kKMF-6qtbsuXZ95cN_sH6IVd0yigReQKqViIVBgc-dhHEATafWOpQ1wEuH3gzlFKRPFkE1tegcRLAsSnHJEgrPE1KMqxV1FRgcVvvxcurcYor9pzHB4Q-JwEzFTZb36q01jA1Lu',
+        urgency: 'atencao',
+        status: 'active',
+        createdAt: 'Ontem • 18:20',
+        views: 682,
+        clicks: 215
+      }
+    ]
   }
 };
 
@@ -71,7 +107,16 @@ function loadState() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return JSON.parse(JSON.stringify(defaultState));
     const parsed = JSON.parse(raw);
-    return { ...defaultState, ...parsed };
+    const merged = { ...defaultState, ...parsed };
+    // Garantir que a estrutura do admin existe
+    if (!merged.admin) {
+      merged.admin = JSON.parse(JSON.stringify(defaultState.admin));
+    } else if (!Array.isArray(merged.admin.posts) || merged.admin.posts.length === 0) {
+      merged.admin.posts = JSON.parse(JSON.stringify(defaultState.admin.posts));
+    }
+    // Sempre reiniciar autenticação ao carregar
+    merged.admin.authenticated = false;
+    return merged;
   } catch (e) {
     console.error('Erro ao ler estado do LocalStorage:', e);
     return JSON.parse(JSON.stringify(defaultState));
@@ -259,11 +304,18 @@ function toggleScreenStrobe() {
 // Navegação entre abas
 function switchTab(targetTab) {
   triggerHaptic(20);
+
+  // Proteção do Painel Admin
+  if (targetTab === 'admin' && !appState.admin?.authenticated) {
+    openAdminPinModal();
+    return;
+  }
+
   appState.activeTab = targetTab;
   saveState();
 
   // Esconder todas as telas
-  const views = ['inicio', 'calculadora', 'checklists', 'plano-familiar', 'feed'];
+  const views = ['inicio', 'calculadora', 'checklists', 'plano-familiar', 'feed', 'admin'];
   views.forEach((v) => {
     const el = document.getElementById(`view-${v}`);
     if (el) el.classList.add('hidden');
@@ -297,7 +349,8 @@ function switchTab(targetTab) {
     calculadora: 'Calculadora',
     checklists: 'Checklists',
     'plano-familiar': 'Plano Familiar',
-    feed: 'Feed'
+    feed: 'Feed',
+    admin: 'Painel do Criador'
   };
   const subEl = document.getElementById('header-breadcrumb');
   if (subEl) subEl.textContent = subtitleMap[targetTab] || 'Prontidão';
@@ -309,6 +362,10 @@ function switchTab(targetTab) {
     recalculateSupplies();
   } else if (targetTab === 'checklists') {
     renderChecklists();
+  } else if (targetTab === 'admin') {
+    renderAdminPostsList();
+  } else if (targetTab === 'feed') {
+    renderDynamicFeedCards();
   }
 }
 
@@ -1164,6 +1221,471 @@ function initTacticalClock() {
 }
 
 // ==========================================
+// MÓDULO 9: PAINEL ADMINISTRATIVO TÁTICO & GESTÃO DO FEED
+// ==========================================
+let logoTapCount = 0;
+let logoTapTimer = null;
+
+function handleLogoTap() {
+  logoTapCount++;
+  triggerHaptic(15);
+
+  if (logoTapTimer) clearTimeout(logoTapTimer);
+
+  if (logoTapCount >= 5) {
+    logoTapCount = 0;
+    triggerHaptic(60);
+    openAdminPinModal();
+    return;
+  }
+
+  logoTapTimer = setTimeout(() => {
+    // Se foi apenas 1 clique simples, navega para o início
+    if (logoTapCount === 1) {
+      switchTab('inicio');
+    }
+    logoTapCount = 0;
+  }, 2000);
+}
+
+function openAdminPinModal() {
+  triggerHaptic(20);
+  const modal = document.getElementById('admin-pin-modal');
+  const input = document.getElementById('admin-pin-input');
+  const error = document.getElementById('admin-pin-error');
+  if (error) error.classList.add('hidden');
+  if (input) {
+    input.value = '';
+    setTimeout(() => input.focus(), 150);
+  }
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeAdminPinModal() {
+  triggerHaptic(15);
+  const modal = document.getElementById('admin-pin-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function verifyAdminPIN() {
+  const input = document.getElementById('admin-pin-input');
+  const error = document.getElementById('admin-pin-error');
+  const enteredPin = input ? input.value.trim() : '';
+
+  const correctPin = appState.admin?.pin || '7272';
+
+  if (enteredPin === correctPin) {
+    triggerHaptic(40);
+    if (!appState.admin) appState.admin = {};
+    appState.admin.authenticated = true;
+    closeAdminPinModal();
+    switchTab('admin');
+    triggerAdminToast('Acesso autorizado! Bem-vindo ao Painel do Criador.');
+  } else {
+    triggerHaptic(80);
+    if (error) error.classList.remove('hidden');
+    if (input) {
+      input.classList.add('border-error');
+      setTimeout(() => input.classList.remove('border-error'), 1000);
+    }
+  }
+}
+
+function logoutAdmin() {
+  triggerHaptic(20);
+  if (appState.admin) {
+    appState.admin.authenticated = false;
+  }
+  switchTab('inicio');
+  showToast('Sessão administrativa encerrada.');
+}
+
+function selectAdminType(type) {
+  triggerHaptic(15);
+  const hiddenInput = document.getElementById('admin-post-type');
+  if (hiddenInput) hiddenInput.value = type;
+
+  const buttons = document.querySelectorAll('.admin-type-btn');
+  buttons.forEach((btn) => {
+    if (btn.getAttribute('data-target') === type) {
+      btn.className = 'admin-type-btn py-2 px-1 text-center rounded font-label-sm text-label-sm uppercase transition-colors bg-primary-container text-on-primary-container font-bold';
+    } else {
+      btn.className = 'admin-type-btn py-2 px-1 text-center rounded font-label-sm text-label-sm uppercase transition-colors text-on-surface-variant hover:text-on-surface';
+    }
+  });
+}
+
+function setAdminFormMode(mode) {
+  selectAdminType(mode);
+  const formSection = document.getElementById('action-form-section');
+  if (formSection) formSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function handleAdminImageUpload(event) {
+  const file = event.target?.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    const preview = document.getElementById('admin-img-preview');
+    const hiddenData = document.getElementById('admin-post-image-data');
+    const nameLabel = document.getElementById('admin-img-name');
+
+    if (preview) preview.src = dataUrl;
+    if (hiddenData) hiddenData.value = dataUrl;
+    if (nameLabel) nameLabel.textContent = file.name;
+    triggerHaptic(20);
+    showToast('Imagem carregada com sucesso!');
+  };
+  reader.readAsDataURL(file);
+}
+
+function updateAdminImageFromUrl(url) {
+  if (!url || !url.startsWith('http')) return;
+  const preview = document.getElementById('admin-img-preview');
+  const hiddenData = document.getElementById('admin-post-image-data');
+  const nameLabel = document.getElementById('admin-img-name');
+
+  if (preview) preview.src = url;
+  if (hiddenData) hiddenData.value = url;
+  if (nameLabel) nameLabel.textContent = 'Imagem via URL Externa';
+}
+
+function handleAdminPublish() {
+  triggerHaptic(30);
+
+  const titleInput = document.getElementById('admin-post-title');
+  const descInput = document.getElementById('admin-post-desc');
+  const linkInput = document.getElementById('admin-post-link');
+  const couponInput = document.getElementById('admin-post-coupon');
+  const priceInput = document.getElementById('admin-post-price');
+  const typeInput = document.getElementById('admin-post-type');
+  const editingIdInput = document.getElementById('admin-editing-id');
+  const imgDataInput = document.getElementById('admin-post-image-data');
+  const urgencyRadios = document.getElementsByName('admin-urgency');
+
+  const title = titleInput?.value?.trim();
+  const desc = descInput?.value?.trim();
+
+  if (!title) {
+    alert('Por favor, informe o título do comunicado ou produto.');
+    titleInput?.focus();
+    return;
+  }
+
+  let urgency = 'atencao';
+  urgencyRadios.forEach((r) => {
+    if (r.checked) urgency = r.value;
+  });
+
+  const editingId = editingIdInput?.value;
+  const defaultFallbackImg = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDshZjJJ_n6VY0a3_J3F648i-BNXF0jR7AQ31lHbHJpg76gr9bN7Lx_n7rHzr6l1icjeMnzrcgbBYdLK4uKkqJFTflnmwwWG-OgavZhXZ9h3bfZJ8SX1Hcu0B1DIANHt7SwqMWmlVCqlGjC_IZi3mdoCAK5gcpexjmuHyAZMYB7HiQVFWhV_KsdEzrtQcufJsvavFKCh_CmO3vqXIkF3IN-rxmrigkfWxwlcS3Xyv_J';
+
+  if (!appState.admin.posts) appState.admin.posts = [];
+
+  if (editingId) {
+    const post = appState.admin.posts.find((p) => p.id === editingId);
+    if (post) {
+      post.type = typeInput?.value || 'alerta';
+      post.title = title;
+      post.desc = desc || '';
+      post.link = linkInput?.value?.trim() || '';
+      post.coupon = couponInput?.value?.trim() || '';
+      post.price = priceInput?.value?.trim() || '';
+      if (imgDataInput?.value) post.imageUrl = imgDataInput.value;
+      post.urgency = urgency;
+      triggerAdminToast('Publicação atualizada com sucesso!');
+    }
+  } else {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const newPost = {
+      id: 'post_' + Date.now(),
+      type: typeInput?.value || 'alerta',
+      title: title,
+      desc: desc || '',
+      link: linkInput?.value?.trim() || '',
+      coupon: couponInput?.value?.trim() || '',
+      price: priceInput?.value?.trim() || '',
+      imageUrl: imgDataInput?.value || defaultFallbackImg,
+      urgency: urgency,
+      status: 'active',
+      createdAt: `Hoje • ${hours}:${minutes}`,
+      views: 1,
+      clicks: 0
+    };
+    appState.admin.posts.unshift(newPost);
+    triggerAdminToast('Publicação gravada e push transmitido para 2.840 membros.');
+  }
+
+  saveState();
+  cancelAdminEdit();
+  renderAdminPostsList();
+  renderDynamicFeedCards();
+}
+
+function cancelAdminEdit() {
+  const titleInput = document.getElementById('admin-post-title');
+  const descInput = document.getElementById('admin-post-desc');
+  const linkInput = document.getElementById('admin-post-link');
+  const couponInput = document.getElementById('admin-post-coupon');
+  const priceInput = document.getElementById('admin-post-price');
+  const editingIdInput = document.getElementById('admin-editing-id');
+  const cancelBtn = document.getElementById('btn-admin-cancel-edit');
+  const heading = document.getElementById('admin-form-heading');
+  const publishLabel = document.getElementById('btn-admin-publish-label');
+
+  if (titleInput) titleInput.value = '';
+  if (descInput) descInput.value = '';
+  if (linkInput) linkInput.value = '';
+  if (couponInput) couponInput.value = '';
+  if (priceInput) priceInput.value = '';
+  if (editingIdInput) editingIdInput.value = '';
+
+  if (cancelBtn) cancelBtn.classList.add('hidden');
+  if (heading) heading.textContent = 'Publicar no Feed & Home';
+  if (publishLabel) publishLabel.textContent = 'PUBLICAR NO FEED AGORA';
+}
+
+function editAdminPost(id) {
+  triggerHaptic(20);
+  const post = appState.admin?.posts?.find((p) => p.id === id);
+  if (!post) return;
+
+  selectAdminType(post.type || 'alerta');
+
+  const titleInput = document.getElementById('admin-post-title');
+  const descInput = document.getElementById('admin-post-desc');
+  const linkInput = document.getElementById('admin-post-link');
+  const couponInput = document.getElementById('admin-post-coupon');
+  const priceInput = document.getElementById('admin-post-price');
+  const editingIdInput = document.getElementById('admin-editing-id');
+  const cancelBtn = document.getElementById('btn-admin-cancel-edit');
+  const heading = document.getElementById('admin-form-heading');
+  const publishLabel = document.getElementById('btn-admin-publish-label');
+  const preview = document.getElementById('admin-img-preview');
+  const hiddenData = document.getElementById('admin-post-image-data');
+
+  if (titleInput) titleInput.value = post.title || '';
+  if (descInput) descInput.value = post.desc || '';
+  if (linkInput) linkInput.value = post.link || '';
+  if (couponInput) couponInput.value = post.coupon || '';
+  if (priceInput) priceInput.value = post.price || '';
+  if (editingIdInput) editingIdInput.value = post.id;
+  if (preview && post.imageUrl) preview.src = post.imageUrl;
+  if (hiddenData && post.imageUrl) hiddenData.value = post.imageUrl;
+
+  if (cancelBtn) cancelBtn.classList.remove('hidden');
+  if (heading) heading.textContent = 'Editar Publicação';
+  if (publishLabel) publishLabel.textContent = 'SALVAR ALTERAÇÕES';
+
+  const formSection = document.getElementById('action-form-section');
+  if (formSection) formSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function toggleAdminPostStatus(id) {
+  triggerHaptic(20);
+  const post = appState.admin?.posts?.find((p) => p.id === id);
+  if (post) {
+    post.status = post.status === 'active' ? 'paused' : 'active';
+    saveState();
+    renderAdminPostsList();
+    renderDynamicFeedCards();
+    triggerAdminToast(post.status === 'active' ? 'Post reativado no feed.' : 'Post pausado temporariamente.');
+  }
+}
+
+function deleteAdminPost(id) {
+  triggerHaptic(30);
+  if (!confirm('Deseja realmente excluir este comunicado permanentemente?')) return;
+  appState.admin.posts = appState.admin.posts.filter((p) => p.id !== id);
+  saveState();
+  renderAdminPostsList();
+  renderDynamicFeedCards();
+  triggerAdminToast('Comunicado removido com sucesso.');
+}
+
+function promptUpdateManual(manualTitle) {
+  triggerHaptic(20);
+  const newLink = prompt(`Informe o link ou URL do novo arquivo PDF para "${manualTitle}":`);
+  if (!newLink || newLink.trim() === '') return;
+  triggerAdminToast(`Manual "${manualTitle}" atualizado! Link registrado com sucesso.`);
+}
+
+function triggerAdminBroadcast() {
+  triggerHaptic(40);
+  triggerAdminToast('Alerta de transmissão imediata (Push) transmitido com sucesso!');
+}
+
+function triggerAdminToast(message) {
+  const toast = document.getElementById('toast-admin');
+  if (!toast) return;
+  const label = toast.querySelector('.toast-admin-text');
+  if (label && message) label.textContent = message;
+
+  toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+  setTimeout(() => {
+    toast.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+  }, 3200);
+}
+
+function renderAdminPostsList() {
+  const container = document.getElementById('admin-posts-container');
+  const countBadge = document.getElementById('admin-posts-count-badge');
+  if (!container) return;
+
+  const posts = appState.admin?.posts || [];
+  if (countBadge) countBadge.textContent = `${posts.length} PUBLICADOS`;
+
+  if (posts.length === 0) {
+    container.innerHTML = `
+      <div class="p-6 text-center rounded-xl bg-surface-container border border-surface-container-high/60 text-on-surface-variant font-body-sm">
+        Nenhum comunicado criado ainda. Use o formulário acima para publicar alertas, ofertas ou manuais no Feed.
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  posts.forEach((p) => {
+    const isPaused = p.status === 'paused';
+    const typeLabel = p.type === 'alerta' ? 'ALERTA RISCO' : p.type === 'oferta' ? 'OFERTA AFILIADA' : 'CONTEÚDO GUIA';
+    const badgeBg = p.type === 'alerta' ? 'bg-secondary-container text-on-secondary-container' : 'bg-surface-container-highest text-primary';
+
+    html += `
+      <div class="flex flex-col p-space-md rounded-xl bg-surface-container shadow-sm gap-space-xs border border-surface-container-high ${isPaused ? 'opacity-65' : ''}">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded font-label-sm text-label-sm uppercase font-bold flex items-center gap-1 ${isPaused ? 'bg-surface-container-highest text-outline' : badgeBg}">
+            ${isPaused ? '<span class="material-symbols-outlined text-[14px]">pause_circle</span> PAUSADO' : typeLabel}
+          </span>
+          <span class="font-display-code text-[11px] text-tertiary flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">visibility</span>
+            ${p.views || 0} visualizações
+          </span>
+        </div>
+        <div class="flex items-center gap-space-sm">
+          ${p.imageUrl ? `<img class="w-12 h-12 rounded-lg object-cover flex-shrink-0 bg-surface-container-high" src="${p.imageUrl}" alt="Capa"/>` : ''}
+          <div class="flex flex-col min-w-0">
+            <span class="font-label-lg text-label-lg text-on-surface font-bold truncate ${isPaused ? 'line-through' : ''}">${p.title}</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant truncate">${p.desc || p.createdAt || 'Sem descrição'}</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-space-xs pt-1 border-t border-surface-container-high/50 mt-1">
+          <button onclick="toggleAdminPostStatus('${p.id}')" class="px-3 py-1.5 rounded-lg bg-surface-container-highest text-on-surface font-label-sm text-label-sm uppercase hover:bg-surface-bright transition-colors">
+            ${isPaused ? 'Reativar' : 'Pausar'}
+          </button>
+          <button onclick="editAdminPost('${p.id}')" class="px-3 py-1.5 rounded-lg bg-surface-container-highest text-on-surface font-label-sm text-label-sm uppercase hover:bg-surface-bright transition-colors">
+            Editar
+          </button>
+          <button onclick="deleteAdminPost('${p.id}')" class="px-3 py-1.5 rounded-lg bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase hover:opacity-80 transition-colors">
+            Excluir
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function renderDynamicFeedCards() {
+  const container = document.getElementById('dynamic-feed-cards');
+  if (!container) return;
+
+  const posts = (appState.admin?.posts || []).filter((p) => p.status === 'active');
+  if (posts.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  let html = '';
+  posts.forEach((p) => {
+    const isAlerta = p.type === 'alerta';
+    const isOferta = p.type === 'oferta';
+    const categoryAttr = isAlerta ? 'alertas' : isOferta ? 'ofertas' : 'links';
+
+    let badgeHtml = '';
+    if (isAlerta) {
+      badgeHtml = `
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-secondary-container text-white font-label-sm text-label-sm uppercase tracking-wide font-bold">
+          <span class="material-symbols-outlined text-[14px]">warning</span>
+          ALERTA TÁTICO
+        </span>
+      `;
+    } else if (isOferta) {
+      badgeHtml = `
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-primary-container text-on-primary font-label-sm text-label-sm uppercase tracking-wide font-bold">
+          <span class="material-symbols-outlined text-[14px]">local_offer</span>
+          OFERTA AFILIADA
+        </span>
+      `;
+    } else {
+      badgeHtml = `
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-highest text-primary font-label-sm text-label-sm uppercase tracking-wide font-bold">
+          <span class="material-symbols-outlined text-[14px]">menu_book</span>
+          MANUAL / GUIA
+        </span>
+      `;
+    }
+
+    let actionButtonHtml = '';
+    if (isOferta) {
+      actionButtonHtml = `
+        <div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-high mt-1">
+          <div class="flex flex-col">
+            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Valor Ref.</span>
+            <span class="font-headline-sm text-headline-sm text-primary font-bold">${p.price || 'Sob Consulta'}</span>
+          </div>
+          ${p.coupon ? `<span class="px-2 py-1 rounded bg-surface-container font-label-sm text-label-sm text-primary uppercase font-bold border border-primary/30">Cupom: ${p.coupon}</span>` : ''}
+        </div>
+        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `claimOffer('${p.coupon || 'PROT15'}', '${p.title}')`}" class="w-full py-3 px-4 rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-md">
+          <span>${p.link ? 'ACESSAR PRODUTO NO PARCEIRO' : 'PEGAR CUPOM DE DESCONTO'}</span>
+          <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+        </button>
+      `;
+    } else if (isAlerta) {
+      actionButtonHtml = `
+        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `alert('${p.desc || p.title}')`}" class="w-full py-3 px-4 rounded-lg bg-secondary-container text-white font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-md">
+          <span>${p.link ? 'VER DETALHES DO AVISO' : 'CIENTE DO ALERTA'}</span>
+          <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+        </button>
+      `;
+    } else {
+      actionButtonHtml = `
+        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `alert('${p.desc}')`}" class="w-full py-3 px-4 rounded-lg bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform hover:bg-surface-container-highest border border-surface-variant">
+          <span>${p.link ? 'ACESSAR MANUAL / PDF' : 'LER PROTOCOLO'}</span>
+          <span class="material-symbols-outlined text-[18px]">menu_book</span>
+        </button>
+      `;
+    }
+
+    html += `
+      <div class="feed-card bg-surface-container rounded-xl overflow-hidden shadow-sm flex flex-col border border-surface-container-high" data-category="${categoryAttr}">
+        ${p.imageUrl ? `
+          <div class="relative h-44 w-full bg-surface-container-high overflow-hidden">
+            <img class="w-full h-full object-cover" alt="${p.title}" src="${p.imageUrl}" loading="lazy"/>
+            <div class="absolute top-3 left-3">
+              ${badgeHtml}
+            </div>
+          </div>
+        ` : ''}
+        <div class="p-space-md flex flex-col gap-3">
+          <div class="flex flex-col gap-1">
+            <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface leading-snug">${p.title}</h4>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">${p.desc}</p>
+          </div>
+          ${actionButtonHtml}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// ==========================================
 // INICIALIZAÇÃO DA APLICAÇÃO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -1180,12 +1702,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Checar parâmetro de URL (ex: ?tab=sos ou ?tab=calculadora)
+  // Checar parâmetro de URL (ex: ?tab=sos ou ?tab=calculadora ou ?tab=admin)
   const urlParams = new URLSearchParams(window.location.search);
   const paramTab = urlParams.get('tab');
   if (paramTab === 'sos') {
     switchTab('inicio');
     openSOSModal();
+  } else if (paramTab === 'admin') {
+    switchTab('inicio');
+    openAdminPinModal();
   } else if (paramTab && ['inicio', 'calculadora', 'checklists', 'plano-familiar', 'feed'].includes(paramTab)) {
     switchTab(paramTab);
   } else {
@@ -1231,5 +1756,6 @@ document.addEventListener('DOMContentLoaded', () => {
   recalculateSupplies();
   updateDashboardMetrics();
   updateNetworkStatus();
+  renderDynamicFeedCards();
 });
 

@@ -136,8 +136,8 @@
   <!-- CABEÇALHO TÁTICO PERSISTENTE -->
   <header class="fixed top-0 w-full z-40 pt-safe bg-surface/90 backdrop-blur-xl border-b border-surface-container-high/60 shadow-[0_1px_8px_rgba(0,0,0,0.4)] no-print">
     <div class="h-16 px-margin flex items-center justify-between">
-      <div class="flex items-center gap-space-sm min-w-0 cursor-pointer" onclick="switchTab('inicio')">
-        <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0 border border-primary/30">
+      <div id="header-logo-container" class="flex items-center gap-space-sm min-w-0 cursor-pointer select-none" onclick="handleLogoTap()">
+        <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0 border border-primary/30 active:scale-90 transition-transform">
           <img alt="Protocolo 72H Logo" class="h-6 w-6 object-contain" src="icons/icon.svg"/>
         </div>
         <div class="flex flex-col min-w-0">
@@ -1296,6 +1296,9 @@
           </div>
         </div>
 
+        <!-- Container de Cards Dinâmicos Criados no Painel Admin -->
+        <div id="dynamic-feed-cards" class="flex flex-col gap-space-md"></div>
+
         <!-- Card Canal VIP de Transmissão -->
         <div class="bg-surface-container-high rounded-xl p-space-md shadow-md flex flex-col gap-3 mt-space-sm relative overflow-hidden border border-primary/20">
           <div class="flex items-center gap-3">
@@ -1315,6 +1318,335 @@
             <span>ENTRAR NO GRUPO DE TRANSMISSÃO</span>
           </button>
         </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TELA 6: PAINEL ADMINISTRATIVO SECRETO -->
+    <!-- ========================================== -->
+    <section id="view-admin" class="hidden flex flex-col w-full">
+      <div class="flex flex-col w-full px-margin-mobile pt-3 pb-space-xl gap-space-md">
+
+        <!-- Barra de Contexto Tática Admin / Restrita -->
+        <div class="flex items-center justify-between py-space-sm px-space-md rounded-xl bg-surface-container-high shadow-md border border-secondary-container/40">
+          <div class="flex items-center gap-space-xs min-w-0">
+            <span class="material-symbols-outlined text-secondary text-[22px] animate-pulse" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold truncate">NÍVEL 0 // ACESSO RESTRITO</span>
+              <span class="font-headline-sm text-headline-sm uppercase text-primary tracking-wide leading-none truncate">PAINEL DO CRIADOR</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-space-xs flex-shrink-0">
+            <div class="px-2 py-1 rounded bg-surface-container-lowest text-tertiary font-display-code text-[11px] font-bold border border-tertiary/20">
+              SYS_ONLINE
+            </div>
+            <button onclick="logoutAdmin()" class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-secondary hover:bg-secondary-container transition-colors" title="Encerrar Sessão">
+              <span class="material-symbols-outlined text-[20px]">logout</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Métricas Rápidas & Analytics Executivo (Bento Grid) -->
+        <div class="grid grid-cols-2 gap-gutter-mobile">
+          <!-- Card: Membros Ativos -->
+          <div class="flex flex-col p-space-md rounded-xl bg-surface-container shadow-sm justify-between border border-surface-container-high/60">
+            <div class="flex items-center justify-between mb-space-xs">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Membros PWA</span>
+              <span class="material-symbols-outlined text-primary text-[18px]">group</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span class="font-headline-lg text-headline-lg text-on-surface">2.840</span>
+              <span class="font-label-sm text-label-sm text-tertiary">+12%</span>
+            </div>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">ativos / instalados</span>
+          </div>
+
+          <!-- Card: Sessões Hoje -->
+          <div class="flex flex-col p-space-md rounded-xl bg-surface-container shadow-sm justify-between border border-surface-container-high/60">
+            <div class="flex items-center justify-between mb-space-xs">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Sessões Hoje</span>
+              <span class="material-symbols-outlined text-tertiary-container text-[18px]">bolt</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span class="font-headline-lg text-headline-lg text-on-surface">742</span>
+              <span class="font-label-sm text-label-sm text-primary">pico 08h</span>
+            </div>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">retenção de 68.4%</span>
+          </div>
+
+          <!-- Card: Cliques Afiliados -->
+          <div class="flex flex-col p-space-md rounded-xl bg-surface-container shadow-sm justify-between border border-surface-container-high/60">
+            <div class="flex items-center justify-between mb-space-xs">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">CTR Afiliados</span>
+              <span class="material-symbols-outlined text-primary text-[18px]">ads_click</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span class="font-headline-lg text-headline-lg text-on-surface">418</span>
+              <span class="font-label-sm text-label-sm text-primary-fixed">14.7%</span>
+            </div>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">toques em ofertas</span>
+          </div>
+
+          <!-- Card: Comissões Estimadas -->
+          <div class="flex flex-col p-space-md rounded-xl bg-surface-container shadow-sm justify-between border border-surface-container-high/60">
+            <div class="flex items-center justify-between mb-space-xs">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Comissão Est.</span>
+              <span class="material-symbols-outlined text-primary-container text-[18px]">payments</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span class="font-headline-lg text-headline-lg text-primary">R$ 3.820</span>
+            </div>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">30 dias acumulados</span>
+          </div>
+        </div>
+
+        <!-- Ações Táticas Rápidas -->
+        <div class="flex flex-col gap-space-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-headline-sm text-headline-sm uppercase text-on-surface">Ações Táticas Rápidas</span>
+            <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">4 MÓDULOS</span>
+          </div>
+          <div class="grid grid-cols-2 gap-gutter-mobile">
+            <button class="flex items-center gap-space-xs p-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-left transition-transform active:scale-95 shadow-sm border border-surface-container-highest/40" onclick="setAdminFormMode('alerta')">
+              <span class="p-2 rounded-lg bg-secondary-container text-on-secondary-container material-symbols-outlined text-[20px]">warning</span>
+              <div class="flex flex-col min-w-0">
+                <span class="font-label-md text-label-md uppercase text-on-surface font-bold truncate">Novo Alerta</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Defesa Civil</span>
+              </div>
+            </button>
+            <button class="flex items-center gap-space-xs p-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-left transition-transform active:scale-95 shadow-sm border border-surface-container-highest/40" onclick="setAdminFormMode('oferta')">
+              <span class="p-2 rounded-lg bg-surface-container-lowest text-primary material-symbols-outlined text-[20px]">shopping_bag</span>
+              <div class="flex flex-col min-w-0">
+                <span class="font-label-md text-label-md uppercase text-on-surface font-bold truncate">Nova Oferta</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Equipamento</span>
+              </div>
+            </button>
+            <button class="flex items-center gap-space-xs p-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-left transition-transform active:scale-95 shadow-sm border border-surface-container-highest/40" onclick="document.getElementById('manuals-section').scrollIntoView({behavior:'smooth'})">
+              <span class="p-2 rounded-lg bg-surface-container-lowest text-tertiary material-symbols-outlined text-[20px]">menu_book</span>
+              <div class="flex flex-col min-w-0">
+                <span class="font-label-md text-label-md uppercase text-on-surface font-bold truncate">Manuais 72H</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Substituir PDFs</span>
+              </div>
+            </button>
+            <button class="flex items-center gap-space-xs p-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-left transition-transform active:scale-95 shadow-sm border border-secondary/30" id="btn-quick-broadcast" onclick="triggerAdminBroadcast()">
+              <span class="p-2 rounded-lg bg-secondary text-on-secondary material-symbols-outlined text-[20px] animate-pulse">campaign</span>
+              <div class="flex flex-col min-w-0">
+                <span class="font-label-md text-label-md uppercase text-secondary font-bold truncate">Push Geral</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Disparo Flash</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Formulário de Publicação em Destaque -->
+        <div class="flex flex-col p-space-md rounded-xl bg-surface-container gap-space-sm shadow-md border border-surface-container-high" id="action-form-section">
+          <div class="flex items-center justify-between pb-space-xs border-b border-surface-container-high">
+            <div class="flex items-center gap-space-xs">
+              <span class="w-2.5 h-2.5 rounded-full bg-primary-container animate-ping"></span>
+              <span class="font-headline-sm text-headline-sm uppercase text-on-surface" id="admin-form-heading">Publicar no Feed &amp; Home</span>
+            </div>
+            <span class="font-label-sm text-label-sm uppercase px-2 py-0.5 rounded bg-surface-container-highest text-primary">POST AUTOMÁTICO</span>
+          </div>
+
+          <!-- Seletor de Tipo (Segmented Control Tático) -->
+          <input type="hidden" id="admin-post-type" value="alerta"/>
+          <input type="hidden" id="admin-editing-id" value=""/>
+          <div class="grid grid-cols-3 gap-1 p-1 rounded-lg bg-surface-container-lowest border border-surface-container-high/60">
+            <button class="admin-type-btn py-2 px-1 text-center rounded font-label-sm text-label-sm uppercase transition-colors bg-primary-container text-on-primary-container font-bold" data-target="alerta" type="button" onclick="selectAdminType('alerta')">
+              Alerta Risco
+            </button>
+            <button class="admin-type-btn py-2 px-1 text-center rounded font-label-sm text-label-sm uppercase transition-colors text-on-surface-variant hover:text-on-surface" data-target="oferta" type="button" onclick="selectAdminType('oferta')">
+              Oferta Link
+            </button>
+            <button class="admin-type-btn py-2 px-1 text-center rounded font-label-sm text-label-sm uppercase transition-colors text-on-surface-variant hover:text-on-surface" data-target="aditivo" type="button" onclick="selectAdminType('aditivo')">
+              Conteúdo
+            </button>
+          </div>
+
+          <!-- Título do Comunicado -->
+          <div class="flex flex-col gap-1">
+            <label class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant">Título do Comunicado / Produto</label>
+            <input id="admin-post-title" class="w-full px-space-sm py-2.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary border border-surface-container-high transition-colors" placeholder="Ex: Alerta de Geada Extrema ou Lanterna Tática" type="text"/>
+          </div>
+
+          <!-- Descrição Resumida -->
+          <div class="flex flex-col gap-1">
+            <label class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant">Descrição Resumida (Feed &amp; Notificação)</label>
+            <textarea id="admin-post-desc" class="w-full px-space-sm py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary border border-surface-container-high transition-colors resize-none" placeholder="Instruções claras de ação ou pontos-chave do equipamento recomendado..." rows="3"></textarea>
+          </div>
+
+          <!-- Link Afiliado + Cupom / Preço -->
+          <div class="grid grid-cols-1 gap-space-xs">
+            <div class="flex flex-col gap-1">
+              <label class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant">Link Afiliado / Redirecionamento (ou PDF)</label>
+              <div class="flex items-center px-space-sm rounded-lg bg-surface-container-lowest border border-surface-container-high">
+                <span class="material-symbols-outlined text-outline text-[18px]">link</span>
+                <input id="admin-post-link" class="w-full px-2 py-2.5 bg-transparent text-on-surface font-display-code text-[12px] placeholder:text-outline focus:outline-none" placeholder="https://amzn.to/3xyz... ou link de parceiro/manual" type="url"/>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-space-xs">
+              <div class="flex flex-col gap-1">
+                <label class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant">Cupom / Bônus</label>
+                <input id="admin-post-coupon" class="w-full px-space-sm py-2 rounded-lg bg-surface-container-lowest text-on-surface font-display-code text-[12px] placeholder:text-outline focus:outline-none uppercase border border-surface-container-high" placeholder="EX: PROTOCOLO15" type="text"/>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant">Preço Ref. (R$)</label>
+                <input id="admin-post-price" class="w-full px-space-sm py-2 rounded-lg bg-surface-container-lowest text-on-surface font-display-code text-[12px] placeholder:text-outline focus:outline-none border border-surface-container-high" placeholder="R$ 149,90" type="text"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mídia de Destaque / Imagem -->
+          <div class="flex flex-col gap-1">
+            <label class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant">Mídia de Destaque (Capa do Feed)</label>
+            <input type="file" id="admin-file-picker" accept="image/*" class="hidden" onchange="handleAdminImageUpload(event)"/>
+            <input type="hidden" id="admin-post-image-data" value=""/>
+            <div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-lowest cursor-pointer hover:bg-surface-container-high border border-surface-container-high transition-colors" onclick="document.getElementById('admin-file-picker').click()">
+              <img id="admin-img-preview" class="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDshZjJJ_n6VY0a3_J3F648i-BNXF0jR7AQ31lHbHJpg76gr9bN7Lx_n7rHzr6l1icjeMnzrcgbBYdLK4uKkqJFTflnmwwWG-OgavZhXZ9h3bfZJ8SX1Hcu0B1DIANHt7SwqMWmlVCqlGjC_IZi3mdoCAK5gcpexjmuHyAZMYB7HiQVFWhV_KsdEzrtQcufJsvavFKCh_CmO3vqXIkF3IN-rxmrigkfWxwlcS3Xyv_J" alt="Preview da imagem"/>
+              <div class="flex flex-col min-w-0">
+                <span id="admin-img-name" class="font-label-md text-label-md text-on-surface truncate">capa_tatico_default.jpg</span>
+                <span class="font-body-sm text-body-sm text-primary">Toque para selecionar foto da galeria ou câmera</span>
+              </div>
+            </div>
+            <!-- Campo de URL alternativa de imagem -->
+            <input id="admin-post-image-url" oninput="updateAdminImageFromUrl(this.value)" class="w-full px-space-sm py-1.5 rounded-lg bg-surface-container-lowest text-on-surface font-display-code text-[11px] placeholder:text-outline focus:outline-none border border-surface-container-high/60 mt-1" placeholder="Ou cole a URL direta de uma imagem na web" type="url"/>
+          </div>
+
+          <!-- Nível de Urgência & Switch Push -->
+          <div class="flex flex-col gap-space-xs pt-1">
+            <label class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant">Nível de Urgência Operacional</label>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="flex items-center justify-center p-2 rounded-lg bg-surface-container-lowest has-[:checked]:bg-surface-container-highest has-[:checked]:border-primary border border-surface-container-high cursor-pointer">
+                <input class="hidden" name="admin-urgency" type="radio" value="baixa"/>
+                <span class="font-label-sm text-label-sm uppercase text-on-surface">Baixa</span>
+              </label>
+              <label class="flex items-center justify-center p-2 rounded-lg bg-surface-container-lowest has-[:checked]:bg-primary-container has-[:checked]:text-on-primary-container border border-surface-container-high cursor-pointer">
+                <input checked="" class="hidden" name="admin-urgency" type="radio" value="atencao"/>
+                <span class="font-label-sm text-label-sm uppercase font-bold text-primary">Amarelo 72h</span>
+              </label>
+              <label class="flex items-center justify-center p-2 rounded-lg bg-surface-container-lowest has-[:checked]:bg-secondary-container has-[:checked]:text-on-secondary-container border border-surface-container-high cursor-pointer">
+                <input class="hidden" name="admin-urgency" type="radio" value="imediata"/>
+                <span class="font-label-sm text-label-sm uppercase font-bold text-secondary">Vermelho SOS</span>
+              </label>
+            </div>
+
+            <!-- Checkbox Push Notification -->
+            <label class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-lowest mt-1 cursor-pointer border border-surface-container-high">
+              <input id="admin-push-checkbox" checked="" class="w-5 h-5 rounded bg-surface-container-high accent-primary-container" type="checkbox"/>
+              <div class="flex flex-col min-w-0">
+                <span class="font-label-md text-label-md text-on-surface font-bold">Disparar Notificação Push Imediata</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">Transmite alerta para todos os 2.840 dispositivos</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Botões de Ação do Formulário -->
+          <div class="flex flex-col gap-2 pt-1">
+            <button onclick="handleAdminPublish()" class="w-full py-3.5 px-space-md rounded-xl bg-primary-container hover:opacity-90 active:scale-[0.99] text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wide flex items-center justify-center gap-2 shadow-lg transition-transform" id="btn-admin-publish">
+              <span class="material-symbols-outlined text-[20px]">send</span>
+              <span id="btn-admin-publish-label">PUBLICAR NO FEED AGORA</span>
+            </button>
+            <button id="btn-admin-cancel-edit" onclick="cancelAdminEdit()" class="hidden w-full py-2 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-md text-label-md uppercase tracking-wider transition-colors">
+              Cancelar Edição
+            </button>
+          </div>
+        </div>
+
+        <!-- Gestão de Conteúdo Ativo (Feed & Home) -->
+        <div class="flex flex-col gap-space-sm">
+          <div class="flex items-center justify-between">
+            <span class="font-headline-sm text-headline-sm uppercase text-on-surface">Conteúdo Ativo no PWA</span>
+            <span id="admin-posts-count-badge" class="font-label-sm text-label-sm uppercase px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">0 PUBLICADOS</span>
+          </div>
+
+          <!-- Lista Gerenciada pelo JavaScript -->
+          <div id="admin-posts-container" class="flex flex-col gap-space-sm">
+            <!-- Cards injetados via JS -->
+          </div>
+        </div>
+
+        <!-- Gestão dos 4 E-books e Manuais Oficiais -->
+        <div class="flex flex-col gap-space-sm pt-space-xs" id="manuals-section">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-space-xs">
+              <span class="material-symbols-outlined text-primary text-[20px]">library_books</span>
+              <span class="font-headline-sm text-headline-sm uppercase text-on-surface">Manuais &amp; E-Books Oficiais</span>
+            </div>
+            <span class="font-label-sm text-label-sm uppercase px-2 py-0.5 rounded bg-surface-container-high text-primary">4 DISPONÍVEIS</span>
+          </div>
+
+          <!-- Grid dos 4 E-books -->
+          <div class="grid grid-cols-1 gap-gutter-mobile">
+            <!-- Ebook 1 -->
+            <div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm border border-surface-container-high">
+              <div class="flex items-center gap-space-sm min-w-0">
+                <div class="w-12 h-14 rounded bg-surface-container-highest flex flex-col items-center justify-center text-primary flex-shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                  <span class="font-label-sm text-[9px] font-bold">v3.2</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-md text-label-md text-on-surface font-bold truncate">Manual 72H: As Primeiras Horas</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant truncate">PDF • 18.4 MB • Atualizado há 5d</span>
+                </div>
+              </div>
+              <button onclick="promptUpdateManual('Manual 72H: As Primeiras Horas')" class="p-2 rounded-lg bg-surface-container-highest hover:bg-surface-bright text-primary flex-shrink-0" title="Substituir PDF / Link">
+                <span class="material-symbols-outlined text-[20px]">file_upload</span>
+              </button>
+            </div>
+
+            <!-- Ebook 2 -->
+            <div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm border border-surface-container-high">
+              <div class="flex items-center gap-space-sm min-w-0">
+                <div class="w-12 h-14 rounded bg-surface-container-highest flex flex-col items-center justify-center text-tertiary flex-shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">water_drop</span>
+                  <span class="font-label-sm text-[9px] font-bold">v2.1</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-md text-label-md text-on-surface font-bold truncate">Guia Definitivo de Água &amp; Purificação</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant truncate">PDF • 12.1 MB • Atualizado há 12d</span>
+                </div>
+              </div>
+              <button onclick="promptUpdateManual('Guia Definitivo de Água & Purificação')" class="p-2 rounded-lg bg-surface-container-highest hover:bg-surface-bright text-tertiary flex-shrink-0" title="Substituir PDF / Link">
+                <span class="material-symbols-outlined text-[20px]">file_upload</span>
+              </button>
+            </div>
+
+            <!-- Ebook 3 -->
+            <div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm border border-surface-container-high">
+              <div class="flex items-center gap-space-sm min-w-0">
+                <div class="w-12 h-14 rounded bg-surface-container-highest flex flex-col items-center justify-center text-secondary flex-shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">medical_services</span>
+                  <span class="font-label-sm text-[9px] font-bold">v4.0</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-md text-label-md text-on-surface font-bold truncate">Protocolo de Trauma &amp; Primeiros Socorros</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant truncate">PDF • 24.8 MB • Atualizado ontem</span>
+                </div>
+              </div>
+              <button onclick="promptUpdateManual('Protocolo de Trauma & Primeiros Socorros')" class="p-2 rounded-lg bg-surface-container-highest hover:bg-surface-bright text-secondary flex-shrink-0" title="Substituir PDF / Link">
+                <span class="material-symbols-outlined text-[20px]">file_upload</span>
+              </button>
+            </div>
+
+            <!-- Ebook 4 -->
+            <div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm border border-surface-container-high">
+              <div class="flex items-center gap-space-sm min-w-0">
+                <div class="w-12 h-14 rounded bg-surface-container-highest flex flex-col items-center justify-center text-primary-fixed flex-shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">energy_savings_leaf</span>
+                  <span class="font-label-sm text-[9px] font-bold">v1.8</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-md text-label-md text-on-surface font-bold truncate">Despensa Seca &amp; Armazenamento Longo Prazo</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant truncate">PDF • 16.0 MB • Atualizado há 1m</span>
+                </div>
+              </div>
+              <button onclick="promptUpdateManual('Despensa Seca & Armazenamento Longo Prazo')" class="p-2 rounded-lg bg-surface-container-highest hover:bg-surface-bright text-primary-fixed flex-shrink-0" title="Substituir PDF / Link">
+                <span class="material-symbols-outlined text-[20px]">file_upload</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1511,6 +1843,58 @@
       SINAL SOS DE RESGATE<br/>
       <span class="font-body-md text-sm">Toque em qualquer lugar para desligar</span>
     </span>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: AUTENTICAÇÃO DO CRIADOR (PIN SECRETO) -->
+  <!-- ========================================== -->
+  <div id="admin-pin-modal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 no-print">
+    <div class="w-full max-w-sm bg-surface-container rounded-2xl p-6 shadow-2xl flex flex-col gap-4 border border-secondary-container/60 animate-in fade-in zoom-in duration-200">
+      <div class="flex items-center justify-between border-b border-surface-container-high pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-lg bg-secondary-container flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-[22px]">lock</span>
+          </div>
+          <div class="flex flex-col">
+            <h3 class="font-headline-sm text-headline-sm uppercase text-secondary tracking-wide leading-tight">ACESSO DO CRIADOR</h3>
+            <span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider">Protocolo Nível 0</span>
+          </div>
+        </div>
+        <button onclick="closeAdminPinModal()" class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-white">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <p class="font-body-sm text-body-sm text-on-surface-variant">
+          Digite o PIN mestre de segurança para desbloquear o console de controle do Feed, ofertas e manuais.
+        </p>
+        <div class="flex flex-col gap-1.5 mt-2">
+          <label class="font-label-sm text-label-sm uppercase tracking-wider text-outline text-center">PIN de 4 Dígitos (Padrão: 7272)</label>
+          <input id="admin-pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" class="w-full h-14 bg-surface-container-lowest border border-surface-container-high rounded-xl text-center font-display-code text-2xl tracking-[0.5em] text-primary focus:outline-none focus:border-primary transition-all placeholder:tracking-normal placeholder:text-outline" onkeyup="if(event.key === 'Enter') verifyAdminPIN()"/>
+          <span id="admin-pin-error" class="hidden font-label-sm text-center text-error font-semibold mt-1">PIN incorreto. Tente novamente.</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-2 border-t border-surface-container-high">
+        <button onclick="closeAdminPinModal()" class="py-2.5 px-3 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md uppercase tracking-wider hover:bg-surface-bright transition-colors">
+          Cancelar
+        </button>
+        <button onclick="verifyAdminPIN()" class="py-2.5 px-3 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wide flex items-center justify-center gap-1 shadow-md hover:opacity-90 active:scale-95 transition-all">
+          <span>Acessar</span>
+          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST EXCLUSIVO DO ADMIN -->
+  <div id="toast-admin" class="fixed bottom-24 left-4 right-4 bg-primary-container text-on-primary-container p-space-sm rounded-xl shadow-2xl flex items-center gap-space-sm transform translate-y-32 opacity-0 transition-all duration-300 z-50 pointer-events-none no-print border border-primary/50">
+    <span class="material-symbols-outlined text-[24px]">verified</span>
+    <div class="flex flex-col min-w-0">
+      <span class="font-label-md text-label-md font-bold uppercase">Operação Executada!</span>
+      <span class="font-body-sm text-body-sm toast-admin-text">Alterações gravadas no armazenamento local do PWA.</span>
+    </div>
   </div>
 
   <!-- TOAST DE FEEDBACK -->
