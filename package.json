@@ -6,7 +6,8 @@
   "main": "server.cjs",
   "scripts": {
     "start": "node server.cjs",
-    "dev": "node server.cjs"
+    "dev": "node server.cjs",
+    "build": "echo 'Protocolo 72H PWA ready'"
   },
   "keywords": ["pwa", "emergencia", "72h", "defesa-civil", "sobrevivencia", "stitch"],
   "author": "Protocolo 72H Team",

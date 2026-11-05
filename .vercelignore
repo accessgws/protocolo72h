@@ -1,0 +1,8 @@
+# Arquivos de desenvolvimento e backup
+stitch_guia_emerg_ncia_72h_pwa/
+generate-icons.cjs
+server.cjs
+.git/
+.gitignore
+README.md
+*.log
