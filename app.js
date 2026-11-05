@@ -1128,9 +1128,48 @@ function joinVIPChannel() {
 }
 
 // ==========================================
+// MÓDULO 8: RELÓGIO TÁTICO OPERACIONAL (DATA & HORA)
+// ==========================================
+function initTacticalClock() {
+  function updateClock() {
+    const now = new Date();
+
+    // Formato de hora: HH:MM:SS
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const timeFull = `${hours}:${minutes}:${seconds}`;
+    const timeShort = `${hours}:${minutes}`;
+
+    // Formato de data tática: QUA, 04 NOV 2026
+    const dias = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB'];
+    const meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+    const diaSemana = dias[now.getDay()];
+    const dia = String(now.getDate()).padStart(2, '0');
+    const mes = meses[now.getMonth()];
+    const ano = now.getFullYear();
+    const dateFormatted = `${diaSemana}, ${dia} ${mes} ${ano}`;
+
+    const clockFull = document.getElementById('tactical-full-time');
+    const dateFull = document.getElementById('tactical-full-date');
+    const clockHeader = document.getElementById('header-live-clock');
+
+    if (clockFull) clockFull.textContent = timeFull;
+    if (dateFull) dateFull.textContent = dateFormatted;
+    if (clockHeader) clockHeader.textContent = timeShort;
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+}
+
+// ==========================================
 // INICIALIZAÇÃO DA APLICAÇÃO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
+  // Iniciar relógio tático operacional
+  initTacticalClock();
+
   // Configurar listeners de navegação
   const navTabs = document.querySelectorAll('.nav-tab');
   navTabs.forEach((tab) => {

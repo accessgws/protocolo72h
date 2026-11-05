@@ -142,7 +142,11 @@
         </div>
         <div class="flex flex-col min-w-0">
           <span class="font-headline-sm text-headline-sm uppercase tracking-wide text-primary truncate leading-tight">PROTOCOLO 72H</span>
-          <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant truncate" id="header-breadcrumb">Início</span>
+          <div class="flex items-center gap-1.5 font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant truncate">
+            <span id="header-breadcrumb">Início</span>
+            <span class="opacity-40">•</span>
+            <span id="header-live-clock" class="text-primary font-display-code text-[11px] font-semibold">--:--</span>
+          </div>
         </div>
       </div>
 
@@ -183,6 +187,21 @@
     <!-- ========================================== -->
     <section id="view-inicio" class="flex flex-col w-full">
       <div class="flex flex-col w-full px-margin-mobile pt-3 pb-space-lg gap-space-md">
+
+        <!-- Barra Tática de Data, Hora & Prontidão Operacional -->
+        <div class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-surface-container-low border border-surface-container-high shadow-md">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest font-semibold">PRONTIDÃO CIVIL • TEMPO REAL</span>
+              <span id="tactical-full-date" class="font-display-code text-xs text-on-surface uppercase font-medium truncate">SINCRONIZANDO...</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container-high border border-primary/30 flex-shrink-0">
+            <span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
+            <span id="tactical-full-time" class="font-display-code text-sm text-primary font-bold tracking-widest">--:--:--</span>
+          </div>
+        </div>
 
         <!-- SOS Fast Banner (0-2h Immediate Protocol) -->
         <div class="w-full">
