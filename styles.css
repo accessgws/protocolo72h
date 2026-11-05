@@ -1,0 +1,116 @@
+/* Protocolo 72H - Estilos Táticos Complementares */
+@layer base {
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #111317;
+    color: #e2e2e8;
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #111317;
+}
+::-webkit-scrollbar-thumb {
+  background: #282a2e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Tactical pulse animations */
+@keyframes tacticalPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+  }
+}
+
+.animate-tactical-pulse {
+  animation: tacticalPulse 2.5s infinite;
+}
+
+/* SOS Strobe */
+@keyframes strobeScreen {
+  0%, 49% {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  50%, 100% {
+    background-color: #bb0112;
+    color: #ffffff;
+  }
+}
+
+.strobe-active {
+  animation: strobeScreen 0.18s infinite !important;
+}
+
+/* Active tab state */
+.nav-tab.active {
+  color: #f59e0b !important;
+}
+.nav-tab.active .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1, 'wght' 600;
+  transform: translateY(-1px);
+}
+
+/* Touch active feedback */
+button:active, .tactical-touch:active {
+  transform: scale(0.97);
+}
+
+/* Print layout for Emergency Card & Checklist */
+@media print {
+  header, nav, #btn-install, #toast-feedback, .no-print {
+    display: none !important;
+  }
+  body, main {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .bg-surface, .bg-surface-container, .bg-surface-container-high, .bg-surface-container-low {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+  }
+  .text-on-surface, .text-on-surface-variant, .text-primary, .text-tertiary {
+    color: #000000 !important;
+  }
+}
+

@@ -1,0 +1,14 @@
+{
+  "name": "protocolo-72h-pwa",
+  "version": "1.0.0",
+  "description": "PWA Tático de Prontidão e Emergência Familiar 72H",
+  "private": true,
+  "main": "server.cjs",
+  "scripts": {
+    "start": "node server.cjs",
+    "dev": "node server.cjs"
+  },
+  "keywords": ["pwa", "emergencia", "72h", "defesa-civil", "sobrevivencia", "stitch"],
+  "author": "Protocolo 72H Team",
+  "license": "MIT"
+}

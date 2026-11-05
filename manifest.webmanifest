@@ -1,0 +1,87 @@
+{
+  "id": "protocolo-72h-pwa",
+  "name": "Protocolo 72H - Guia de Prontidão e Emergência",
+  "short_name": "Protocolo 72H",
+  "description": "Aplicativo tático de prontidão civil e sobrevivência familiar 72h. 100% funcional offline com calculadora de suprimentos, checklists interativos de evacuação e SOS imediato.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#111317",
+  "theme_color": "#111317",
+  "categories": ["utilities", "lifestyle", "safety", "medical"],
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Modo SOS Imediato",
+      "short_name": "SOS",
+      "description": "Acionar sirene, apito Morse, lanterna e números de emergência",
+      "url": "./index.html?tab=sos",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Calculadora 72H",
+      "short_name": "Calculadora",
+      "description": "Cálculo de água potável e ração familiar",
+      "url": "./index.html?tab=calculadora",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Checklists de Fuga",
+      "short_name": "Checklists",
+      "description": "Inventário da Mochila de Emergência (BOB)",
+      "url": "./index.html?tab=checklists",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Plano Familiar",
+      "short_name": "Plano",
+      "description": "Pontos de encontro, rotas e ficha médica",
+      "url": "./index.html?tab=plano-familiar",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Feed Tático & Alertas",
+      "short_name": "Feed",
+      "description": "Alertas Defesa Civil, boletins meteorológicos e ofertas",
+      "url": "./index.html?tab=feed",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
+

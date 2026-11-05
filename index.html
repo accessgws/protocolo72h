@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <meta name="theme-color" content="#111317"/>
+  <meta name="description" content="Protocolo 72H - Guia e Ferramenta Tática de Prontidão Civil e Sobrevivência Familiar. Calculadora hídrica, checklists de evacuação e SOS offline."/>
+  
+  <!-- PWA & Apple Meta Tags -->
+  <link rel="manifest" href="manifest.webmanifest"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Protocolo 72H"/>
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"/>
+
+  <title>Protocolo 72H - Prontidão & Emergência Familiar</title>
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#111317",
+            "surface-dim": "#111317",
+            "surface-bright": "#37393e",
+            "surface-container-lowest": "#0c0e12",
+            "surface-container-low": "#1a1c20",
+            "surface-container": "#1e2024",
+            "surface-container-high": "#282a2e",
+            "surface-container-highest": "#333539",
+            "surface-variant": "#333539",
+            "on-surface": "#e2e2e8",
+            "on-surface-variant": "#d8c3ad",
+            "inverse-surface": "#e2e2e8",
+            "inverse-on-surface": "#2f3035",
+            "outline": "#a08e7a",
+            "outline-variant": "#534434",
+            "surface-tint": "#ffb95f",
+            "primary": "#ffc174",
+            "on-primary": "#472a00",
+            "primary-container": "#f59e0b",
+            "on-primary-container": "#613b00",
+            "inverse-primary": "#855300",
+            "secondary": "#ffb4ab",
+            "on-secondary": "#690005",
+            "secondary-container": "#bb0112",
+            "on-secondary-container": "#ffc8c1",
+            "tertiary": "#9fd1ff",
+            "on-tertiary": "#003351",
+            "tertiary-container": "#5bb8fe",
+            "on-tertiary-container": "#00476e",
+            "error": "#ffb4ab",
+            "on-error": "#690005",
+            "error-container": "#93000a",
+            "on-error-container": "#ffdad6",
+            "primary-fixed": "#ffddb8",
+            "primary-fixed-dim": "#ffb95f",
+            "on-primary-fixed": "#2a1700",
+            "on-primary-fixed-variant": "#653e00",
+            "secondary-fixed": "#ffdad6",
+            "secondary-fixed-dim": "#ffb4ab",
+            "on-secondary-fixed": "#410002",
+            "on-secondary-fixed-variant": "#93000b",
+            "tertiary-fixed": "#cce5ff",
+            "tertiary-fixed-dim": "#93ccff",
+            "on-tertiary-fixed": "#001d31",
+            "on-tertiary-fixed-variant": "#004b73",
+            "background": "#111317",
+            "on-background": "#e2e2e8"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "gutter-mobile": "0.75rem",
+            "margin": "1.25rem",
+            "margin-mobile": "1rem"
+          },
+          fontFamily: {
+            "headline-xl": ["Oswald", "Impact", "sans-serif"],
+            "headline-xl-mobile": ["Oswald", "Impact", "sans-serif"],
+            "headline-lg": ["Oswald", "Impact", "sans-serif"],
+            "headline-md": ["Oswald", "Impact", "sans-serif"],
+            "headline-sm": ["Oswald", "Impact", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "label-lg": ["Inter", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "display-code": ["Inter", "monospace"]
+          },
+          fontSize: {
+            "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "headline-lg": ["28px", { lineHeight: "32px", letterSpacing: "0.01em", fontWeight: "600" }],
+            "headline-md": ["22px", { lineHeight: "26px", letterSpacing: "0.01em", fontWeight: "600" }],
+            "label-sm": ["10px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "700" }],
+            "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+            "label-lg": ["14px", { lineHeight: "18px", letterSpacing: "0.04em", fontWeight: "600" }],
+            "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "headline-xl-mobile": ["32px", { lineHeight: "36px", letterSpacing: "0.02em", fontWeight: "700" }],
+            "headline-sm": ["18px", { lineHeight: "22px", letterSpacing: "0.01em", fontWeight: "600" }],
+            "display-code": ["13px", { lineHeight: "16px", fontWeight: "500" }],
+            "headline-xl": ["40px", { lineHeight: "44px", letterSpacing: "0.02em", fontWeight: "700" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen">
+
+  <!-- CABEÇALHO TÁTICO PERSISTENTE -->
+  <header class="fixed top-0 w-full z-40 pt-safe bg-surface/90 backdrop-blur-xl border-b border-surface-container-high/60 shadow-[0_1px_8px_rgba(0,0,0,0.4)] no-print">
+    <div class="h-16 px-margin flex items-center justify-between">
+      <div class="flex items-center gap-space-sm min-w-0 cursor-pointer" onclick="switchTab('inicio')">
+        <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0 border border-primary/30">
+          <img alt="Protocolo 72H Logo" class="h-6 w-6 object-contain" src="icons/icon.svg"/>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="font-headline-sm text-headline-sm uppercase tracking-wide text-primary truncate leading-tight">PROTOCOLO 72H</span>
+          <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant truncate" id="header-breadcrumb">Início</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <!-- Indicador de Rede / Offline -->
+        <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container-high border border-surface-container-highest/60">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" id="net-dot"></span>
+          <span class="font-label-sm text-label-sm text-emerald-400 uppercase tracking-wider" id="net-status">OFFLINE PRONTO</span>
+        </div>
+
+        <!-- Botão Rápido SOS -->
+        <button onclick="openSOSModal()" class="w-10 h-10 rounded-lg bg-error-container/80 hover:bg-error-container text-white flex items-center justify-center shadow-md active:scale-95 transition-all" title="Abrir Modo SOS">
+          <span class="material-symbols-outlined text-[22px] animate-pulse">crisis_alert</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- BANNER DE INSTALAÇÃO DO PWA (Exibido quando aplicável) -->
+  <div id="pwa-install-banner" class="hidden fixed top-16 left-0 right-0 z-40 bg-primary-container text-on-primary-container px-4 py-2.5 shadow-lg flex items-center justify-between no-print">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="material-symbols-outlined text-[20px]">install_mobile</span>
+      <span class="font-label-md text-label-md uppercase font-bold truncate">Instale para ter acesso 100% offline</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="installPWA()" class="px-3 py-1 bg-surface-container-lowest text-primary font-label-sm text-label-sm uppercase rounded font-bold shadow hover:bg-surface-dim transition-all">Instalar</button>
+      <button onclick="document.getElementById('pwa-install-banner').classList.add('hidden')" class="p-1 hover:opacity-75">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL (SPA COM ABAS) -->
+  <main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen">
+
+    <!-- ========================================== -->
+    <!-- TELA 1: INÍCIO (PAINEL PRINCIPAL) -->
+    <!-- ========================================== -->
+    <section id="view-inicio" class="flex flex-col w-full">
+      <div class="flex flex-col w-full px-margin-mobile pt-3 pb-space-lg gap-space-md">
+
+        <!-- SOS Fast Banner (0-2h Immediate Protocol) -->
+        <div class="w-full">
+          <div onclick="openSOSModal()" class="relative overflow-hidden rounded-xl bg-error-container p-space-md shadow-xl flex items-center justify-between gap-space-sm active:scale-[0.99] transition-transform cursor-pointer">
+            <div class="flex items-center gap-space-sm min-w-0">
+              <div class="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-[28px] text-on-error" style="font-variation-settings: 'FILL' 1;">crisis_alert</span>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-block w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+                  <span class="font-headline-sm text-headline-sm uppercase text-white tracking-wide truncate">MODO SOS IMEDIATO</span>
+                </div>
+                <p class="font-body-sm text-body-sm text-on-secondary-container truncate">Protocolo 0-2 Horas: Evacuação &amp; Sobrevivência</p>
+              </div>
+            </div>
+            <button class="flex-shrink-0 h-11 px-space-md rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm uppercase tracking-wide flex items-center gap-1 active:scale-95 shadow-md">
+              <span>ATIVAR</span>
+              <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tactical Family Readiness Index Bento Card -->
+        <div class="w-full rounded-xl bg-surface-container-high p-space-md shadow-lg flex flex-col gap-space-md">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-space-xs">
+              <span class="material-symbols-outlined text-[20px] text-primary">security</span>
+              <h2 class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wide">Prontidão Familiar</h2>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm uppercase tracking-wider">Monitoramento 72h</span>
+          </div>
+
+          <div class="flex items-center gap-space-md">
+            <!-- Circular Metric SVG Gauge -->
+            <div class="relative w-20 h-20 flex-shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewbox="0 0 72 72">
+                <circle class="stroke-surface-container" cx="36" cy="36" fill="transparent" r="30" stroke-width="7"></circle>
+                <circle id="dash-gauge-circle" class="stroke-primary-container transition-all duration-500" cx="36" cy="36" fill="transparent" r="30" stroke-dasharray="188.4" stroke-dashoffset="60.2" stroke-linecap="round" stroke-width="7"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="dash-gauge-percent" class="font-headline-md text-headline-md text-primary leading-none">68%</span>
+                <span class="font-label-sm text-label-sm text-outline leading-tight">SEGURO</span>
+              </div>
+            </div>
+
+            <!-- Quick Metrics Breakdown -->
+            <div class="flex flex-col flex-1 min-w-0 gap-1.5">
+              <div class="flex justify-between items-center text-body-sm font-body-sm text-on-surface">
+                <span class="truncate">Água Reserva Estimada</span>
+                <span id="dash-water-metric" class="font-display-code text-display-code text-tertiary">31.5L / 31.5L</span>
+              </div>
+              <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                <div id="dash-water-bar" class="bg-tertiary h-full rounded-full transition-all duration-300" style="width: 75%;"></div>
+              </div>
+
+              <div class="flex justify-between items-center text-body-sm font-body-sm text-on-surface pt-0.5">
+                <span class="truncate">Mochila de Fuga (BOB)</span>
+                <span id="dash-bob-metric" class="font-display-code text-display-code text-primary-fixed">8 / 12 itens</span>
+              </div>
+              <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                <div id="dash-bob-bar" class="bg-primary-container h-full rounded-full transition-all duration-300" style="width: 67%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Bar inside Card -->
+          <div class="flex items-center justify-between pt-space-xs gap-space-sm border-t border-surface-container/60">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="material-symbols-outlined text-[18px] text-error flex-shrink-0">warning</span>
+              <span id="dash-pending-count" class="font-body-sm text-body-sm text-secondary truncate">4 itens pendentes para 72h</span>
+            </div>
+            <button onclick="switchTab('checklists')" class="h-10 px-space-md rounded-lg bg-surface-bright text-primary font-label-lg text-label-lg uppercase tracking-wide hover:bg-surface-variant active:scale-95 transition-all flex items-center gap-1 flex-shrink-0">
+              <span>Revisar</span>
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Tactical Actions Grid -->
+        <div class="w-full flex flex-col gap-space-xs">
+          <span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1">Atalhos Táticos de Campo</span>
+          <div class="grid grid-cols-3 gap-gutter-mobile">
+            <button onclick="switchTab('calculadora')" class="flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container hover:bg-surface-container-high active:scale-95 transition-all gap-1.5 min-h-[82px] text-center border border-surface-container-high/60">
+              <div class="w-9 h-9 rounded-lg bg-tertiary/10 text-tertiary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[22px]">water_drop</span>
+              </div>
+              <span class="font-label-md text-label-md text-on-surface line-clamp-1">Calculadora</span>
+            </button>
+
+            <button onclick="switchTab('checklists')" class="flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container hover:bg-surface-container-high active:scale-95 transition-all gap-1.5 min-h-[82px] text-center border border-surface-container-high/60">
+              <div class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[22px]">backpack</span>
+              </div>
+              <span class="font-label-md text-label-md text-on-surface line-clamp-1">Mochila BOB</span>
+            </button>
+
+            <button onclick="openSOSModal()" class="flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container hover:bg-surface-container-high active:scale-95 transition-all gap-1.5 min-h-[82px] text-center border border-surface-container-high/60">
+              <div class="w-9 h-9 rounded-lg bg-error-container/20 text-error flex items-center justify-center">
+                <span class="material-symbols-outlined text-[22px]">contact_phone</span>
+              </div>
+              <span class="font-label-md text-label-md text-on-surface line-clamp-1">SOS Contatos</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Manuais & Guias Oficiais Grid 2x2 -->
+        <div class="w-full flex flex-col gap-space-sm mt-space-xs">
+          <div class="flex items-center justify-between px-1">
+            <div class="flex items-center gap-space-xs">
+              <span class="material-symbols-outlined text-[20px] text-primary">menu_book</span>
+              <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wide">Manuais &amp; Guias Oficiais</h3>
+            </div>
+            <span class="font-label-sm text-label-sm text-emerald-400 bg-surface-container px-2 py-0.5 rounded uppercase tracking-wider">4 Disponíveis</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-gutter-mobile">
+            <!-- Card 1: Kit Emergência 72h -->
+            <article class="flex flex-col rounded-xl bg-surface-container overflow-hidden shadow-md hover:shadow-xl transition-all border border-surface-container-high/50">
+              <div class="relative w-full aspect-[2/3] overflow-hidden bg-surface-container-lowest">
+                <img alt="Kit Emergência 72H" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFK2q5m62yUkIDrFqY_kdbF4dgoWW2t5vy3KC7MOIS4Urigq7GSQt57dJg44s4rP5tFKcQdZi8cpN-vdncx0oMMn-O5-F9XwzFE0kHQZuHXMfjsDjJv6oEsdMFtY56Na1OPn3ybPY3SXkRbIc6rmMkx6JdoeH8KPDD0YoykH8R-DbnoaQ_dSJdgwzByor66TKuX145S37jNWFqdVSSZVCHViDCBFh032Sh3f3DXHU-bPHWfN7RlCdMGg"/>
+                <div class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-surface-dim/80 backdrop-blur-md">
+                  <span class="font-label-sm text-label-sm uppercase text-primary">Checklist + Ação</span>
+                </div>
+              </div>
+              <div class="p-space-sm flex flex-col justify-between flex-1 gap-space-sm bg-surface-container">
+                <div class="min-w-0">
+                  <h4 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1 leading-snug">Kit Emergência 72h</h4>
+                  <p class="font-body-sm text-body-sm text-outline line-clamp-2 mt-0.5">Mochila tática, ferramentas, rádio e primeiros socorros.</p>
+                </div>
+                <button onclick="openGuideModal('bob')" class="w-full h-10 rounded-lg bg-surface-container-high text-primary font-headline-sm text-headline-sm uppercase tracking-wide hover:bg-primary hover:text-on-primary active:scale-95 transition-all flex items-center justify-center gap-1">
+                  <span>Acessar Guia</span>
+                  <span class="material-symbols-outlined text-[18px]">read_more</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 2: Guia de Água -->
+            <article class="flex flex-col rounded-xl bg-surface-container overflow-hidden shadow-md hover:shadow-xl transition-all border border-surface-container-high/50">
+              <div class="relative w-full aspect-[2/3] overflow-hidden bg-surface-container-lowest">
+                <img alt="Guia Completo de Água" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCamRG5TJZgXwGeGuUZ6p9Kv-j4JCVyesx8tC1wHwCDIVLOuyF-Lu4OT3kCHj-soMDlzcWINjE1tWBzfuPBHc0uZHwj741KNPFv2IbpczF4Ht4nMpgdv6Y9b8r5hqD0VIUf9ZQxcxTL-r_TAFhId-Jt74aY0Q3zG9fBDqdduLvSpzybMBZo7ozNZ6n3gpPhdJIb_cciktOWOU1x56v8TurNQbfafwpW7IQMme9ag0ZNi76wJ7AaL37ogA"/>
+                <div class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-surface-dim/80 backdrop-blur-md">
+                  <span class="font-label-sm text-label-sm uppercase text-tertiary">Recurso Vital</span>
+                </div>
+              </div>
+              <div class="p-space-sm flex flex-col justify-between flex-1 gap-space-sm bg-surface-container">
+                <div class="min-w-0">
+                  <h4 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1 leading-snug">Guia de Água</h4>
+                  <p class="font-body-sm text-body-sm text-outline line-clamp-2 mt-0.5">Armazenamento em galões, dosagem de cloro e filtragem.</p>
+                </div>
+                <button onclick="openGuideModal('water')" class="w-full h-10 rounded-lg bg-surface-container-high text-tertiary font-headline-sm text-headline-sm uppercase tracking-wide hover:bg-tertiary hover:text-on-tertiary active:scale-95 transition-all flex items-center justify-center gap-1">
+                  <span>Acessar Guia</span>
+                  <span class="material-symbols-outlined text-[18px]">read_more</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 3: Validade de Alimentos -->
+            <article class="flex flex-col rounded-xl bg-surface-container overflow-hidden shadow-md hover:shadow-xl transition-all border border-surface-container-high/50">
+              <div class="relative w-full aspect-[2/3] overflow-hidden bg-surface-container-lowest">
+                <img alt="Tabela de Validade dos Alimentos" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATSF0dptTs6vsfiUz6TAbSaO6iyQwQDIZo3bbAqbTtiB9yf8oU6aHUBPT-rgKjmDtsWfUETpBIMnS1vtGstVzHkuV0QdVs7gExjtfOAC5irdyHQVqs0weZSLfEqsYEld9jqjwIPbliRj2WbQDMqMPOU6FX4YOxHysT28iN0pKHlkPXEYm9K4pKCRAMfhuWpWr7bZidmCIzVBOXyD8q6yOzQfXNXpjs5eL9e1Jy_nHCUDZpRDH6orlCIw"/>
+                <div class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-surface-dim/80 backdrop-blur-md">
+                  <span class="font-label-sm text-label-sm uppercase text-primary-fixed">Despensa Seca</span>
+                </div>
+              </div>
+              <div class="p-space-sm flex flex-col justify-between flex-1 gap-space-sm bg-surface-container">
+                <div class="min-w-0">
+                  <h4 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1 leading-snug">Validade de Alimentos</h4>
+                  <p class="font-body-sm text-body-sm text-outline line-clamp-2 mt-0.5">Rotação sem eletricidade, enlatados e frascos herméticos.</p>
+                </div>
+                <button onclick="openGuideModal('food')" class="w-full h-10 rounded-lg bg-surface-container-high text-primary font-headline-sm text-headline-sm uppercase tracking-wide hover:bg-primary hover:text-on-primary active:scale-95 transition-all flex items-center justify-center gap-1">
+                  <span>Acessar Guia</span>
+                  <span class="material-symbols-outlined text-[18px]">read_more</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 4: Plano Regional e Familiar -->
+            <article class="flex flex-col rounded-xl bg-surface-container overflow-hidden shadow-md hover:shadow-xl transition-all border border-surface-container-high/50">
+              <div class="relative w-full aspect-[2/3] overflow-hidden bg-surface-container-lowest">
+                <img alt="Plano Regional e Familiar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrzy_3mS0R8jALras9v7s9V3yKWfuxLz_OZUIncjHGfGJ5TBqffPAi0UlhI1YfXlo09cyHk5YRVkkBjiMPs_DjZh9vJoLb98Y-h8ovRSKMsVF_PvIAJDNwHPEkrvdQ2keNYHt_ZEVMGVKb-T8U0BmkLO0M4tRRpYmRbgSyxhfc78cgjBX7NoOZhoYtM-v7LrbYiemcVmzaRpwL-H3cYx8pvqBqBM25-vrarhZMoZP3eX4_ZwutB2phqQ"/>
+                <div class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-surface-dim/80 backdrop-blur-md">
+                  <span class="font-label-sm text-label-sm uppercase text-secondary">Riscos Climáticos</span>
+                </div>
+              </div>
+              <div class="p-space-sm flex flex-col justify-between flex-1 gap-space-sm bg-surface-container">
+                <div class="min-w-0">
+                  <h4 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1 leading-snug">Plano Regional</h4>
+                  <p class="font-body-sm text-body-sm text-outline line-clamp-2 mt-0.5">El Niño, inundações, secas por regiões brasileiras e rotas.</p>
+                </div>
+                <button onclick="openGuideModal('regional')" class="w-full h-10 rounded-lg bg-surface-container-high text-secondary font-headline-sm text-headline-sm uppercase tracking-wide hover:bg-secondary hover:text-on-secondary active:scale-95 transition-all flex items-center justify-center gap-1">
+                  <span>Acessar Guia</span>
+                  <span class="material-symbols-outlined text-[18px]">read_more</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Offline Status / Emergency Broadcast Card -->
+        <div class="w-full rounded-xl bg-surface-container-low p-space-md flex items-center justify-between gap-space-sm border border-surface-container-high/40">
+          <div class="flex items-center gap-space-sm min-w-0">
+            <div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary flex-shrink-0">
+              <span class="material-symbols-outlined text-[22px]">cell_tower</span>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="font-headline-sm text-headline-sm uppercase text-on-surface truncate">Defesa Civil &amp; Rádio AM/FM</span>
+              <span class="font-body-sm text-body-sm text-outline truncate">Frequência local de alerta: 820 kHz / 95.7 MHz</span>
+            </div>
+          </div>
+          <button onclick="alert('Sintonize seu rádio de pilha na faixa AM 820 kHz ou FM 95.7 MHz para informativos oficiais de emergência da Defesa Civil.')" class="text-primary hover:text-white p-1">
+            <span class="material-symbols-outlined text-[22px]">tune</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TELA 2: CALCULADORA DE AUTONOMIA 72H -->
+    <!-- ========================================== -->
+    <section id="view-calculadora" class="hidden flex flex-col w-full">
+      <div class="flex flex-col px-margin py-space-md gap-space-lg">
+        <!-- Top Tactical Status & Banner -->
+        <div class="flex flex-col gap-space-xs">
+          <div class="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded bg-primary/10">
+            <span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+            <span class="font-label-sm text-label-sm uppercase tracking-wider text-primary">Base de Cálculo Civil: Mínimo 72 Horas</span>
+          </div>
+          <h1 class="font-headline-xl-mobile text-headline-xl-mobile uppercase text-on-surface tracking-wide mt-1">
+            Calculadora de <span class="text-primary">Autonomia 72H</span>
+          </h1>
+          <p class="font-body-md text-body-md text-on-surface-variant">
+            Dimensione os suprimentos vitais de água potável, calorias emergenciais e ração para sustentar seu núcleo familiar com segurança durante o colapso de serviços básicos.
+          </p>
+        </div>
+
+        <!-- Visual Showcase / Tactical Guides Mosaic -->
+        <div class="grid grid-cols-2 gap-gutter-mobile">
+          <div onclick="openGuideModal('water')" class="relative overflow-hidden rounded-xl bg-surface-container-high shadow-md flex flex-col group cursor-pointer border border-surface-container-highest/40">
+            <div class="h-28 w-full relative">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKfrWPA1hwV5xWdjWtZWH3xCsDDFzdcaKn6u3SvN77ko245dpuzNeY89yBGCXq3uflQrMigFBkB42NuUm8Y_Fu6DgL9O_FvtvBJGOLfyJWHJqP7unC1p8A9UyF1AV4M5m0riBPjrESqmC0gtdgVVfw5UtWBaBCKj3K9toTccmv7TPv4h1LiLSoH4iK5Fd49Z10jkww82reqg56TLuhaxVKkejFTc6iYzMG0UoqfEwX" alt="Guia Hídrico"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-surface-container-high via-surface-container-high/40 to-transparent"></div>
+              <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-tertiary/20 text-tertiary font-label-sm text-label-sm uppercase">Guia Hídrico</span>
+            </div>
+            <div class="p-2.5 flex flex-col">
+              <span class="font-headline-sm text-headline-sm uppercase text-on-surface leading-tight">Protocolo Hídrico</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Filtro, fervura &amp; cloração rápida</span>
+            </div>
+          </div>
+
+          <div onclick="openGuideModal('food')" class="relative overflow-hidden rounded-xl bg-surface-container-high shadow-md flex flex-col group cursor-pointer border border-surface-container-highest/40">
+            <div class="h-28 w-full relative">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwlVZ4WRGwf2SkTcfis1f-Rjn4pmGSyj6djRzFFzACngHOusBrIy1pFWX-VHQfbRzUj4VIgc3eZYTSrt4VaDHvtGb5jMJbWU1Kx8j4LVmbA07AFaAOc1yDsBf2bJBMEN90gzN3gWPvh8WV9Dpsj_8sh-_N8jayuYr-29lhNRMsDGu4-kmlq5h7goDxy6Pkhjv-yhn5CagROYtweQDA58piIprKLfAtpM_xdelgi8F" alt="Despensa 72h"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-surface-container-high via-surface-container-high/40 to-transparent"></div>
+              <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-primary/20 text-primary font-label-sm text-label-sm uppercase">Despensa 72H</span>
+            </div>
+            <div class="p-2.5 flex flex-col">
+              <span class="font-headline-sm text-headline-sm uppercase text-on-surface leading-tight">Rodízio &amp; Estoque</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Controle de validade selada</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Household Profile Selector Card -->
+        <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-md border border-surface-container-high/60">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[22px]">group</span>
+              <span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">1. Perfil Familiar</span>
+            </div>
+            <span class="font-label-sm text-label-sm uppercase text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded">Membros Ativos</span>
+          </div>
+
+          <!-- Counter Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm" id="demographic-controls">
+            <!-- Adultos -->
+            <div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="material-symbols-outlined text-on-surface-variant text-[22px]">person</span>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-lg text-label-lg text-on-surface uppercase truncate">Adultos</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant leading-tight truncate">2.000 kcal • 3.5L/dia</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="updateDemographicCount('adults', -1)" aria-label="Diminuir adultos" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" type="button">
+                  <span class="material-symbols-outlined text-[18px]">remove</span>
+                </button>
+                <span class="font-headline-md text-headline-md text-primary w-7 text-center" id="count-adults">2</span>
+                <button onclick="updateDemographicCount('adults', 1)" aria-label="Aumentar adultos" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" type="button">
+                  <span class="material-symbols-outlined text-[18px]">add</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Crianças -->
+            <div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="material-symbols-outlined text-on-surface-variant text-[22px]">child_care</span>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-lg text-label-lg text-on-surface uppercase truncate">Crianças</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant leading-tight truncate">1.500 kcal • 2.5L/dia</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="updateDemographicCount('children', -1)" aria-label="Diminuir crianças" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" type="button">
+                  <span class="material-symbols-outlined text-[18px]">remove</span>
+                </button>
+                <span class="font-headline-md text-headline-md text-primary w-7 text-center" id="count-children">1</span>
+                <button onclick="updateDemographicCount('children', 1)" aria-label="Aumentar crianças" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" type="button">
+                  <span class="material-symbols-outlined text-[18px]">add</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Idosos -->
+            <div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="material-symbols-outlined text-on-surface-variant text-[22px]">elderly</span>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-lg text-label-lg text-on-surface uppercase truncate">Idosos</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant leading-tight truncate">1.700 kcal • 3.0L/dia</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="updateDemographicCount('elderly', -1)" aria-label="Diminuir idosos" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" type="button">
+                  <span class="material-symbols-outlined text-[18px]">remove</span>
+                </button>
+                <span class="font-headline-md text-headline-md text-primary w-7 text-center" id="count-elderly">0</span>
+                <button onclick="updateDemographicCount('elderly', 1)" aria-label="Aumentar idosos" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" type="button">
+                  <span class="material-symbols-outlined text-[18px]">add</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Pets -->
+            <div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="material-symbols-outlined text-on-surface-variant text-[22px]">pets</span>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-lg text-label-lg text-on-surface uppercase truncate">Pets (Cães/Gatos)</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant leading-tight truncate">300g ração • 1.0L/dia</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="updateDemographicCount('pets', -1)" aria-label="Diminuir pets" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" type="button">
+                  <span class="material-symbols-outlined text-[18px]">remove</span>
+                </button>
+                <span class="font-headline-md text-headline-md text-primary w-7 text-center" id="count-pets">1</span>
+                <button onclick="updateDemographicCount('pets', 1)" aria-label="Aumentar pets" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" type="button">
+                  <span class="material-symbols-outlined text-[18px]">add</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extreme Scenario Toggles -->
+        <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm border border-surface-container-high/60">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[22px]">warning</span>
+            <span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">2. Modificadores Ambientais</span>
+          </div>
+          <div class="flex flex-col gap-2.5 mt-1">
+            <!-- Toggle 1: Hot Weather -->
+            <label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high cursor-pointer select-none">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="material-symbols-outlined text-primary text-[24px]">thermostat</span>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-lg text-label-lg text-on-surface truncate">Clima Quente / Seca Severa</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Acrescenta +30% na reserva de água para hidratação</span>
+                </div>
+              </div>
+              <input onchange="toggleModifier('heatWave', this.checked)" class="sr-only peer" id="toggle-heat" type="checkbox"/>
+              <div class="w-12 h-7 bg-surface-variant rounded-full peer peer-checked:bg-primary-container relative transition-colors flex-shrink-0 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-on-primary"></div>
+            </label>
+
+            <!-- Toggle 2: Special Needs -->
+            <label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high cursor-pointer select-none">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="material-symbols-outlined text-secondary text-[24px]">medical_services</span>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-lg text-label-lg text-on-surface truncate">Necessidades Médicas / Dieta Suave</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Soma +20% em água pura e reserva de digestão facilitada</span>
+                </div>
+              </div>
+              <input onchange="toggleModifier('medical', this.checked)" class="sr-only peer" id="toggle-medical" type="checkbox"/>
+              <div class="w-12 h-7 bg-surface-variant rounded-full peer peer-checked:bg-secondary-container relative transition-colors flex-shrink-0 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-on-secondary"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Real-time Tactical Calculation Results -->
+        <div class="flex flex-col gap-space-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[22px]">analytics</span>
+              <span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">3. Provisão Crítica 72H</span>
+            </div>
+            <span class="font-label-sm text-label-sm uppercase text-primary bg-primary/10 px-2 py-0.5 rounded">Cálculo Dinâmico</span>
+          </div>
+
+          <!-- Water Card (Primary Tactical Focus) -->
+          <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm relative overflow-hidden border border-surface-container-high/60">
+            <div class="w-full h-1 bg-tertiary absolute top-0 left-0"></div>
+            <div class="flex items-start justify-between">
+              <div class="flex flex-col">
+                <span class="font-label-sm text-label-sm text-tertiary uppercase tracking-wider">Volume Hídrico Essencial</span>
+                <div class="flex items-baseline gap-2 mt-0.5">
+                  <span class="font-headline-xl text-headline-xl text-on-surface" id="out-total-water">31.5</span>
+                  <span class="font-headline-md text-headline-md text-tertiary">LITROS</span>
+                </div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+                <span class="material-symbols-outlined text-[28px]">water_drop</span>
+              </div>
+            </div>
+
+            <!-- Sub-breakdown -->
+            <div class="grid grid-cols-2 gap-space-xs pt-1">
+              <div class="p-2.5 rounded-lg bg-surface-container-high flex flex-col">
+                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Consumo Direto</span>
+                <span class="font-headline-sm text-headline-sm text-on-surface mt-0.5" id="out-drink-water">21.0 L</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">Hidratação Vital</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-surface-container-high flex flex-col">
+                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Preparo &amp; Higiene</span>
+                <span class="font-headline-sm text-headline-sm text-on-surface mt-0.5" id="out-prep-water">10.5 L</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">Saneamento mínimo</span>
+              </div>
+            </div>
+
+            <!-- Tactical Water Purification Advice -->
+            <div class="flex items-center gap-2.5 p-2.5 rounded-lg bg-surface-container-low text-on-surface-variant border border-surface-container-high/40">
+              <span class="material-symbols-outlined text-primary text-[20px] flex-shrink-0">science</span>
+              <p class="font-body-sm text-body-sm leading-tight">
+                <strong class="text-on-surface">Purificação rápida:</strong> 2 gotas de água sanitária (2,0% a 2,5% de cloro ativo, sem perfume) por litro de água límpida. Aguardar 30 min antes do consumo ou ferver vigorosamente por 3 min.
+              </p>
+            </div>
+          </div>
+
+          <!-- Food / Caloric Card -->
+          <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm relative overflow-hidden border border-surface-container-high/60">
+            <div class="w-full h-1 bg-primary absolute top-0 left-0"></div>
+            <div class="flex items-start justify-between">
+              <div class="flex flex-col">
+                <span class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Aporte Calórico Familiar</span>
+                <div class="flex items-baseline gap-2 mt-0.5">
+                  <span class="font-headline-xl text-headline-xl text-on-surface" id="out-total-meals">27</span>
+                  <span class="font-headline-md text-headline-md text-primary">REFEIÇÕES</span>
+                </div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[28px]">lunch_dining</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-high">
+              <div class="flex flex-col">
+                <span class="font-label-sm text-label-sm uppercase text-on-surface-variant">Energia Total Requerida</span>
+                <span class="font-headline-sm text-headline-sm text-on-surface" id="out-calories">16.500 kcal</span>
+              </div>
+              <span class="font-label-sm text-label-sm text-primary uppercase bg-primary/10 px-2 py-1 rounded">Não-perecíveis</span>
+            </div>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">
+              Priorize latas com abertura fácil (pull-ring), atum em óleo, feijão pronto, barras proteicas e castanhas que não demandem gás ou cozimento prolongado.
+            </p>
+          </div>
+
+          <!-- Pets Allocation Card -->
+          <div class="bg-surface-container rounded-xl p-space-md shadow-md flex items-center justify-between border border-surface-container-high/60">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+                <span class="material-symbols-outlined text-[22px]">pets</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-label-lg text-label-lg uppercase text-on-surface">Cotas para Animais</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant" id="out-pet-details">0.9 kg ração + 3.0 L água</span>
+              </div>
+            </div>
+            <span class="font-label-sm text-label-sm text-emerald-400 bg-surface-container-high px-2 py-1 rounded uppercase">Incluso</span>
+          </div>
+
+          <!-- Botão Salvar Provisão -->
+          <button onclick="showToast('✓ Provisão 72H calculada e sincronizada com o Painel Principal!'); triggerHaptic(30);" class="w-full h-12 rounded-xl bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wide flex items-center justify-center gap-2 active:scale-98 shadow-md mt-1">
+            <span class="material-symbols-outlined text-[20px]">save</span>
+            <span>Salvar Parâmetros no Painel</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TELA 3: CHECKLISTS INTERATIVOS -->
+    <!-- ========================================== -->
+    <section id="view-checklists" class="hidden flex flex-col w-full">
+      <!-- Visual Header Hero Banner -->
+      <div class="relative w-full overflow-hidden bg-surface-container-low px-margin-mobile pt-5 pb-6 border-b border-surface-container-high/40">
+        <div class="absolute -right-16 -top-16 w-52 h-52 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-12 -bottom-10 w-44 h-44 bg-error-container/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="relative flex flex-col gap-2">
+          <div class="inline-flex items-center gap-1.5 self-start px-2 py-0.5 rounded bg-primary-container/20 text-primary">
+            <span class="material-symbols-outlined text-[14px]">verified_user</span>
+            <span class="font-label-sm text-label-sm uppercase tracking-wider">GUIA DE PRONTIDÃO FAMILIAR</span>
+          </div>
+          <h1 class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wide leading-none">
+            KIT EMERGÊNCIA <span class="text-primary">72H</span>
+          </h1>
+          <p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">
+            Inventário de contingência tático. Mantenha os suprimentos revisados a cada 6 meses.
+          </p>
+
+          <!-- Mini visual display de itens essenciais -->
+          <div class="mt-3 flex items-center gap-2 p-2 rounded-lg bg-surface-container border border-surface-container-high/60">
+            <div class="w-12 h-12 rounded overflow-hidden flex-shrink-0 bg-surface-container-high">
+              <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQPA47O63C7oVGDiEO3_A2aObIjPcqJc_bRQWQlv5Syb1jIlg3pypmDm1TUCXqdyJjIh86VjVjSJkbPB63GhhFCZuyqgL98fKksFYgA83Qk1zjFsQk9oJXq4vx-AWa8uWuOWsDM1V-_OQHT4hfK3CXY1U2dil_0m3ejqn4DO7xY_2rlL5OkUyJpMf9HCaRInP9UK-aOzTCkAWSc3PTpFJC4dovWnzjWDyTW5mlkmtj" alt="Mochila Rápida BOB"/>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between text-on-surface">
+                <span class="font-label-md text-label-md uppercase text-primary truncate">Mochila Rápida (BOB)</span>
+                <span class="font-display-code text-display-code text-primary-fixed-dim">PESO ALVO: &lt; 9 KG</span>
+              </div>
+              <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Pronta para evacuação em até 5 minutos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navegação por Abas Táticas -->
+      <div class="px-margin-mobile pt-4 pb-2 bg-surface">
+        <div class="grid grid-cols-2 p-1 rounded-xl bg-surface-container-low gap-1 border border-surface-container-high/60">
+          <button class="py-2.5 px-3 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all bg-primary-container text-on-primary-container shadow-md flex items-center justify-center gap-1.5 min-h-[48px]" id="tab-bob" onclick="switchChecklistSubTab('bob')">
+            <span class="material-symbols-outlined text-[18px]">backpack</span>
+            <span class="truncate">Mochila (BOB)</span>
+          </button>
+          <button class="py-2.5 px-3 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1.5 min-h-[48px]" id="tab-home" onclick="switchChecklistSubTab('home')">
+            <span class="material-symbols-outlined text-[18px]">roofing</span>
+            <span class="truncate">Estoque 72h</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de Progresso Geral & Painel Tático -->
+      <div class="px-margin-mobile py-2 bg-surface">
+        <div class="p-3.5 rounded-xl bg-surface-container flex flex-col gap-2.5 shadow-sm border border-surface-container-high/60">
+          <div class="flex items-center justify-between min-w-0">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+              <span class="font-label-lg text-label-lg uppercase tracking-wide text-on-surface truncate">Prontidão da Carga</span>
+            </div>
+            <span class="font-headline-sm text-headline-sm text-primary tracking-wide flex-shrink-0" id="progress-metric">
+              10 / 12 <span class="font-body-sm text-body-sm text-on-surface-variant">(83%)</span>
+            </span>
+          </div>
+
+          <!-- Barra de progresso linear -->
+          <div class="w-full h-2.5 rounded-full bg-surface-container-high overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-primary-container to-primary rounded-full transition-all duration-300" id="progress-bar" style="width: 83%;"></div>
+          </div>
+
+          <div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+            <span class="flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              STATUS: OPERACIONAL
+            </span>
+            <span class="text-tertiary">REVISÃO LOCAL ATIVA</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conteúdo Dinâmico de Listas -->
+      <div class="px-margin-mobile py-3 flex flex-col gap-5" id="checklist-items-container">
+        <!-- Renderizado dinamicamente por renderChecklists() -->
+      </div>
+
+      <!-- Dica Tática de Sobrevivência -->
+      <div class="px-margin-mobile">
+        <div class="p-3.5 rounded-xl bg-surface-container-low flex items-start gap-3 border border-surface-container-high/40">
+          <div class="w-8 h-8 rounded-lg bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-label-lg text-label-lg uppercase text-primary">Regra dos 3 de Sobrevivência</span>
+            <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              3 minutos sem oxigênio, 3 horas sem abrigo em frio extremo, 3 dias sem água potável, 3 semanas sem comida. Priorize hidratação e aquecimento térmico!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ações Utilitárias Inferiores -->
+      <div class="px-margin-mobile pt-4 pb-6 flex flex-col gap-2.5">
+        <div class="grid grid-cols-2 gap-2">
+          <!-- Botão Adicionar Item -->
+          <button onclick="addCustomItemPrompt()" class="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase transition-transform active:scale-[0.98] min-h-[48px] border border-surface-container-high/60">
+            <span class="material-symbols-outlined text-[20px] text-primary">add_circle</span>
+            <span class="truncate">+ Novo Item</span>
+          </button>
+          <!-- Botão Gerar Impressão / PDF -->
+          <button onclick="window.print()" class="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase transition-transform active:scale-[0.98] min-h-[48px] border border-surface-container-highest/60">
+            <span class="material-symbols-outlined text-[20px] text-tertiary">print</span>
+            <span class="truncate">Imprimir Checklist</span>
+          </button>
+        </div>
+
+        <!-- Botão Primário Alerta SOS / Conclusão -->
+        <button onclick="showToast('✓ Mochila 72H inspecionada e validada!'); triggerHaptic(30);" class="w-full py-3.5 px-4 rounded-xl bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-[0.98] min-h-[48px]">
+          <span class="material-symbols-outlined text-[20px]">verified</span>
+          <span>Validar Kit 72 Horas Agora</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TELA 4: PLANO FAMILIAR 72H -->
+    <!-- ========================================== -->
+    <section id="view-plano-familiar" class="hidden flex flex-col w-full">
+      <!-- Top Visual Banner -->
+      <div class="relative w-full h-44 overflow-hidden bg-surface-container-lowest">
+        <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJ4J9w9-7fUK2poFxnsOjskFGo6UAhkM8D3gv1SQzet2rCDnV4Z7rpiVXmGuJIul-SV01a1oXG4vTdVovnQpQJGyu8pqNOxIGo-JCMLRshzr6uXaWQQxJTWWQGEB6MM2KiH_c3szP-9nyIS4ddsITFywsw5hAt1dQjZtJ3Co2D5HY7pZwVvI_CIes5poIsY9eeijKlR8DCL-_wc2K226JKd34YrAfS-Dg3PkX-lbDP')"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/60 to-transparent"></div>
+        <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+          <div class="flex flex-col">
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-primary-container/20 text-primary font-label-sm text-label-sm uppercase tracking-wider mb-1 w-fit">
+              <span class="material-symbols-outlined text-[14px]">shield</span>
+              Defesa Civil &amp; Prontidão
+            </span>
+            <h2 class="font-headline-lg text-headline-lg text-on-surface uppercase tracking-wide leading-none">
+              Plano Familiar 72H
+            </h2>
+          </div>
+          <div class="flex flex-col items-end">
+            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Equipe</span>
+            <span class="font-headline-sm text-headline-sm text-primary" id="plan-completion">3 Membros</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-margin flex flex-col gap-space-lg mt-space-md">
+        <!-- Timeline Selector (0h -> 72h) -->
+        <div class="flex flex-col gap-space-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">timer</span>
+              <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Cronograma Tático de Resposta</h3>
+            </div>
+            <span class="font-label-sm text-label-sm uppercase text-primary">Toque para Alternar</span>
+          </div>
+
+          <!-- Time Pills Scrollable -->
+          <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar -mx-margin px-margin">
+            <button class="timeline-tab active flex-shrink-0 px-3.5 py-2.5 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase flex items-center gap-2 transition-all" onclick="switchTimelineStep(0)" type="button">
+              <span class="material-symbols-outlined text-[18px]">crisis_alert</span>
+              0h - 2h Decisão
+            </button>
+            <button class="timeline-tab flex-shrink-0 px-3.5 py-2.5 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase flex items-center gap-2 transition-all hover:bg-surface-bright" onclick="switchTimelineStep(1)" type="button">
+              <span class="material-symbols-outlined text-[18px]">lock</span>
+              24h Isolamento
+            </button>
+            <button class="timeline-tab flex-shrink-0 px-3.5 py-2.5 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase flex items-center gap-2 transition-all hover:bg-surface-bright" onclick="switchTimelineStep(2)" type="button">
+              <span class="material-symbols-outlined text-[18px]">water_drop</span>
+              48h Racionamento
+            </button>
+            <button class="timeline-tab flex-shrink-0 px-3.5 py-2.5 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase flex items-center gap-2 transition-all hover:bg-surface-bright" onclick="switchTimelineStep(3)" type="button">
+              <span class="material-symbols-outlined text-[18px]">sos</span>
+              72h Resgate
+            </button>
+          </div>
+
+          <!-- Active Timeline Card -->
+          <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm border border-surface-container-high/60" id="timeline-card">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-sm text-label-sm uppercase" id="timeline-badge">Fase Crítica Imediata</span>
+                <span class="font-headline-sm text-headline-sm text-primary uppercase" id="timeline-period">0h - 2h: Alerta &amp; Decisão</span>
+              </div>
+              <span class="material-symbols-outlined text-primary text-[22px]" id="timeline-icon">crisis_alert</span>
+            </div>
+            <p class="font-body-md text-body-md text-on-surface" id="timeline-desc">
+              Momento de maior estresse cognitivo. Avalie a rota de risco imediato e determine se o procedimento seguro é <strong class="text-primary font-label-lg">Evacuação Relâmpago</strong> ou <strong class="text-tertiary font-label-lg">Abrigo no Local (Shelter-in-place)</strong>.
+            </p>
+            <div class="flex flex-col gap-2 pt-1" id="timeline-actions">
+              <div class="flex items-start gap-2.5 bg-surface-container-high p-2.5 rounded-lg">
+                <span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span>
+                <span class="font-body-sm text-body-sm text-on-surface">Pegar Mochila 72h e documentos impermeabilizados de todos os membros.</span>
+              </div>
+              <div class="flex items-start gap-2.5 bg-surface-container-high p-2.5 rounded-lg">
+                <span class="material-symbols-outlined text-primary text-[18px] mt-0.5">power_settings_new</span>
+                <span class="font-body-sm text-body-sm text-on-surface">Corte preventivo do registro geral de gás e disjuntor principal caso haja água subindo.</span>
+              </div>
+              <div class="flex items-start gap-2.5 bg-surface-container-high p-2.5 rounded-lg">
+                <span class="material-symbols-outlined text-primary text-[18px] mt-0.5">pin_drop</span>
+                <span class="font-body-sm text-body-sm text-on-surface">Ativar Ponto de Encontro 1 e notificar o Contato Fora da Cidade via SMS/WhatsApp.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ficha Tática Familiar -->
+        <div class="flex flex-col gap-space-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">assignment</span>
+              <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Ficha Tática Familiar</h3>
+            </div>
+            <span class="font-label-sm text-label-sm uppercase text-emerald-400">Salvo Localmente</span>
+          </div>
+
+          <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-md border border-surface-container-high/60">
+            <!-- Ponto de Encontro 1 -->
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <label class="font-label-lg text-label-lg uppercase text-primary flex items-center gap-1.5" for="pe1-input">
+                  <span class="material-symbols-outlined text-[16px]">location_on</span>
+                  Ponto de Encontro 1 (Próximo à Casa)
+                </label>
+                <span class="font-label-sm text-label-sm text-on-surface-variant">Evacuação Local</span>
+              </div>
+              <input class="w-full h-12 bg-surface-container-low text-on-surface px-3 rounded-lg font-body-md text-body-md border border-surface-container-high focus:outline-none focus:border-primary transition-colors" id="pe1-input" placeholder="Ex: Praça da Matriz, ao lado do Coreto" type="text"/>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">Para reagrupamento se houver perda de contato ao sair da casa.</span>
+            </div>
+
+            <!-- Ponto de Encontro 2 -->
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <label class="font-label-lg text-label-lg uppercase text-primary flex items-center gap-1.5" for="pe2-input">
+                  <span class="material-symbols-outlined text-[16px]">share_location</span>
+                  Ponto de Encontro 2 (Fora do Bairro)
+                </label>
+                <span class="font-label-sm text-label-sm text-on-surface-variant">Evacuação Geral</span>
+              </div>
+              <input class="w-full h-12 bg-surface-container-low text-on-surface px-3 rounded-lg font-body-md text-body-md border border-surface-container-high focus:outline-none focus:border-primary transition-colors" id="pe2-input" placeholder="Ex: Ginásio Municipal, Casa dos Avós em Campinas" type="text"/>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">Em caso de interdição total da vizinhança ou área de inundação/deslizamento.</span>
+            </div>
+
+            <!-- Contato Fora da Cidade -->
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <label class="font-label-lg text-label-lg uppercase text-primary flex items-center gap-1.5" for="out-city-input">
+                  <span class="material-symbols-outlined text-[16px]">contact_phone</span>
+                  Contato de Emergência Fora da Cidade
+                </label>
+                <span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-label-sm uppercase">Pivô Central</span>
+              </div>
+              <input class="w-full h-12 bg-surface-container-low text-on-surface px-3 rounded-lg font-body-md text-body-md border border-surface-container-high focus:outline-none focus:border-primary transition-colors" id="out-city-input" placeholder="Ex: Tia Marta - (19) 98765-4321" type="text"/>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">Chamadas locais congestionam rápido; ligações interurbanas costumam completar primeiro.</span>
+            </div>
+
+            <!-- Ficha Médica Resumida -->
+            <div class="flex flex-col gap-2 pt-2 border-t border-surface-container-high/60">
+              <div class="flex items-center justify-between">
+                <span class="font-label-lg text-label-lg uppercase text-primary flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px]">medical_services</span>
+                  Ficha Médica Resumida da Equipe Familiar
+                </span>
+                <button onclick="addFamilyMemberPrompt()" class="px-2.5 py-1 bg-surface-container-high rounded text-primary font-label-sm text-label-sm uppercase flex items-center gap-1 hover:bg-surface-bright active:scale-95 transition-all" type="button">
+                  <span class="material-symbols-outlined text-[14px]">add</span> Adicionar Membro
+                </button>
+              </div>
+              <div class="flex flex-col gap-2" id="family-medical-list">
+                <!-- Preenchido via renderFamilyMembers() -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Protocolo para Grupos Vulneráveis -->
+        <div class="flex flex-col gap-space-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">groups</span>
+              <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Protocolo para Grupos Vulneráveis</h3>
+            </div>
+            <span class="font-label-sm text-label-sm uppercase text-on-surface-variant">Prioridade Zero</span>
+          </div>
+
+          <div class="flex flex-col gap-space-sm">
+            <!-- Crianças Card -->
+            <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-2.5 border border-surface-container-high/60">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-[20px]">child_care</span>
+                  </div>
+                  <div>
+                    <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface leading-tight">Crianças &amp; Menores</h4>
+                    <span class="font-label-sm text-label-sm text-primary uppercase">Segurança Emocional e Rastreio</span>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm uppercase">Ativo</span>
+              </div>
+              <div class="grid grid-cols-1 gap-2 pt-1">
+                <label class="flex items-start gap-3 p-2 bg-surface-container-low rounded-lg cursor-pointer">
+                  <input checked class="w-5 h-5 rounded accent-primary-container mt-0.5" type="checkbox"/>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-label-lg text-label-lg text-on-surface">Apito Tático &amp; Pulseira com Telefone</span>
+                    <span class="font-body-sm text-body-sm text-on-surface-variant">Pendurado no pescoço/bolso com instrução de assoprar 3 vezes se perder os pais.</span>
+                  </div>
+                </label>
+                <label class="flex items-start gap-3 p-2 bg-surface-container-low rounded-lg cursor-pointer">
+                  <input checked class="w-5 h-5 rounded accent-primary-container mt-0.5" type="checkbox"/>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-label-lg text-label-lg text-on-surface">Kit Distração Anti-Pânico</span>
+                    <span class="font-body-sm text-body-sm text-on-surface-variant">Caderno pequeno, lápis de cor, 1 brinquedo de afeto e balas de glicose para manter a calma.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Idosos Card -->
+            <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-2.5 border border-surface-container-high/60">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-lg bg-tertiary/20 flex items-center justify-center text-tertiary">
+                    <span class="material-symbols-outlined text-[20px]">elderly</span>
+                  </div>
+                  <div>
+                    <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface leading-tight">Idosos &amp; Mobilidade Reduzida</h4>
+                    <span class="font-label-sm text-label-sm text-tertiary uppercase">Medicamentos &amp; Autonomia</span>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm uppercase">Ativo</span>
+              </div>
+              <div class="grid grid-cols-1 gap-2 pt-1">
+                <label class="flex items-start gap-3 p-2 bg-surface-container-low rounded-lg cursor-pointer">
+                  <input checked class="w-5 h-5 rounded accent-primary-container mt-0.5" type="checkbox"/>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-label-lg text-label-lg text-on-surface">Farmácia Selada para 7 Dias</span>
+                    <span class="font-body-sm text-body-sm text-on-surface-variant">Caixa organizadora estanque com cópias plastificadas de laudos e receitas médicas.</span>
+                  </div>
+                </label>
+                <label class="flex items-start gap-3 p-2 bg-surface-container-low rounded-lg cursor-pointer">
+                  <input class="w-5 h-5 rounded accent-primary-container mt-0.5" type="checkbox"/>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-label-lg text-label-lg text-on-surface">Apoio de Marcha e Agasalhos Extras</span>
+                    <span class="font-body-sm text-body-sm text-on-surface-variant">Bengala dobrável tática, calçado antiderrapante e manta térmica aluminizada.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Pets Card -->
+            <div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-2.5 border border-surface-container-high/60">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-lg bg-secondary-container/20 flex items-center justify-center text-secondary">
+                    <span class="material-symbols-outlined text-[20px]">pets</span>
+                  </div>
+                  <div>
+                    <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface leading-tight">Animais de Estimação (Pets)</h4>
+                    <span class="font-label-sm text-label-sm text-secondary uppercase">Guia, Caixa &amp; Alimento</span>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm uppercase">Ativo</span>
+              </div>
+              <div class="grid grid-cols-1 gap-2 pt-1">
+                <label class="flex items-start gap-3 p-2 bg-surface-container-low rounded-lg cursor-pointer">
+                  <input checked class="w-5 h-5 rounded accent-primary-container mt-0.5" type="checkbox"/>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-label-lg text-label-lg text-on-surface">Caixa de Transporte / Guia Dupla com Plaqueta</span>
+                    <span class="font-body-sm text-body-sm text-on-surface-variant">Identificação no peitoral com 2 telefones e registro de vacinação antirrábica.</span>
+                  </div>
+                </label>
+                <label class="flex items-start gap-3 p-2 bg-surface-container-low rounded-lg cursor-pointer">
+                  <input checked class="w-5 h-5 rounded accent-primary-container mt-0.5" type="checkbox"/>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-label-lg text-label-lg text-on-surface">Ração Seca Fracionada + Tigela Dobrável</span>
+                    <span class="font-body-sm text-body-sm text-on-surface-variant">Alocada em sacos ziploc para evitar umidade e fungos em abrigos.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ações do Plano Familiar -->
+        <div class="flex flex-col gap-space-sm pt-2 pb-6">
+          <button onclick="sharePlanViaWhatsApp()" class="w-full h-14 bg-primary-container hover:opacity-95 active:scale-[0.98] transition-all rounded-xl flex items-center justify-center gap-2 text-on-primary-container shadow-[0_4px_16px_rgba(245,158,11,0.25)]" type="button">
+            <span class="material-symbols-outlined text-[24px]">send</span>
+            <span class="font-headline-sm text-headline-sm uppercase tracking-wider">Salvar &amp; Compartilhar no WhatsApp</span>
+          </button>
+
+          <button onclick="downloadOfflineSummary()" class="w-full h-11 bg-surface-container hover:bg-surface-container-high active:scale-[0.99] transition-all rounded-xl flex items-center justify-center gap-2 text-on-surface border border-surface-container-high" type="button">
+            <span class="material-symbols-outlined text-[18px]">print</span>
+            <span class="font-label-lg text-label-lg uppercase">Gerar Cartão de Emergência Offline (Imprimir/PDF)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 5: FEED TÁTICO & COMUNICADOS -->
+    <!-- ========================================== -->
+    <section id="view-feed" class="hidden flex flex-col w-full">
+      <div class="px-margin pt-space-md pb-space-lg flex flex-col gap-space-md">
+        <!-- Header do Feed -->
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between">
+            <div class="inline-flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+              <span class="font-headline-sm text-headline-sm uppercase text-primary tracking-wide">CANAL TÁTICO &amp; COMUNICADOS</span>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-surface-container-high text-primary font-label-sm text-label-sm uppercase">AO VIVO</span>
+          </div>
+          <p class="font-body-sm text-body-sm text-on-surface-variant">Alertas em tempo real, atualizações do protocolo, recomendações de equipamentos homologados e ofertas exclusivas para membros.</p>
+        </div>
+
+        <!-- Filtros em pílulas -->
+        <div class="flex gap-2 overflow-x-auto pb-1 -mx-margin px-margin no-scrollbar">
+          <button class="feed-filter-btn flex-shrink-0 px-3.5 py-2 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md uppercase tracking-wider transition-transform active:scale-95 shadow-sm" onclick="filterFeed('all', this)">
+            Todos (4)
+          </button>
+          <button class="feed-filter-btn flex-shrink-0 px-3.5 py-2 rounded-lg bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase tracking-wider transition-colors active:scale-95" onclick="filterFeed('alerta', this)">
+            Alertas &amp; Clima
+          </button>
+          <button class="feed-filter-btn flex-shrink-0 px-3.5 py-2 rounded-lg bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase tracking-wider transition-colors active:scale-95" onclick="filterFeed('protocolo', this)">
+            Atualizações 72H
+          </button>
+          <button class="feed-filter-btn flex-shrink-0 px-3.5 py-2 rounded-lg bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase tracking-wider transition-colors active:scale-95" onclick="filterFeed('ofertas', this)">
+            Equipamentos &amp; Ofertas
+          </button>
+          <button class="feed-filter-btn flex-shrink-0 px-3.5 py-2 rounded-lg bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase tracking-wider transition-colors active:scale-95" onclick="filterFeed('links', this)">
+            Links Úteis
+          </button>
+        </div>
+
+        <!-- Card Alerta Preventivo -->
+        <div class="feed-card bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col gap-3 relative overflow-hidden border border-secondary-container/30" data-category="alerta">
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase tracking-wider font-semibold">
+              <span class="material-symbols-outlined text-[14px]">warning</span>
+              ALERTA PREVENTIVO - DEFESA CIVIL
+            </span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">Há 2 horas</span>
+          </div>
+          <div class="flex flex-col gap-1">
+            <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Boletim Meteorológico Integrado #182</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">Frente fria extrema e precipitações atípicas previstas para as regiões Sul e Sudeste nas próximas 48 horas. Risco de corte pontual de fornecimento elétrico e alagamentos em calhas urbanas.</p>
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[18px]">emergency_home</span>
+              <span class="font-label-sm text-label-sm text-primary uppercase font-medium">Nível Amarelo: Monitoramento</span>
+            </div>
+            <button onclick="openGuideModal('alerta_clima')" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md uppercase active:scale-95 transition-all">
+              <span>Ver Orientações</span>
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Container de Cards -->
+        <div class="flex flex-col gap-space-md" id="feed-container">
+          <!-- Oferta: Lanterna Tática -->
+          <div class="feed-card bg-surface-container rounded-xl overflow-hidden shadow-sm flex flex-col border border-surface-container-high" data-category="ofertas">
+            <div class="relative h-44 w-full bg-surface-container-high overflow-hidden">
+              <img class="w-full h-full object-cover" alt="Lanterna Tática 1200 Lumens" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB11QccocNeJMDFa_HTHZUxEUJ415yVrL59xeY3yt9S-N9gOvd7pxVfPPC2tFSmn4fn2d-IsIuIS-axfHxeJPrWyPjynARwnCYqfpFDs9mkXaoXZNS6BZ7kNv0Erir3QDVKys7waimuUgljq91bwjA8Zmf0HNMhrVZzUTl7neFvD_m1uiIRvanClXYxtC_4_VkHz4g-aYoACYVOGcm3CASkyHI9Y7dMEMZXNoy-ReKP" loading="lazy"/>
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-primary-container text-on-primary font-label-sm text-label-sm uppercase tracking-wide font-bold">
+                  <span class="material-symbols-outlined text-[14px]">local_offer</span>
+                  OFERTA HOMOLOGADA (-35% OFF)
+                </span>
+              </div>
+              <div class="absolute bottom-3 right-3 bg-surface-container-lowest/90 px-2 py-0.5 rounded text-on-surface font-label-sm text-label-sm uppercase">
+                Testado pelo Protocolo
+              </div>
+            </div>
+            <div class="p-space-md flex flex-col gap-3">
+              <div class="flex flex-col gap-1">
+                <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface">Lanterna Tática Recarregável 1200 Lumens c/ Powerbank</h4>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">Bateria integrada de 5000mAh capaz de recarregar rádio transmissor ou smartphone, certificação de imersão IPX8 e modo estrobo militar para sinalização de resgate noturno.</p>
+              </div>
+              <div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-high">
+                <div class="flex flex-col">
+                  <span class="font-label-sm text-label-sm text-on-surface-variant line-through uppercase">De R$ 189,00</span>
+                  <div class="flex items-baseline gap-1">
+                    <span class="font-label-sm text-label-sm text-primary uppercase">Por</span>
+                    <span class="font-headline-sm text-headline-sm text-primary font-bold">R$ 119,90</span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end">
+                  <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Cupom de Membro</span>
+                  <span class="font-display-code text-display-code text-on-surface uppercase bg-surface-container px-2 py-0.5 rounded tracking-widest font-semibold border border-primary/30">PROTOCOLO72</span>
+                </div>
+              </div>
+              <button onclick="claimOffer('PROTOCOLO72', 'Lanterna Tática 1200LM')" class="w-full py-3 px-4 rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-md">
+                <span>RESGATAR OFERTA COM CUPOM</span>
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Protocolo: Conservação de Sementes -->
+          <div class="feed-card bg-surface-container rounded-xl overflow-hidden shadow-sm flex flex-col border border-surface-container-high" data-category="protocolo">
+            <div class="relative h-40 w-full bg-surface-container-high overflow-hidden">
+              <img class="w-full h-full object-cover" alt="Conservação de Sementes e Grãos" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXbVwG2iEKN7nkZi58o87YgOkKCDls7Ob9ihAfBdxbqxKvS9Rf4bTqVAiZOopxtgQE47-Dv_aQbQJ55rscDLGJPfb4xHfoi1E6x9gycAc14Pi5o5-scBKTk9546nHQe9HgK3CpwjSPH5-Yr5Jp-eJlQmjLxH_aK-nTjy53CoM4wHYpBudx2lkWKY6aZHo4KHYYRpZ4ngdoKxiob00cJeVFHOf8OxjqnR0YNnqBhhJZ" loading="lazy"/>
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-tertiary text-on-tertiary font-label-sm text-label-sm uppercase tracking-wide font-bold">
+                  <span class="material-symbols-outlined text-[14px]">library_add</span>
+                  NOVO MÓDULO ADICIONADO
+                </span>
+              </div>
+            </div>
+            <div class="p-space-md flex flex-col gap-3">
+              <div class="flex flex-col gap-1">
+                <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface">Conservação de Sementes e Grãos em Garrafas PET</h4>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">Método tático de purga caseira de oxigênio utilizando algodão, álcool e folhas de louro para conservação preventiva de feijão, arroz e sementes crioulas por até 5 anos sem caruncho.</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+                  <span class="material-symbols-outlined text-[16px]">timer</span>
+                  <span>Leitura: 4 min</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+                  <span class="material-symbols-outlined text-[16px]">verified</span>
+                  <span>Protocolo Testado</span>
+                </div>
+              </div>
+              <button onclick="openGuideModal('sementes')" class="w-full py-3 px-4 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform hover:bg-surface-bright">
+                <span class="material-symbols-outlined text-[20px] text-primary">menu_book</span>
+                <span>LER ADITIVO DO MANUAL</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Link Oficial: CEMADEN / INMET -->
+          <div class="feed-card bg-surface-container rounded-xl p-space-md shadow-sm flex flex-col gap-3 border border-surface-container-high" data-category="links">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-tertiary-fixed-dim font-label-sm text-label-sm uppercase tracking-wide font-semibold">
+                <span class="material-symbols-outlined text-[14px]">radar</span>
+                LINK EXTERNO OFICIAL
+              </span>
+              <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Monitoramento Nacional</span>
+            </div>
+            <div class="flex flex-col gap-1">
+              <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface">Mapa Pluviométrico em Tempo Real - CEMADEN &amp; INMET</h4>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Acesse diretamente os sensores pluviométricos e radares de satélite do seu município sem intermediários para tomada autônoma de decisão de evacuação.</p>
+            </div>
+            <div class="p-3 rounded-lg bg-surface-container-low flex items-center gap-3 border border-surface-container-high">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0 text-primary">
+                <span class="material-symbols-outlined text-[22px]">public</span>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="font-label-md text-label-md text-on-surface uppercase truncate font-medium">Plataforma Georreferenciada</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant truncate">cemaden.gov.br • inmet.gov.br</span>
+              </div>
+            </div>
+            <a href="https://www.gov.br/cemaden/pt-br" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform hover:bg-surface-bright">
+              <span>ACESSAR MAPA METEOROLÓGICO</span>
+              <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+            </a>
+          </div>
+
+          <!-- Oferta: Filtro Portátil de Sobrevivência -->
+          <div class="feed-card bg-surface-container rounded-xl overflow-hidden shadow-sm flex flex-col border border-surface-container-high" data-category="ofertas">
+            <div class="relative h-44 w-full bg-surface-container-high overflow-hidden">
+              <img class="w-full h-full object-cover" alt="Filtro Portátil de Sobrevivência" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ7BbigZrgUI-LSLCmIXT11U42TH65kheZ_1ohby5fDr7v7m75WAihBVMvNUMthvK5ROFYhyzgWFx_R0qfTkJq2eUB3Cod0vUNk__8VgnIWx_QsV6zBdNedqBZwgd37xMRgyulNqWaOZbglgG7V8Sd0tQct-iTSWrEult16Sag2HtPcTLNfF_8YO53YI04K89kQ0VPKKgB6UQ8YYkp7_gvQUz7eM-bUm7qZecBsUt5" loading="lazy"/>
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-primary-container text-on-primary font-label-sm text-label-sm uppercase tracking-wide font-bold">
+                  <span class="material-symbols-outlined text-[14px]">inventory</span>
+                  ESTOQUE CRÍTICO (PARCEIRO)
+                </span>
+              </div>
+            </div>
+            <div class="p-space-md flex flex-col gap-3">
+              <div class="flex flex-col gap-1">
+                <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface">Filtro Portátil de Sobrevivência (Membrana 0.1 Micron)</h4>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">Capacidade nominal de purificação de até 2.000 Litros. Elimina 99.999% de bactérias e cistos em caso de colapso de distribuição de água encanada.</p>
+              </div>
+              <div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-high">
+                <div class="flex flex-col">
+                  <span class="font-label-sm text-label-sm text-on-surface-variant line-through uppercase">De R$ 145,00</span>
+                  <div class="flex items-baseline gap-1">
+                    <span class="font-label-sm text-label-sm text-primary uppercase">Por</span>
+                    <span class="font-headline-sm text-headline-sm text-primary font-bold">R$ 89,00</span>
+                  </div>
+                </div>
+                <span class="px-2 py-1 rounded bg-surface-container font-label-sm text-label-sm text-primary uppercase font-bold border border-primary/30">Desconto 38% OFF</span>
+              </div>
+              <button onclick="claimOffer('FILTRO72', 'Filtro Portátil de Sobrevivência')" class="w-full py-3 px-4 rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-md">
+                <span>VER LINK COM DESCONTO DE MEMBRO</span>
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Canal VIP de Transmissão -->
+        <div class="bg-surface-container-high rounded-xl p-space-md shadow-md flex flex-col gap-3 mt-space-sm relative overflow-hidden border border-primary/20">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center text-on-primary flex-shrink-0">
+              <span class="material-symbols-outlined text-[28px]">cell_tower</span>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <h4 class="font-headline-sm text-headline-sm uppercase text-on-surface leading-tight">CANAL VIP DE TRANSMISSÃO</h4>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">Alertas prioritários antes da sobrecarga de sinal</span>
+            </div>
+          </div>
+          <p class="font-body-sm text-body-sm text-on-surface-variant">
+            Em emergências severas, canais de streaming e redes sociais caem primeiro. Mantenha nosso canal direto salvo em mensageiros com consumo ultrabaixo de largura de banda.
+          </p>
+          <button onclick="joinVIPChannel()" class="w-full py-3 px-4 rounded-lg bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform hover:bg-surface-container-highest border border-surface-variant">
+            <span class="material-symbols-outlined text-[20px] text-primary">campaign</span>
+            <span>ENTRAR NO GRUPO DE TRANSMISSÃO</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BARRA INFERIOR DE NAVEGAÇÃO PERSISTENTE -->
+  <nav class="fixed bottom-0 w-full z-40 pb-safe bg-surface/95 backdrop-blur-xl border-t border-surface-container-high shadow-[0_-1px_12px_rgba(0,0,0,0.6)] no-print">
+    <div class="flex justify-around items-center h-16 px-gutter-mobile">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] transition-colors active text-primary-container" data-path="inicio" href="#inicio">
+        <span class="material-symbols-outlined text-[24px]">dashboard</span>
+        <span class="font-label-sm text-label-sm uppercase tracking-wide">Início</span>
+      </a>
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="calculadora" href="#calculadora">
+        <span class="material-symbols-outlined text-[24px]">calculate</span>
+        <span class="font-label-sm text-label-sm uppercase tracking-wide">Calculadora</span>
+      </a>
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="checklists" href="#checklists">
+        <span class="material-symbols-outlined text-[24px]">inventory_2</span>
+        <span class="font-label-sm text-label-sm uppercase tracking-wide">Checklists</span>
+      </a>
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="plano-familiar" href="#plano-familiar">
+        <span class="material-symbols-outlined text-[24px]">shield</span>
+        <span class="font-label-sm text-label-sm uppercase tracking-wide">Plano</span>
+      </a>
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="feed" href="#feed">
+        <span class="material-symbols-outlined text-[24px]">campaign</span>
+        <span class="font-label-sm text-label-sm uppercase tracking-wide">Feed</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- MODAL: MODO SOS IMEDIATO & FERRAMENTAS -->
+  <!-- ========================================== -->
+  <div id="sos-modal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col items-center justify-end sm:justify-center p-0 sm:p-4 no-print">
+    <div class="w-full sm:max-w-md bg-surface-container rounded-t-2xl sm:rounded-2xl p-5 shadow-2xl flex flex-col gap-4 border border-error-container max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-surface-container-high pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-error-container text-white flex items-center justify-center">
+            <span class="material-symbols-outlined text-[24px]">crisis_alert</span>
+          </div>
+          <div>
+            <h3 class="font-headline-md text-headline-md uppercase text-error tracking-wide">MODO SOS IMEDIATO</h3>
+            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Central de Resgate e Alerta</span>
+          </div>
+        </div>
+        <button onclick="closeSOSModal()" class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface hover:text-white">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Discagem Rápida de Emergência no Brasil -->
+      <div class="flex flex-col gap-2">
+        <span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Telefones Oficiais de Socorro (Brasil)</span>
+        <div class="grid grid-cols-2 gap-2">
+          <a href="tel:193" class="flex items-center gap-3 p-3 rounded-xl bg-error-container/20 border border-error-container/50 text-white active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-error text-[24px]">local_fire_department</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-headline-sm text-headline-sm text-error leading-tight">193</span>
+              <span class="font-label-sm text-label-sm uppercase text-on-surface-variant truncate">Bombeiros</span>
+            </div>
+          </a>
+
+          <a href="tel:192" class="flex items-center gap-3 p-3 rounded-xl bg-error-container/20 border border-error-container/50 text-white active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-error text-[24px]">medical_services</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-headline-sm text-headline-sm text-error leading-tight">192</span>
+              <span class="font-label-sm text-label-sm uppercase text-on-surface-variant truncate">SAMU</span>
+            </div>
+          </a>
+
+          <a href="tel:190" class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-high border border-surface-container-highest text-white active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-primary text-[24px]">local_police</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-headline-sm text-headline-sm text-primary leading-tight">190</span>
+              <span class="font-label-sm text-label-sm uppercase text-on-surface-variant truncate">Polícia Militar</span>
+            </div>
+          </a>
+
+          <a href="tel:199" class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-high border border-surface-container-highest text-white active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-tertiary text-[24px]">shield</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-headline-sm text-headline-sm text-tertiary leading-tight">199</span>
+              <span class="font-label-sm text-label-sm uppercase text-on-surface-variant truncate">Defesa Civil</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Ferramentas Táticas de Sinalização e Áudio -->
+      <div class="flex flex-col gap-2 pt-1 border-t border-surface-container-high">
+        <span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Sinalização de Socorro</span>
+        <div class="grid grid-cols-2 gap-2">
+          <!-- Apito Contínuo Web Audio -->
+          <button id="btn-whistle-toggle" onclick="toggleWhistle()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface active:scale-95 transition-all border border-surface-container-highest min-h-[72px] text-center">
+            <span class="material-symbols-outlined text-[24px] text-primary">campaign</span>
+            <span class="font-headline-sm text-headline-sm uppercase text-primary mt-1">Apito Contínuo</span>
+            <span class="font-body-sm text-[11px] text-on-surface-variant">2800 Hz Alta Penetração</span>
+          </button>
+
+          <!-- Código Morse Sonoro -->
+          <button id="btn-morse-audio" onclick="playMorseSOS()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface active:scale-95 transition-all border border-surface-container-highest min-h-[72px] text-center">
+            <span class="material-symbols-outlined text-[24px] text-tertiary">graphic_eq</span>
+            <span class="font-headline-sm text-headline-sm uppercase text-tertiary mt-1">Morse SOS Sonoro</span>
+            <span class="font-body-sm text-[11px] text-on-surface-variant">... --- ...</span>
+          </button>
+        </div>
+
+        <!-- Lanterna Estroboscópica Tela -->
+        <button id="btn-strobe-toggle" onclick="toggleScreenStrobe()" class="w-full py-3 px-3 rounded-xl bg-error-container text-white font-headline-sm text-headline-sm uppercase tracking-wide flex items-center justify-center gap-2 active:scale-98 shadow-md">
+          <span class="material-symbols-outlined text-[22px]">flash_on</span>
+          <span>Ativar Estroboscópio Visual SOS</span>
+        </button>
+      </div>
+
+      <!-- Checklist de Ação Imediata (0-2h) -->
+      <div class="flex flex-col gap-2 pt-1 border-t border-surface-container-high">
+        <span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Protocolo de Evacuação Imediata</span>
+        <div class="space-y-1.5 text-body-sm font-body-sm text-on-surface">
+          <div class="flex items-start gap-2 bg-surface-container-low p-2 rounded-lg">
+            <span class="material-symbols-outlined text-primary text-[18px]">check</span>
+            <span>1. Pegue a Mochila 72h e a pasta de documentos plastificados.</span>
+          </div>
+          <div class="flex items-start gap-2 bg-surface-container-low p-2 rounded-lg">
+            <span class="material-symbols-outlined text-primary text-[18px]">check</span>
+            <span>2. Feche o registro geral de gás e desligue o disjuntor principal.</span>
+          </div>
+          <div class="flex items-start gap-2 bg-surface-container-low p-2 rounded-lg">
+            <span class="material-symbols-outlined text-primary text-[18px]">check</span>
+            <span>3. Calce botas ou sapatos fechados em todos os familiares.</span>
+          </div>
+          <div class="flex items-start gap-2 bg-surface-container-low p-2 rounded-lg">
+            <span class="material-symbols-outlined text-primary text-[18px]">check</span>
+            <span>4. Dirija-se imediatamente ao Ponto de Encontro 1 pré-definido.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: LEITOR DE GUIAS OFICIAIS -->
+  <!-- ========================================== -->
+  <div id="guide-modal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 no-print">
+    <div class="w-full max-w-lg bg-surface-container rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] border border-surface-container-high">
+      <div class="relative w-full h-48 bg-surface-container-lowest flex-shrink-0">
+        <img id="guide-modal-cover" class="w-full h-full object-cover" src="" alt="Capa do Guia"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/30 to-transparent"></div>
+        <button onclick="closeGuideModal()" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-surface-dim/80 text-white flex items-center justify-center hover:bg-surface-dim">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+        <span id="guide-modal-category" class="absolute bottom-3 left-4 px-2 py-0.5 rounded bg-primary/20 text-primary font-label-sm text-label-sm uppercase">Categoria</span>
+      </div>
+
+      <div class="p-5 overflow-y-auto flex flex-col gap-3">
+        <h2 id="guide-modal-title" class="font-headline-lg text-headline-lg uppercase text-on-surface">Título do Guia</h2>
+        <div id="guide-modal-body" class="font-body-md text-body-md text-on-surface-variant flex flex-col gap-2">
+          <!-- Conteúdo inserido dinamicamente -->
+        </div>
+      </div>
+
+      <div class="p-4 bg-surface-container-low border-t border-surface-container-high flex justify-end">
+        <button onclick="closeGuideModal()" class="px-5 py-2.5 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase hover:bg-surface-bright active:scale-95 transition-all">
+          Concluir Leitura
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERLAY DO ESTROBOSCÓPIO VISUAL SOS -->
+  <div id="strobe-overlay" onclick="toggleScreenStrobe()" class="hidden fixed inset-0 z-[100] flex flex-col items-center justify-center cursor-pointer select-none no-print">
+    <span class="font-headline-xl text-headline-xl font-bold uppercase tracking-widest text-center px-4">
+      SINAL SOS DE RESGATE<br/>
+      <span class="font-body-md text-sm">Toque em qualquer lugar para desligar</span>
+    </span>
+  </div>
+
+  <!-- TOAST DE FEEDBACK -->
+  <div id="toast-feedback" class="hidden opacity-0 transition-opacity duration-300 fixed bottom-20 left-4 right-4 bg-surface-bright text-on-surface p-3.5 rounded-xl shadow-2xl flex items-center gap-3 z-50 border border-primary/40 no-print">
+    <span class="material-symbols-outlined text-primary text-[22px]">check_circle</span>
+    <span class="font-body-md text-body-md font-semibold text-white" id="toast-text">Ação executada com sucesso!</span>
+  </div>
+
+  <!-- Lógica Principal -->
+  <script src="app.js"></script>
+</body>
+</html>
+

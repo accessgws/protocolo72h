@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Oswald:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#111317;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-fixed": "#410002", "tertiary": "#9fd1ff", "surface-container-low": "#1a1c20", "secondary-container": "#bb0112", "primary-fixed": "#ffddb8", "on-tertiary": "#003351", "surface-dim": "#111317", "primary": "#ffc174", "on-error-container": "#ffdad6", "error-container": "#93000a", "inverse-primary": "#855300", "surface-container-high": "#282a2e", "on-primary": "#472a00", "outline": "#a08e7a", "on-primary-fixed": "#2a1700", "on-surface": "#e2e2e8", "inverse-on-surface": "#2f3035", "secondary": "#ffb4ab", "on-secondary": "#690005", "on-error": "#690005", "primary-fixed-dim": "#ffb95f", "inverse-surface": "#e2e2e8", "secondary-fixed-dim": "#ffb4ab", "error": "#ffb4ab", "on-primary-container": "#613b00", "surface-bright": "#37393e", "surface-container": "#1e2024", "tertiary-container": "#5bb8fe", "surface-variant": "#333539", "tertiary-fixed": "#cce5ff", "on-secondary-container": "#ffc8c1", "background": "#111317", "primary-container": "#f59e0b", "on-tertiary-fixed": "#001d31", "on-tertiary-fixed-variant": "#004b73", "on-secondary-fixed-variant": "#93000b", "surface-container-highest": "#333539", "on-primary-fixed-variant": "#653e00", "secondary-fixed": "#ffdad6", "surface": "#111317", "surface-tint": "#ffb95f", "tertiary-fixed-dim": "#93ccff", "on-surface-variant": "d8c3ad", "on-background": "#e2e2e8", "surface-container-lowest": "#0c0e12", "outline-variant": "#534434", "on-tertiary-container": "#00476e" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-md": "1rem", "margin": "1.25rem", "space-sm": "0.5rem", "space-xl": "2rem", "space-lg": "1.5rem", "gutter-mobile": "0.75rem", "margin-mobile": "1rem", "gutter": "1rem", "space-xs": "0.25rem" }, "fontFamily": { "body-md": ["Inter"], "headline-lg": ["Oswald"], "headline-md": ["Oswald"], "label-sm": ["Inter"], "body-sm": ["Inter"], "label-lg": ["Inter"], "body-lg": ["Inter"], "headline-xl-mobile": ["Oswald"], "headline-sm": ["Oswald"], "display-code": ["Inter"], "headline-xl": ["Oswald"], "label-md": ["Inter"] }, "fontSize": { "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "headline-lg": ["28px", {"lineHeight": "32px", "letterSpacing": "0.01em", "fontWeight": "600"}], "headline-md": ["22px", {"lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "600"}], "label-sm": ["10px", {"lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "700"}], "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-lg": ["14px", {"lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600"}], "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-xl-mobile": ["32px", {"lineHeight": "36px", "letterSpacing": "0.02em", "fontWeight": "700"}], "headline-sm": ["18px", {"lineHeight": "22px", "letterSpacing": "0.01em", "fontWeight": "600"}], "display-code": ["13px", {"lineHeight": "16px", "fontWeight": "500"}], "headline-xl": ["40px", {"lineHeight": "44px", "letterSpacing": "0.02em", "fontWeight": "700"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm min-w-0"><img alt="Protocolo 72H Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN2mjc3VAY3OiRbJNHYFcXs7eun6Hw15CRrf7jcU_19yIHsVDVItl8gmj0n84xXw7ub-7KzTKhcKmFCJoxJi7H8PTsjbMGUq1l73WwJ_iVqLPpAd6mHg4IGyhqvYw5N0GooZ5JKvYfCtDl25VLMLybEsA5WR1EN_-8Ooc5YwhtJ0V91ofWy_1EXgpJSBCD9F5vAq76HeJC7uuy1BHGKxaK1T6Olw2XicHwCPDYKbrm"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm uppercase tracking-wide text-primary truncate leading-tight">PROTOCOLO 72H</span><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant truncate">Calculadora</span></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><div class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span><span class="font-label-sm text-label-sm text-emerald-400 uppercase tracking-wider">OFFLINE PRONTO</span></div><button class="w-11 h-11 flex items-center justify-center p-0.5 rounded-full hover:opacity-80 transition-opacity"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc9T-_brRNKfmueorRwcdPE_PThm6_h1lK59YB3Pm8pXk7Bk5oaQEvkQB78CdIrsgOLlBLJ6PNxCfOWfbBFgh0gJE1UqCpBXr_jznbg6sbpF1HE9dBskJEAd2nBrPY2WrreAA15xTV4m99CjQAUzRL5Tvv8P8JdhOKmUMNrQ_boIyknNtPtOAlN91JnOmDSqEoaWG1XaiFnTw7OSwbS1D0jZnqOH3IRPIbAub--zqF"/></button></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Tactical Calculator View -->
+<div class="flex flex-col px-margin py-space-md gap-space-lg">
+<!-- Top Tactical Status & Banner -->
+<section class="flex flex-col gap-space-xs">
+<div class="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded bg-primary/10">
+<span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary">Base de Cálculo Civil: Mínimo 72 Horas</span>
+</div>
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile uppercase text-on-surface tracking-wide mt-1">
+        Calculadora de <span class="text-primary">Autonomia 72H</span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Dimensione os suprimentos vitais de água potável, calorias emergenciais e ração para sustentar seu núcleo familiar com segurança durante o colapso de serviços básicos.
+      </p>
+</section>
+<!-- Visual Showcase / Tactical Guides Mosaic -->
+<section class="grid grid-cols-2 gap-gutter-mobile">
+<div class="relative overflow-hidden rounded-xl bg-surface-container-high shadow-md flex flex-col group">
+<div class="h-28 w-full relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Close-up tactical still life of emergency water survival gear including a blue 20L water jerry can, transparent sealed water bottles, a modern micro portable water purifier pump, and a clean glass of crystal clear drinking water under high-contrast dramatic studio lighting with dark gritty shadows and amber tactical accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKfrWPA1hwV5xWdjWtZWH3xCsDDFzdcaKn6u3SvN77ko245dpuzNeY89yBGCXq3uflQrMigFBkB42NuUm8Y_Fu6DgL9O_FvtvBJGOLfyJWHJqP7unC1p8A9UyF1AV4M5m0riBPjrESqmC0gtdgVVfw5UtWBaBCKj3K9toTccmv7TPv4h1LiLSoH4iK5Fd49Z10jkww82reqg56TLuhaxVKkejFTc6iYzMG0UoqfEwX"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-high via-surface-container-high/40 to-transparent"></div>
+<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-tertiary/20 text-tertiary font-label-sm text-label-sm uppercase">Guia Hídrico</span>
+</div>
+<div class="p-2.5 flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface leading-tight">Protocolo Hídrico</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Filtro, fervura &amp; cloração rápida</span>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-surface-container-high shadow-md flex flex-col group">
+<div class="h-28 w-full relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Organized emergency pantry shelf lined with hermetically sealed glass jars filled with dry white rice, black beans, uncooked pasta, rolled oats, along with metallic canned goods on dark rustic timber shelves with warm amber edge glow and tactical minimalist labels." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwlVZ4WRGwf2SkTcfis1f-Rjn4pmGSyj6djRzFFzACngHOusBrIy1pFWX-VHQfbRzUj4VIgc3eZYTSrt4VaDHvtGb5jMJbWU1Kx8j4LVmbA07AFaAOc1yDsBf2bJBMEN90gzN3gWPvh8WV9Dpsj_8sh-_N8jayuYr-29lhNRMsDGu4-kmlq5h7goDxy6Pkhjv-yhn5CagROYtweQDA58piIprKLfAtpM_xdelgi8F"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-high via-surface-container-high/40 to-transparent"></div>
+<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-primary/20 text-primary font-label-sm text-label-sm uppercase">Despensa 72H</span>
+</div>
+<div class="p-2.5 flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface leading-tight">Rodízio &amp; Estoque</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Controle de validade selada</span>
+</div>
+</div>
+</section>
+<!-- Household Profile Selector Card -->
+<section class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">group</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">1. Perfil Familiar</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded">Membros Ativos</span>
+</div>
+<!-- Counter Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm" id="demographic-controls">
+<!-- Adultos -->
+<div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[22px]">person</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface uppercase truncate">Adultos</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant leading-tight truncate">2.000 kcal • 3.5L/dia</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<button aria-label="Diminuir adultos" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" data-action="dec" data-target="adults" type="button">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-headline-md text-headline-md text-primary w-7 text-center" id="count-adults">2</span>
+<button aria-label="Aumentar adultos" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" data-action="inc" data-target="adults" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Crianças -->
+<div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[22px]">child_care</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface uppercase truncate">Crianças</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant leading-tight truncate">1.500 kcal • 2.5L/dia</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<button aria-label="Diminuir crianças" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" data-action="dec" data-target="children" type="button">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-headline-md text-headline-md text-primary w-7 text-center" id="count-children">1</span>
+<button aria-label="Aumentar crianças" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" data-action="inc" data-target="children" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Idosos -->
+<div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[22px]">elderly</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface uppercase truncate">Idosos</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant leading-tight truncate">1.700 kcal • 3.0L/dia</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<button aria-label="Diminuir idosos" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" data-action="dec" data-target="elderly" type="button">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-headline-md text-headline-md text-primary w-7 text-center" id="count-elderly">0</span>
+<button aria-label="Aumentar idosos" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" data-action="inc" data-target="elderly" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Pets -->
+<div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[22px]">pets</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface uppercase truncate">Pets (Cães/Gatos)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant leading-tight truncate">300g ração • 1.0L/dia</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<button aria-label="Diminuir pets" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" data-action="dec" data-target="pets" type="button">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-headline-md text-headline-md text-primary w-7 text-center" id="count-pets">1</span>
+<button aria-label="Aumentar pets" class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center active:scale-95 hover:bg-surface-bright transition-all" data-action="inc" data-target="pets" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Extreme Scenario Toggles -->
+<section class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">warning</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">2. Modificadores Ambientais</span>
+</div>
+<div class="flex flex-col gap-2.5 mt-1">
+<!-- Toggle 1: Hot Weather -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high cursor-pointer select-none">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-primary text-[24px]">thermostat</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Clima Quente / Seca Severa</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Acrescenta +30% na reserva de água para hidratação</span>
+</div>
+</div>
+<input class="sr-only peer" id="toggle-heat" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-variant rounded-full peer peer-checked:bg-primary-container relative transition-colors flex-shrink-0 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-on-primary"></div>
+</label>
+<!-- Toggle 2: Special Needs -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high cursor-pointer select-none">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-secondary text-[24px]">medical_services</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Necessidades Médicas / Idosos Débeis</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Soma +20% em água pura e reserva de digestão facilitada</span>
+</div>
+</div>
+<input class="sr-only peer" id="toggle-medical" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-variant rounded-full peer peer-checked:bg-secondary-container relative transition-colors flex-shrink-0 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-on-secondary"></div>
+</label>
+</div>
+</section>
+<!-- Real-time Tactical Calculation Results -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">analytics</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">3. Provisão Crítica 72H</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase text-primary bg-primary/10 px-2 py-0.5 rounded">Cálculo Dinâmico</span>
+</div>
+<!-- Water Card (Primary Tactical Focus) -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm relative overflow-hidden">
+<div class="w-full h-1 bg-tertiary absolute top-0 left-0"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-tertiary uppercase tracking-wider">Volume Hídrico Essencial</span>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-headline-xl text-headline-xl text-on-surface" id="out-total-water">31.5</span>
+<span class="font-headline-md text-headline-md text-tertiary">LITROS</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[28px]">water_drop</span>
+</div>
+</div>
+<!-- Sub-breakdown -->
+<div class="grid grid-cols-2 gap-space-xs pt-1">
+<div class="p-2.5 rounded-lg bg-surface-container-high flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Consumo Direto</span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-0.5" id="out-drink-water">21.0 L</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hidratação Vital</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-high flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Preparo &amp; Higiene</span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-0.5" id="out-prep-water">10.5 L</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Saneamento mínimo</span>
+</div>
+</div>
+<!-- Tactical Water Purification Advice -->
+<div class="flex items-center gap-2.5 p-2.5 rounded-lg bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[20px] flex-shrink-0">science</span>
+<p class="font-body-sm text-body-sm leading-tight">
+<strong class="text-on-surface">Purificação rápida:</strong> 2 gotas de água sanitária (sem perfume) por litro de água límpida. Aguardar 30 min antes do consumo ou ferver por 3 min contínuos.
+          </p>
+</div>
+</div>
+<!-- Food / Caloric Card -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm relative overflow-hidden">
+<div class="w-full h-1 bg-primary absolute top-0 left-0"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Aporte Calórico Familiar</span>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-headline-xl text-headline-xl text-on-surface" id="out-total-meals">27</span>
+<span class="font-headline-md text-headline-md text-primary">REFEIÇÕES</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">lunch_dining</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-high">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant">Energia Total Requerida</span>
+<span class="font-headline-sm text-headline-sm text-on-surface" id="out-calories">16.500 kcal</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase bg-primary/10 px-2 py-1 rounded">Não-perecíveis</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Priorize latas com abertura fácil (pull-ring), atum em óleo, feijão pronto, barras proteicas e castanhas que não demandem gás ou cozimento prolongado.
+        </p>
+</div>
+<!-- Pets Allocation Card -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-md flex items-center justify-between" id="pet-summary-container">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">pets</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg uppercase text-on-surface">Cotas para Animais</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant" id="out-pet-details">0.9 kg ração + 3.0 L água</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-emerald-400 bg-surface-container-high px-2 py-1 rounded uppercase">Incluso</span>
+</div>
+</section>
+<!-- Pantry Rotation & Shelf-Life Section (Inspiration Image Reference) -->
+<section class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">inventory</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">4. Guia Rápido de Validades</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant">Rotatividade</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        Baseado no padrão de vedação hermética da despensa de contingência. Nunca armazene diretamente no solo de concreto.
+      </p>
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="p-3 rounded-lg bg-surface-container-high flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase text-primary">Arroz &amp; Feijão</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">24-36 Meses</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface mt-1">Armazenar com folhas de louro em garrafas PET secas ou potes herméticos.</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-high flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase text-primary">Enlatados em Geral</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">12-48 Meses</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface mt-1">Milho, ervilha, sardinha e atum. Descarte latas amassadas, estufadas ou enferrujadas.</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-high flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase text-primary">Macarrão &amp; Aveia</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">18-24 Meses</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface mt-1">Excelente densidade calórica. Manter em local fresco protegido da umidade e insetos.</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-high flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase text-tertiary">Água Envasada</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">6-12 Meses</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface mt-1">Girar galões semestralmente. Manter longe de produtos químicos, tintas ou luz solar.</span>
+</div>
+</div>
+</section>
+<!-- Primary Action: Push to Checklist -->
+<section class="flex flex-col gap-space-xs mt-1">
+<button class="w-full min-h-[52px] px-space-md py-3 rounded-lg bg-primary text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-transform" id="btn-export-checklist" type="button">
+<span class="material-symbols-outlined text-[24px]">assignment_turned_in</span>
+<span>Exportar Metas para os Checklists</span>
+</button>
+<div class="hidden p-2.5 rounded-lg bg-surface-container-high text-emerald-400 font-label-md text-label-md uppercase tracking-wide text-center" id="export-toast">
+        ✓ 31.5L e 27 refeições vinculados ao inventário offline com sucesso!
+      </div>
+</section>
+</div>
+</div>
+<script>
+  (function initTacticalCalculator() {
+    // State
+    const state = {
+      adults: 2,
+      children: 1,
+      elderly: 0,
+      pets: 1,
+      heatWave: false,
+      medical: false
+    };
+
+    // Elements
+    const elements = {
+      countAdults: document.getElementById('count-adults'),
+      countChildren: document.getElementById('count-children'),
+      countElderly: document.getElementById('count-elderly'),
+      countPets: document.getElementById('count-pets'),
+      toggleHeat: document.getElementById('toggle-heat'),
+      toggleMedical: document.getElementById('toggle-medical'),
+      outTotalWater: document.getElementById('out-total-water'),
+      outDrinkWater: document.getElementById('out-drink-water'),
+      outPrepWater: document.getElementById('out-prep-water'),
+      outTotalMeals: document.getElementById('out-total-meals'),
+      outCalories: document.getElementById('out-calories'),
+      outPetDetails: document.getElementById('out-pet-details'),
+      btnExport: document.getElementById('btn-export-checklist'),
+      exportToast: document.getElementById('export-toast')
+    };
+
+    function recalculate() {
+      const days = 3; // Fixed 72-hour window
+
+      // Base water rates per person per day (Litros)
+      const adultWaterDay = 3.5;
+      const childWaterDay = 2.5;
+      const elderlyWaterDay = 3.0;
+      const petWaterDay = 1.0;
+
+      // Base daily calories
+      const adultCalDay = 2000;
+      const childCalDay = 1500;
+      const elderlyCalDay = 1700;
+
+      // Base daily meals (approx 3/person)
+      const humanCount = state.adults + state.children + state.elderly;
+      const totalMeals = humanCount * 3 * days;
+
+      let dailyCal = (state.adults * adultCalDay) + (state.children * childCalDay) + (state.elderly * elderlyCalDay);
+      if (state.medical) {
+        dailyCal *= 1.1; // Medical supplementation
+      }
+      const totalCal = dailyCal * days;
+
+      // Water computation
+      let baseHumanWaterDay = (state.adults * adultWaterDay) + (state.children * childWaterDay) + (state.elderly * elderlyWaterDay);
+      
+      let modifier = 1.0;
+      if (state.heatWave) modifier += 0.3;
+      if (state.medical) modifier += 0.2;
+
+      const adjustedHumanWaterDay = baseHumanWaterDay * modifier;
+      const petTotalWater = (state.pets * petWaterDay) * days;
+      const humanTotalWater = adjustedHumanWaterDay * days;
+      const grossWater = humanTotalWater + petTotalWater;
+
+      // Drink vs Hygiene split
+      const drinkPortion = (humanTotalWater * 0.67) + petTotalWater;
+      const prepPortion = humanTotalWater * 0.33;
+
+      // Pet food
+      const petFoodKg = (state.pets * 0.3 * days).toFixed(1);
+
+      // DOM Updates
+      elements.outTotalWater.textContent = grossWater.toFixed(1);
+      elements.outDrinkWater.textContent = drinkPortion.toFixed(1) + ' L';
+      elements.outPrepWater.textContent = prepPortion.toFixed(1) + ' L';
+      elements.outTotalMeals.textContent = totalMeals;
+      elements.outCalories.textContent = Math.round(totalCal).toLocaleString('pt-BR') + ' kcal';
+
+      if (state.pets > 0) {
+        elements.outPetDetails.textContent = `${petFoodKg} kg de ração + ${petTotalWater.toFixed(1)} L de água`;
+      } else {
+        elements.outPetDetails.textContent = 'Nenhum animal cadastrado';
+      }
+    }
+
+    // Attach counter click listeners
+    const demographicControls = document.getElementById('demographic-controls');
+    if (demographicControls) {
+      demographicControls.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const target = btn.dataset.target;
+
+        if (action === 'inc') {
+          if (state[target] < 12) state[target]++;
+        } else if (action === 'dec') {
+          if (state[target] > 0) state[target]--;
+        }
+
+        // Update target badge
+        if (target === 'adults') elements.countAdults.textContent = state.adults;
+        if (target === 'children') elements.countChildren.textContent = state.children;
+        if (target === 'elderly') elements.countElderly.textContent = state.elderly;
+        if (target === 'pets') elements.countPets.textContent = state.pets;
+
+        recalculate();
+      });
+    }
+
+    // Toggles
+    elements.toggleHeat.addEventListener('change', (e) => {
+      state.heatWave = e.target.checked;
+      recalculate();
+    });
+
+    elements.toggleMedical.addEventListener('change', (e) => {
+      state.medical = e.target.checked;
+      recalculate();
+    });
+
+    // Export button interactive feedback
+    elements.btnExport.addEventListener('click', () => {
+      elements.exportToast.classList.remove('hidden');
+      elements.exportToast.textContent = `✓ ${elements.outTotalWater.textContent}L de água e ${elements.outTotalMeals.textContent} refeições salvos no checklist!`;
+      setTimeout(() => {
+        elements.exportToast.classList.add('hidden');
+      }, 4500);
+    });
+
+    // Initial render
+    recalculate();
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.5)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-gutter-mobile"><a class="flex flex-col items-center justify-center gap-1 min-w-[48px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="inicio" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm uppercase tracking-wide">Início</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-1 min-w-[48px] min-h-[48px] transition-colors text-primary-container" data-path="calculadora" href="#"><span class="material-symbols-outlined text-[24px]">calculate</span><span class="font-label-sm text-label-sm uppercase tracking-wide">Calculadora</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[48px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="checklists" href="#"><span class="material-symbols-outlined text-[24px]">inventory_2</span><span class="font-label-sm text-label-sm uppercase tracking-wide">Checklists</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[48px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="plano-familiar" href="#"><span class="material-symbols-outlined text-[24px]">shield</span><span class="font-label-sm text-label-sm uppercase tracking-wide">Plano Familiar</span></a></div></nav></body></html>
