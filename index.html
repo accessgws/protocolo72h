@@ -1320,27 +1320,48 @@
 
   </main>
 
-  <!-- BARRA INFERIOR DE NAVEGAÇÃO PERSISTENTE -->
-  <nav class="fixed bottom-0 w-full z-40 pb-safe bg-surface/95 backdrop-blur-xl border-t border-surface-container-high shadow-[0_-1px_12px_rgba(0,0,0,0.6)] no-print">
-    <div class="flex justify-around items-center h-16 px-1 sm:px-gutter-mobile max-w-lg mx-auto">
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 transition-colors active text-primary-container" data-path="inicio" href="#inicio">
-        <span class="material-symbols-outlined text-[23px]">dashboard</span>
+  <!-- BARRA INFERIOR DE NAVEGAÇÃO PERSISTENTE (TACTICAL PILL NAV) -->
+  <nav class="fixed bottom-0 w-full z-40 pb-safe bg-[#111317]/95 backdrop-blur-2xl border-t border-surface-container-high/80 shadow-[0_-4px_24px_rgba(0,0,0,0.85)] no-print">
+    <div class="flex justify-around items-center h-[68px] px-2 max-w-md mx-auto">
+      <!-- Início -->
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 transition-all active text-primary" data-path="inicio" href="#inicio">
+        <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
+          <span class="material-symbols-outlined text-[21px] transition-transform">dashboard</span>
+        </div>
         <span class="text-[10px] font-bold uppercase tracking-wider truncate">Início</span>
       </a>
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="calculadora" href="#calculadora">
-        <span class="material-symbols-outlined text-[23px]">calculate</span>
+
+      <!-- Calculadora -->
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="calculadora" href="#calculadora">
+        <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
+          <span class="material-symbols-outlined text-[21px] transition-transform">calculate</span>
+        </div>
         <span class="text-[10px] font-bold uppercase tracking-wider truncate">Cálculo</span>
       </a>
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="checklists" href="#checklists">
-        <span class="material-symbols-outlined text-[23px]">inventory_2</span>
+
+      <!-- Checklists -->
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="checklists" href="#checklists">
+        <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
+          <span class="material-symbols-outlined text-[21px] transition-transform">inventory_2</span>
+        </div>
         <span class="text-[10px] font-bold uppercase tracking-wider truncate">Listas</span>
       </a>
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plano-familiar" href="#plano-familiar">
-        <span class="material-symbols-outlined text-[23px]">shield</span>
+
+      <!-- Plano Familiar -->
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="plano-familiar" href="#plano-familiar">
+        <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
+          <span class="material-symbols-outlined text-[21px] transition-transform">shield</span>
+        </div>
         <span class="text-[10px] font-bold uppercase tracking-wider truncate">Plano</span>
       </a>
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="feed" href="#feed">
-        <span class="material-symbols-outlined text-[23px]">campaign</span>
+
+      <!-- Feed com Beacon de Alerta -->
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="feed" href="#feed">
+        <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
+          <span class="material-symbols-outlined text-[21px] transition-transform">campaign</span>
+          <!-- Beacon de Alerta Ao Vivo -->
+          <span class="absolute top-1 right-2.5 w-2 h-2 rounded-full bg-secondary-container animate-pulse shadow-[0_0_6px_rgba(239,68,68,0.8)]"></span>
+        </div>
         <span class="text-[10px] font-bold uppercase tracking-wider truncate">Feed</span>
       </a>
     </div>

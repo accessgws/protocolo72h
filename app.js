@@ -281,11 +281,11 @@ function switchTab(targetTab) {
   navTabs.forEach((tab) => {
     const path = tab.getAttribute('data-path');
     if (path === targetTab) {
-      tab.classList.add('active', 'text-primary-container');
+      tab.classList.add('active', 'text-primary');
       tab.classList.remove('text-on-surface-variant');
       tab.setAttribute('aria-current', 'page');
     } else {
-      tab.classList.remove('active', 'text-primary-container');
+      tab.classList.remove('active', 'text-primary', 'text-primary-container');
       tab.classList.add('text-on-surface-variant');
       tab.removeAttribute('aria-current');
     }

@@ -75,13 +75,41 @@
   animation: strobeScreen 0.18s infinite !important;
 }
 
-/* Active tab state */
-.nav-tab.active {
-  color: #f59e0b !important;
+/* Bottom Navigation Bar - Tactical Pill Design */
+.nav-tab {
+  color: #a08e7a;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
 }
+
+.nav-tab .nav-pill {
+  background-color: transparent;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.nav-tab.active {
+  color: #ffc174 !important;
+}
+
+.nav-tab.active .nav-pill {
+  background-color: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+}
+
 .nav-tab.active .material-symbols-outlined {
+  color: #ffc174 !important;
   font-variation-settings: 'FILL' 1, 'wght' 600;
-  transform: translateY(-1px);
+  transform: scale(1.08);
+}
+
+.nav-tab:not(.active):hover {
+  color: #e2e2e8;
+}
+
+.nav-tab:not(.active):hover .nav-pill {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Fallback para imagens offline */
