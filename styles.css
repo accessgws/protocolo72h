@@ -84,9 +84,18 @@
   transform: translateY(-1px);
 }
 
+/* Fallback para imagens offline */
+img {
+  text-indent: -10000px;
+}
+img.offline-failed {
+  opacity: 0.15 !important;
+  filter: grayscale(100%);
+}
+
 /* Touch active feedback */
-button:active, .tactical-touch:active {
-  transform: scale(0.97);
+button:active, .tactical-touch:active, .nav-tab:active {
+  transform: scale(0.96);
 }
 
 /* Print layout for Emergency Card & Checklist */

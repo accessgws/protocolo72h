@@ -887,7 +887,11 @@ const guidesData = {
     cover: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDrzy_3mS0R8jALras9v7s9V3yKWfuxLz_OZUIncjHGfGJ5TBqffPAi0UlhI1YfXlo09cyHk5YRVkkBjiMPs_DjZh9vJoLb98Y-h8ovRSKMsVF_PvIAJDNwHPEkrvdQ2keNYHt_ZEVMGVKb-T8U0BmkLO0M4tRRpYmRbgSyxhfc78cgjBX7NoOZhoYtM-v7LrbYiemcVmzaRpwL-H3cYx8pvqBqBM25-vrarhZMoZP3eX4_ZwutB2phqQ',
     content: `
       <h3 class="text-secondary font-headline-sm uppercase mb-2">1. Alertas SMS Gratuitos da Defesa Civil (40199)</h3>
-      <p class="font-body-md text-on-surface mb-3">Envie um SMS gratuito para o número <strong>40199</strong> contendo apenas o seu CEP (ex: <em>01001000</em>). Você passará a receber avisos antecipados de temporais, ressacas e frentes frias severas da Defesa Civil do seu estado.</p>
+      <p class="font-body-md text-on-surface mb-2">Envie um SMS gratuito para o número <strong>40199</strong> contendo apenas o seu CEP (ex: <em>01001000</em>). Você passará a receber avisos antecipados de temporais, ressacas e frentes frias severas da Defesa Civil do seu estado.</p>
+      <a href="sms:40199?body=Cadastrar" class="inline-flex items-center gap-2 mb-4 px-3.5 py-2 rounded-lg bg-secondary-container text-white font-label-md uppercase font-bold active:scale-95 transition-transform shadow-md">
+        <span class="material-symbols-outlined text-[18px]">sms</span>
+        <span>Abrir SMS e Enviar para 40199</span>
+      </a>
 
       <h3 class="text-secondary font-headline-sm uppercase mb-2">2. Inundações e Enchentes Repentinas (Sul / Sudeste)</h3>
       <ul class="list-disc list-inside font-body-md text-on-surface-variant space-y-1 mb-4">

@@ -1123,15 +1123,21 @@
             <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Boletim Meteorológico Integrado #182</h3>
             <p class="font-body-sm text-body-sm text-on-surface-variant">Frente fria extrema e precipitações atípicas previstas para as regiões Sul e Sudeste nas próximas 48 horas. Risco de corte pontual de fornecimento elétrico e alagamentos em calhas urbanas.</p>
           </div>
-          <div class="flex items-center justify-between pt-1">
+          <div class="flex items-center justify-between pt-1 flex-wrap gap-2">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-primary text-[18px]">emergency_home</span>
               <span class="font-label-sm text-label-sm text-primary uppercase font-medium">Nível Amarelo: Monitoramento</span>
             </div>
-            <button onclick="openGuideModal('alerta_clima')" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md uppercase active:scale-95 transition-all">
-              <span>Ver Orientações</span>
-              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </button>
+            <div class="flex items-center gap-2">
+              <a href="sms:40199?body=Cadastrar" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md uppercase active:scale-95 transition-all border border-surface-container-high">
+                <span class="material-symbols-outlined text-[16px] text-secondary">sms</span>
+                <span>SMS 40199</span>
+              </a>
+              <button onclick="openGuideModal('alerta_clima')" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-md text-label-md uppercase active:scale-95 transition-all">
+                <span>Ver Orientações</span>
+                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1297,26 +1303,26 @@
 
   <!-- BARRA INFERIOR DE NAVEGAÇÃO PERSISTENTE -->
   <nav class="fixed bottom-0 w-full z-40 pb-safe bg-surface/95 backdrop-blur-xl border-t border-surface-container-high shadow-[0_-1px_12px_rgba(0,0,0,0.6)] no-print">
-    <div class="flex justify-around items-center h-16 px-gutter-mobile">
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] transition-colors active text-primary-container" data-path="inicio" href="#inicio">
-        <span class="material-symbols-outlined text-[24px]">dashboard</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wide">Início</span>
+    <div class="flex justify-around items-center h-16 px-1 sm:px-gutter-mobile max-w-lg mx-auto">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 transition-colors active text-primary-container" data-path="inicio" href="#inicio">
+        <span class="material-symbols-outlined text-[23px]">dashboard</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider truncate">Início</span>
       </a>
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="calculadora" href="#calculadora">
-        <span class="material-symbols-outlined text-[24px]">calculate</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wide">Calculadora</span>
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="calculadora" href="#calculadora">
+        <span class="material-symbols-outlined text-[23px]">calculate</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider truncate">Cálculo</span>
       </a>
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="checklists" href="#checklists">
-        <span class="material-symbols-outlined text-[24px]">inventory_2</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wide">Checklists</span>
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="checklists" href="#checklists">
+        <span class="material-symbols-outlined text-[23px]">inventory_2</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider truncate">Listas</span>
       </a>
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="plano-familiar" href="#plano-familiar">
-        <span class="material-symbols-outlined text-[24px]">shield</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wide">Plano</span>
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plano-familiar" href="#plano-familiar">
+        <span class="material-symbols-outlined text-[23px]">shield</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider truncate">Plano</span>
       </a>
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[48px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="feed" href="#feed">
-        <span class="material-symbols-outlined text-[24px]">campaign</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wide">Feed</span>
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="feed" href="#feed">
+        <span class="material-symbols-outlined text-[23px]">campaign</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider truncate">Feed</span>
       </a>
     </div>
   </nav>
