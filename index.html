@@ -152,9 +152,9 @@
 
       <div class="flex items-center gap-2 flex-shrink-0">
         <!-- Indicador de Rede / Offline -->
-        <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container-high border border-surface-container-highest/60">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" id="net-dot"></span>
-          <span class="font-label-sm text-label-sm text-emerald-400 uppercase tracking-wider" id="net-status">OFFLINE PRONTO</span>
+        <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container-high border border-surface-container-highest/60 select-none">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" id="net-dot"></span>
+          <span class="font-label-sm text-[10px] sm:text-label-sm text-emerald-400 uppercase tracking-wider font-semibold truncate" id="net-status">OFFLINE PRONTO</span>
         </div>
 
         <!-- Botão Rápido SOS -->
@@ -180,7 +180,7 @@
   </div>
 
   <!-- CONTEÚDO PRINCIPAL (SPA COM ABAS) -->
-  <main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen">
+  <main class="flex flex-col relative w-full pt-[calc(4.25rem+env(safe-area-inset-top,0px))] pb-[calc(6.5rem+env(safe-area-inset-bottom,16px))] bg-surface min-h-screen">
 
     <!-- ========================================== -->
     <!-- TELA 1: INÍCIO (PAINEL PRINCIPAL) -->
@@ -1654,9 +1654,9 @@
 
   <!-- BARRA INFERIOR DE NAVEGAÇÃO PERSISTENTE (TACTICAL PILL NAV) -->
   <nav class="fixed bottom-0 w-full z-40 pb-safe bg-[#111317]/95 backdrop-blur-2xl border-t border-surface-container-high/80 shadow-[0_-4px_24px_rgba(0,0,0,0.85)] no-print">
-    <div class="flex justify-around items-center h-[68px] px-2 max-w-md mx-auto">
+    <div class="flex justify-around items-center min-h-[64px] px-1.5 max-w-md mx-auto">
       <!-- Início -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 transition-all active text-primary" data-path="inicio" href="#inicio">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 transition-all active text-primary" data-path="inicio" href="#inicio">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
           <span class="material-symbols-outlined text-[21px] transition-transform">dashboard</span>
         </div>
@@ -1664,7 +1664,7 @@
       </a>
 
       <!-- Calculadora -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="calculadora" href="#calculadora">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="calculadora" href="#calculadora">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
           <span class="material-symbols-outlined text-[21px] transition-transform">calculate</span>
         </div>
@@ -1672,7 +1672,7 @@
       </a>
 
       <!-- Checklists -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="checklists" href="#checklists">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="checklists" href="#checklists">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
           <span class="material-symbols-outlined text-[21px] transition-transform">inventory_2</span>
         </div>
@@ -1680,7 +1680,7 @@
       </a>
 
       <!-- Plano Familiar -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="plano-familiar" href="#plano-familiar">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="plano-familiar" href="#plano-familiar">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
           <span class="material-symbols-outlined text-[21px] transition-transform">shield</span>
         </div>
@@ -1688,7 +1688,7 @@
       </a>
 
       <!-- Feed com Beacon de Alerta -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="feed" href="#feed">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="feed" href="#feed">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
           <span class="material-symbols-outlined text-[21px] transition-transform">campaign</span>
           <!-- Beacon de Alerta Ao Vivo -->

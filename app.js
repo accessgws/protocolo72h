@@ -303,7 +303,7 @@ function toggleScreenStrobe() {
 
 // Navegação entre abas
 function switchTab(targetTab) {
-  triggerHaptic(20);
+  triggerHaptic(12);
 
   // Proteção do Painel Admin
   if (targetTab === 'admin' && !appState.admin?.authenticated) {
@@ -314,17 +314,22 @@ function switchTab(targetTab) {
   appState.activeTab = targetTab;
   saveState();
 
-  // Esconder todas as telas
+  // Esconder todas as telas e resetar classe de animação
   const views = ['inicio', 'calculadora', 'checklists', 'plano-familiar', 'feed', 'admin'];
   views.forEach((v) => {
     const el = document.getElementById(`view-${v}`);
-    if (el) el.classList.add('hidden');
+    if (el) {
+      el.classList.add('hidden');
+      el.classList.remove('view-enter');
+    }
   });
 
-  // Mostrar tela alvo
+  // Mostrar tela alvo com transição nativa fluida
   const targetEl = document.getElementById(`view-${targetTab}`);
   if (targetEl) {
     targetEl.classList.remove('hidden');
+    void targetEl.offsetWidth; // Reflow para disparar keyframe
+    targetEl.classList.add('view-enter');
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
