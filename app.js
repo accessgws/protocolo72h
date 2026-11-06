@@ -312,6 +312,11 @@ function switchPreparoSubTab(subTab) {
   const contentCalculo = document.getElementById('preparo-view-calculo');
   const contentChecklists = document.getElementById('preparo-view-checklists');
 
+  const bannerTitle = document.getElementById('checklist-banner-title');
+  const bannerBadge = document.getElementById('checklist-banner-badge');
+  const bannerDesc = document.getElementById('checklist-banner-desc');
+  const bannerImg = document.getElementById('checklist-banner-img');
+
   const inactiveBtnClass = 'py-2.5 px-1.5 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1 min-h-[44px]';
   const activeBtnClass = 'py-2.5 px-1.5 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all bg-primary-container text-on-primary-container shadow-md flex items-center justify-center gap-1 min-h-[44px]';
 
@@ -328,6 +333,10 @@ function switchPreparoSubTab(subTab) {
     if (tabBob) tabBob.className = activeBtnClass;
     if (contentCalculo) contentCalculo.classList.add('hidden');
     if (contentChecklists) contentChecklists.classList.remove('hidden');
+    if (bannerTitle) bannerTitle.textContent = 'Mochila Rápida (BOB)';
+    if (bannerBadge) bannerBadge.textContent = 'PESO ALVO: < 9 KG';
+    if (bannerDesc) bannerDesc.textContent = 'Pronta para evacuação em até 5 minutos';
+    if (bannerImg) bannerImg.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQPA47O63C7oVGDiEO3_A2aObIjPcqJc_bRQWQlv5Syb1jIlg3pypmDm1TUCXqdyJjIh86VjVjSJkbPB63GhhFCZuyqgL98fKksFYgA83Qk1zjFsQk9oJXq4vx-AWa8uWuOWsDM1V-_OQHT4hfK3CXY1U2dil_0m3ejqn4DO7xY_2rlL5OkUyJpMf9HCaRInP9UK-aOzTCkAWSc3PTpFJC4dovWnzjWDyTW5mlkmtj';
     appState.checklists.activeSubTab = 'bob';
     saveState();
     renderChecklists();
@@ -335,6 +344,10 @@ function switchPreparoSubTab(subTab) {
     if (tabHome) tabHome.className = activeBtnClass;
     if (contentCalculo) contentCalculo.classList.add('hidden');
     if (contentChecklists) contentChecklists.classList.remove('hidden');
+    if (bannerTitle) bannerTitle.textContent = 'Estoque Residencial 72H';
+    if (bannerBadge) bannerBadge.textContent = 'ABRIGO NO LOCAL';
+    if (bannerDesc) bannerDesc.textContent = 'Suprimentos vitais para isolamento domiciliar';
+    if (bannerImg) bannerImg.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBKfrWPA1hwV5xWdjWtZWH3xCsDDFzdcaKn6u3SvN77ko245dpuzNeY89yBGCXq3uflQrMigFBkB42NuUm8Y_Fu6DgL9O_FvtvBJGOLfyJWHJqP7unC1p8A9UyF1AV4M5m0riBPjrESqmC0gtdgVVfw5UtWBaBCKj3K9toTccmv7TPv4h1LiLSoH4iK5Fd49Z10jkww82reqg56TLuhaxVKkejFTc6iYzMG0UoqfEwX';
     appState.checklists.activeSubTab = 'home';
     saveState();
     renderChecklists();
@@ -508,22 +521,7 @@ function recalculateSupplies() {
 // MÓDULO 2: CHECKLISTS INTERATIVOS
 // ==========================================
 function switchChecklistSubTab(type) {
-  triggerHaptic(20);
-  appState.checklists.activeSubTab = type;
-  saveState();
-
-  const tabBob = document.getElementById('tab-bob');
-  const tabHome = document.getElementById('tab-home');
-
-  if (type === 'bob') {
-    tabBob.className = 'py-2.5 px-3 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all bg-primary-container text-on-primary-container shadow-md flex items-center justify-center gap-1.5 min-h-[48px]';
-    tabHome.className = 'py-2.5 px-3 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1.5 min-h-[48px]';
-  } else {
-    tabHome.className = 'py-2.5 px-3 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all bg-primary-container text-on-primary-container shadow-md flex items-center justify-center gap-1.5 min-h-[48px]';
-    tabBob.className = 'py-2.5 px-3 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1.5 min-h-[48px]';
-  }
-
-  renderChecklists();
+  switchPreparoSubTab(type);
 }
 
 function toggleChecklistItem(id, listType) {
