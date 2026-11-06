@@ -421,10 +421,30 @@
     </section>
 
     <!-- ========================================== -->
-    <!-- TELA 2: CALCULADORA DE AUTONOMIA 72H -->
+    <!-- TELA 2: PREPARO & KITS 72H (CÁLCULO + CHECKLISTS) -->
     <!-- ========================================== -->
-    <section id="view-calculadora" class="hidden flex flex-col w-full">
-      <div class="flex flex-col px-margin py-space-md gap-space-lg">
+    <section id="view-preparo" class="hidden flex flex-col w-full">
+      <!-- Seletor Tático de Sub-Abas -->
+      <div class="px-margin-mobile pt-3 pb-2 sticky top-16 z-30 bg-surface/95 backdrop-blur-md border-b border-surface-container-high/40">
+        <div class="grid grid-cols-3 p-1 rounded-xl bg-surface-container-low gap-1 border border-surface-container-high/60 max-w-lg mx-auto w-full">
+          <button id="preparo-tab-calculo" onclick="switchPreparoSubTab('calculo')" class="py-2.5 px-1.5 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all bg-primary-container text-on-primary-container shadow-md flex items-center justify-center gap-1 min-h-[44px]">
+            <span class="material-symbols-outlined text-[17px]">calculate</span>
+            <span class="truncate">Cálculo</span>
+          </button>
+          <button id="preparo-tab-bob" onclick="switchPreparoSubTab('bob')" class="py-2.5 px-1.5 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1 min-h-[44px]">
+            <span class="material-symbols-outlined text-[17px]">backpack</span>
+            <span class="truncate">Mochila</span>
+          </button>
+          <button id="preparo-tab-home" onclick="switchPreparoSubTab('home')" class="py-2.5 px-1.5 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1 min-h-[44px]">
+            <span class="material-symbols-outlined text-[17px]">roofing</span>
+            <span class="truncate">Estoque</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB-TELA 1: CALCULADORA -->
+      <div id="preparo-view-calculo" class="flex flex-col w-full">
+        <div class="flex flex-col px-margin py-space-md gap-space-lg">
         <!-- Top Tactical Status & Banner -->
         <div class="flex flex-col gap-space-xs">
           <div class="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded bg-primary/10">
@@ -693,13 +713,12 @@
           </button>
         </div>
       </div>
-    </section>
+      <!-- FIM SUB-TELA 1: CALCULADORA -->
+      </div>
 
-    <!-- ========================================== -->
-    <!-- TELA 3: CHECKLISTS INTERATIVOS -->
-    <!-- ========================================== -->
-    <section id="view-checklists" class="hidden flex flex-col w-full">
-      <!-- Visual Header Hero Banner -->
+      <!-- SUB-TELA 2: CHECKLISTS INTERATIVOS -->
+      <div id="preparo-view-checklists" class="hidden flex flex-col w-full">
+        <!-- Visual Header Hero Banner -->
       <div class="relative w-full overflow-hidden bg-surface-container-low px-margin-mobile pt-5 pb-6 border-b border-surface-container-high/40">
         <div class="absolute -right-16 -top-16 w-52 h-52 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -left-12 -bottom-10 w-44 h-44 bg-error-container/20 rounded-full blur-2xl pointer-events-none"></div>
@@ -814,10 +833,12 @@
           <span>Validar Kit 72 Horas Agora</span>
         </button>
       </div>
+      <!-- FIM SUB-TELA 2: CHECKLISTS -->
+      </div>
     </section>
 
     <!-- ========================================== -->
-    <!-- TELA 4: PLANO FAMILIAR 72H -->
+    <!-- TELA 3: PLANO FAMILIAR 72H -->
     <!-- ========================================== -->
     <section id="view-plano-familiar" class="hidden flex flex-col w-full">
       <!-- Top Visual Banner -->
@@ -1656,31 +1677,23 @@
   <nav class="fixed bottom-0 w-full z-40 pb-safe bg-[#111317]/95 backdrop-blur-2xl border-t border-surface-container-high/80 shadow-[0_-4px_24px_rgba(0,0,0,0.85)] no-print">
     <div class="flex justify-around items-center min-h-[64px] px-1.5 max-w-md mx-auto">
       <!-- Início -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 transition-all active text-primary" data-path="inicio" href="#inicio">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[64px] min-h-[48px] py-1 transition-all active text-primary" data-path="inicio" href="#inicio">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
           <span class="material-symbols-outlined text-[21px] transition-transform">dashboard</span>
         </div>
         <span class="text-[10px] font-bold uppercase tracking-wider truncate">Início</span>
       </a>
 
-      <!-- Calculadora -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="calculadora" href="#calculadora">
+      <!-- Preparo 72h (Calculadora + Checklists) -->
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[64px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="preparo" href="#preparo">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
-          <span class="material-symbols-outlined text-[21px] transition-transform">calculate</span>
+          <span class="material-symbols-outlined text-[21px] transition-transform">backpack</span>
         </div>
-        <span class="text-[10px] font-bold uppercase tracking-wider truncate">Cálculo</span>
-      </a>
-
-      <!-- Checklists -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="checklists" href="#checklists">
-        <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
-          <span class="material-symbols-outlined text-[21px] transition-transform">inventory_2</span>
-        </div>
-        <span class="text-[10px] font-bold uppercase tracking-wider truncate">Listas</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider truncate">Preparo</span>
       </a>
 
       <!-- Plano Familiar -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="plano-familiar" href="#plano-familiar">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[64px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="plano-familiar" href="#plano-familiar">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
           <span class="material-symbols-outlined text-[21px] transition-transform">shield</span>
         </div>
@@ -1688,7 +1701,7 @@
       </a>
 
       <!-- Feed com Beacon de Alerta -->
-      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[56px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="feed" href="#feed">
+      <a class="nav-tab flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[64px] min-h-[48px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="feed" href="#feed">
         <div class="nav-pill relative flex items-center justify-center w-12 h-7 rounded-full">
           <span class="material-symbols-outlined text-[21px] transition-transform">campaign</span>
           <!-- Beacon de Alerta Ao Vivo -->

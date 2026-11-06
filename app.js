@@ -301,9 +301,61 @@ function toggleScreenStrobe() {
   }
 }
 
+// Sub-abas da tela Preparo (Calculadora + Checklists)
+function switchPreparoSubTab(subTab) {
+  triggerHaptic(12);
+
+  const tabCalculo = document.getElementById('preparo-tab-calculo');
+  const tabBob = document.getElementById('preparo-tab-bob');
+  const tabHome = document.getElementById('preparo-tab-home');
+
+  const contentCalculo = document.getElementById('preparo-view-calculo');
+  const contentChecklists = document.getElementById('preparo-view-checklists');
+
+  const inactiveBtnClass = 'py-2.5 px-1.5 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1 min-h-[44px]';
+  const activeBtnClass = 'py-2.5 px-1.5 rounded-lg font-headline-sm text-headline-sm uppercase text-center transition-all bg-primary-container text-on-primary-container shadow-md flex items-center justify-center gap-1 min-h-[44px]';
+
+  [tabCalculo, tabBob, tabHome].forEach((btn) => {
+    if (btn) btn.className = inactiveBtnClass;
+  });
+
+  if (subTab === 'calculo') {
+    if (tabCalculo) tabCalculo.className = activeBtnClass;
+    if (contentCalculo) contentCalculo.classList.remove('hidden');
+    if (contentChecklists) contentChecklists.classList.add('hidden');
+    recalculateSupplies();
+  } else if (subTab === 'bob') {
+    if (tabBob) tabBob.className = activeBtnClass;
+    if (contentCalculo) contentCalculo.classList.add('hidden');
+    if (contentChecklists) contentChecklists.classList.remove('hidden');
+    appState.checklists.activeSubTab = 'bob';
+    saveState();
+    renderChecklists();
+  } else if (subTab === 'home') {
+    if (tabHome) tabHome.className = activeBtnClass;
+    if (contentCalculo) contentCalculo.classList.add('hidden');
+    if (contentChecklists) contentChecklists.classList.remove('hidden');
+    appState.checklists.activeSubTab = 'home';
+    saveState();
+    renderChecklists();
+  }
+}
+
 // Navegação entre abas
 function switchTab(targetTab) {
   triggerHaptic(12);
+
+  // Redirecionamento de compatibilidade
+  if (targetTab === 'calculadora') {
+    switchTab('preparo');
+    setTimeout(() => switchPreparoSubTab('calculo'), 10);
+    return;
+  }
+  if (targetTab === 'checklists') {
+    switchTab('preparo');
+    setTimeout(() => switchPreparoSubTab('bob'), 10);
+    return;
+  }
 
   // Proteção do Painel Admin
   if (targetTab === 'admin' && !appState.admin?.authenticated) {
@@ -315,7 +367,7 @@ function switchTab(targetTab) {
   saveState();
 
   // Esconder todas as telas e resetar classe de animação
-  const views = ['inicio', 'calculadora', 'checklists', 'plano-familiar', 'feed', 'admin'];
+  const views = ['inicio', 'preparo', 'plano-familiar', 'feed', 'admin'];
   views.forEach((v) => {
     const el = document.getElementById(`view-${v}`);
     if (el) {
@@ -333,7 +385,7 @@ function switchTab(targetTab) {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
-  // Atualizar visual da barra de navegação inferior
+  // Atualizar visual da barra de navegação inferior (4 abas)
   const navTabs = document.querySelectorAll('.nav-tab');
   navTabs.forEach((tab) => {
     const path = tab.getAttribute('data-path');
@@ -351,8 +403,7 @@ function switchTab(targetTab) {
   // Atualizar subtítulo do cabeçalho
   const subtitleMap = {
     inicio: 'Início',
-    calculadora: 'Calculadora',
-    checklists: 'Checklists',
+    preparo: 'Preparo 72h',
     'plano-familiar': 'Plano Familiar',
     feed: 'Feed',
     admin: 'Painel do Criador'
@@ -360,12 +411,11 @@ function switchTab(targetTab) {
   const subEl = document.getElementById('header-breadcrumb');
   if (subEl) subEl.textContent = subtitleMap[targetTab] || 'Prontidão';
 
-  // Se for início ou calculadora, recomputar métricas
+  // Se for início ou preparo, recomputar métricas
   if (targetTab === 'inicio') {
     updateDashboardMetrics();
-  } else if (targetTab === 'calculadora') {
+  } else if (targetTab === 'preparo') {
     recalculateSupplies();
-  } else if (targetTab === 'checklists') {
     renderChecklists();
   } else if (targetTab === 'admin') {
     renderAdminPostsList();
@@ -1716,7 +1766,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (paramTab === 'admin') {
     switchTab('inicio');
     openAdminPinModal();
-  } else if (paramTab && ['inicio', 'calculadora', 'checklists', 'plano-familiar', 'feed'].includes(paramTab)) {
+  } else if (paramTab && ['inicio', 'preparo', 'calculadora', 'checklists', 'plano-familiar', 'feed'].includes(paramTab)) {
     switchTab(paramTab);
   } else {
     switchTab('inicio');
