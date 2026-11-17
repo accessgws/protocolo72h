@@ -108,12 +108,23 @@ function loadState() {
     if (!raw) return JSON.parse(JSON.stringify(defaultState));
     const parsed = JSON.parse(raw);
     const merged = { ...defaultState, ...parsed };
+    merged.calculator = { ...defaultState.calculator, ...(parsed.calculator || {}) };
+    merged.checklists = { ...defaultState.checklists, ...(parsed.checklists || {}) };
+    merged.familyPlan = {
+      ...defaultState.familyPlan,
+      ...(parsed.familyPlan || {}),
+      vulnerable: {
+        ...defaultState.familyPlan.vulnerable,
+        ...(parsed.familyPlan?.vulnerable || {})
+      }
+    };
     // Garantir que a estrutura do admin existe
     if (!merged.admin) {
       merged.admin = JSON.parse(JSON.stringify(defaultState.admin));
     } else if (!Array.isArray(merged.admin.posts) || merged.admin.posts.length === 0) {
       merged.admin.posts = JSON.parse(JSON.stringify(defaultState.admin.posts));
     }
+    if (!merged.admin.manuals) merged.admin.manuals = {};
     // Sempre reiniciar autenticação ao carregar
     merged.admin.authenticated = false;
     return merged;
@@ -191,7 +202,7 @@ function toggleWhistle() {
   const btn = document.getElementById('btn-whistle-toggle');
   const ctx = getAudioContext();
   if (!ctx) {
-    alert('Áudio não suportado no seu navegador.');
+    showToast('Áudio não suportado neste navegador.');
     return;
   }
 
@@ -620,20 +631,76 @@ function renderChecklists() {
 
 function addCustomItemPrompt() {
   triggerHaptic(20);
-  const name = prompt('Nome do suprimento ou equipamento a adicionar:');
-  if (!name || name.trim() === '') return;
+  const modal = document.getElementById('custom-item-modal');
+  const label = document.getElementById('custom-item-target-label');
+  const nameInput = document.getElementById('custom-item-name');
+  const detailInput = document.getElementById('custom-item-detail');
+  const tagSelect = document.getElementById('custom-item-tag');
+  const isBob = appState.checklists.activeSubTab === 'bob';
 
-  const tag = prompt('Categoria (ex: Hidratação, Ferramenta, Saúde, Energia):') || 'Geral';
-  const detail = prompt('Detalhes/peso (ex: 200g, 1 un, estanque):') || 'Contingência';
-  const priorityStr = prompt('Prioridade (1 = Crítico, 2 = Básico, 3 = Conforto):') || '2';
-  const priority = parseInt(priorityStr, 10) || 2;
+  if (label) {
+    label.textContent = isBob ? 'Destino: Mochila Rápida (BOB)' : 'Destino: Estoque Residencial 72H';
+  }
+  if (nameInput) nameInput.value = '';
+  if (detailInput) detailInput.value = '';
+  if (tagSelect) tagSelect.value = 'Geral';
+  selectCustomItemPriority(2);
+
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => nameInput?.focus(), 60);
+  }
+}
+
+function closeCustomItemModal() {
+  triggerHaptic(12);
+  const modal = document.getElementById('custom-item-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+}
+
+function selectCustomItemPriority(priority) {
+  triggerHaptic(10);
+  const input = document.getElementById('custom-item-priority');
+  if (input) input.value = String(priority);
+
+  document.querySelectorAll('.custom-prio-btn').forEach((btn) => {
+    const p = Number(btn.getAttribute('data-priority'));
+    if (p === Number(priority)) {
+      btn.className = 'custom-prio-btn py-2 px-2 rounded-lg bg-primary-container text-on-primary-container border border-primary font-label-sm text-label-sm uppercase font-bold';
+    } else {
+      btn.className = 'custom-prio-btn py-2 px-2 rounded-lg bg-surface-container-lowest border border-surface-container-high font-label-sm text-label-sm uppercase text-on-surface-variant';
+    }
+  });
+}
+
+function submitCustomItemModal() {
+  triggerHaptic(25);
+  const nameEl = document.getElementById('custom-item-name');
+  const tagEl = document.getElementById('custom-item-tag');
+  const detailEl = document.getElementById('custom-item-detail');
+  const prioEl = document.getElementById('custom-item-priority');
+
+  const name = nameEl?.value?.trim();
+  if (!name) {
+    showToast('Informe o nome do item antes de salvar.');
+    nameEl?.focus();
+    return;
+  }
+
+  const tag = tagEl?.value?.trim() || 'Geral';
+  const detail = detailEl?.value?.trim() || 'Contingência';
+  const priority = parseInt(prioEl?.value || '2', 10) || 2;
 
   const isBob = appState.checklists.activeSubTab === 'bob';
   const newItem = {
     id: 'custom_' + Date.now(),
-    title: name.trim(),
-    tag: tag.trim(),
-    detail: detail.trim(),
+    title: name,
+    tag: tag,
+    detail: detail,
     icon: 'star',
     checked: true,
     priority: Math.min(3, Math.max(1, priority)),
@@ -649,6 +716,7 @@ function addCustomItemPrompt() {
   saveState();
   renderChecklists();
   updateDashboardMetrics();
+  closeCustomItemModal();
   showToast(`Item "${newItem.title}" cadastrado com sucesso!`);
 }
 
@@ -771,6 +839,45 @@ function saveFamilyPlanInputs() {
   appState.familyPlan.pe2 = pe2;
   appState.familyPlan.outCity = outCity;
   saveState();
+  updateDashboardMetrics();
+}
+
+function toggleVulnerableCheck(key, checked) {
+  triggerHaptic(15);
+  if (!appState.familyPlan.vulnerable) {
+    appState.familyPlan.vulnerable = {};
+  }
+  appState.familyPlan.vulnerable[key] = !!checked;
+  saveState();
+  updateVulnerableBadges();
+  updateDashboardMetrics();
+}
+
+function updateVulnerableBadges() {
+  const v = appState.familyPlan?.vulnerable || {};
+  const groups = [
+    { badgeId: 'vuln-badge-child', keys: ['childWhistle', 'childKit'] },
+    { badgeId: 'vuln-badge-elder', keys: ['elderMeds', 'elderCane'] },
+    { badgeId: 'vuln-badge-pet', keys: ['petBox', 'petFood'] }
+  ];
+  groups.forEach((g) => {
+    const el = document.getElementById(g.badgeId);
+    if (!el) return;
+    const done = g.keys.filter((k) => !!v[k]).length;
+    el.textContent = done === g.keys.length ? `${done}/${g.keys.length} OK` : `${done}/${g.keys.length} Ativo`;
+    el.className = done === g.keys.length
+      ? 'px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-label-sm text-label-sm uppercase'
+      : 'px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm uppercase';
+  });
+}
+
+function syncVulnerableUI() {
+  const v = appState.familyPlan?.vulnerable || {};
+  Object.keys(v).forEach((key) => {
+    const cb = document.getElementById(`vuln-${key}`);
+    if (cb) cb.checked = !!v[key];
+  });
+  updateVulnerableBadges();
 }
 
 function renderFamilyMembers() {
@@ -807,22 +914,59 @@ function renderFamilyMembers() {
 
 function addFamilyMemberPrompt() {
   triggerHaptic(20);
-  const name = prompt('Nome completo e parentesco (ex: João - Filho 12 anos):');
-  if (!name || name.trim() === '') return;
+  const modal = document.getElementById('family-member-modal');
+  const nameInput = document.getElementById('family-member-name');
+  const bloodSelect = document.getElementById('family-member-blood');
+  const noteInput = document.getElementById('family-member-note');
 
-  const blood = prompt('Tipo Sanguíneo (ex: O+, A-, AB+, B-):') || 'Desconhecido';
-  const note = prompt('Medicamentos contínuos, alergias ou cuidados vitais:') || 'Sem restrições relatadas.';
+  if (nameInput) nameInput.value = '';
+  if (bloodSelect) bloodSelect.value = 'O+';
+  if (noteInput) noteInput.value = '';
+
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => nameInput?.focus(), 60);
+  }
+}
+
+function closeFamilyMemberModal() {
+  triggerHaptic(12);
+  const modal = document.getElementById('family-member-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+}
+
+function submitFamilyMemberModal() {
+  triggerHaptic(25);
+  const nameEl = document.getElementById('family-member-name');
+  const bloodEl = document.getElementById('family-member-blood');
+  const noteEl = document.getElementById('family-member-note');
+
+  const name = nameEl?.value?.trim();
+  if (!name) {
+    showToast('Informe o nome do familiar antes de salvar.');
+    nameEl?.focus();
+    return;
+  }
+
+  const blood = bloodEl?.value?.trim() || 'Desconhecido';
+  const note = noteEl?.value?.trim() || 'Sem restrições relatadas.';
 
   const newMember = {
     id: Date.now(),
-    name: name.trim(),
-    blood: blood.trim(),
-    note: note.trim()
+    name: name,
+    blood: blood,
+    note: note
   };
 
   appState.familyPlan.members.push(newMember);
   saveState();
   renderFamilyMembers();
+  updateDashboardMetrics();
+  closeFamilyMemberModal();
   showToast(`Membro ${newMember.name} registrado no plano!`);
 }
 
@@ -831,6 +975,7 @@ function removeFamilyMember(id) {
   appState.familyPlan.members = appState.familyPlan.members.filter((m) => m.id !== id);
   saveState();
   renderFamilyMembers();
+  updateDashboardMetrics();
 }
 
 function sharePlanViaWhatsApp() {
@@ -880,13 +1025,37 @@ function downloadOfflineSummary() {
 // MÓDULO 4: PAINEL PRINCIPAL & MÉTRICAS
 // ==========================================
 function updateDashboardMetrics() {
-  const bobItems = appState.checklists.bobItems;
+  const bobItems = appState.checklists.bobItems || [];
+  const homeItems = appState.checklists.homeItems || [];
   const bobTotal = bobItems.length;
   const bobChecked = bobItems.filter((i) => i.checked).length;
-  const bobPercent = bobTotal > 0 ? (bobChecked / bobTotal) : 0;
+  const bobRatio = bobTotal > 0 ? (bobChecked / bobTotal) : 0;
 
-  // Cálculo da prontidão geral
-  const readiness = Math.round(bobPercent * 100);
+  const homeTotal = homeItems.length;
+  const homeChecked = homeItems.filter((i) => i.checked).length;
+  const homeRatio = homeTotal > 0 ? (homeChecked / homeTotal) : 0;
+
+  // Pontuação do Plano Familiar (PE1, PE2, Contato externo, Membros e Grupos Vulneráveis)
+  const plan = appState.familyPlan || {};
+  const hasPe1 = !!(plan.pe1 && plan.pe1.trim().length > 2);
+  const hasPe2 = !!(plan.pe2 && plan.pe2.trim().length > 2);
+  const hasOutCity = !!(plan.outCity && plan.outCity.trim().length > 2);
+  const hasMembers = Array.isArray(plan.members) && plan.members.length > 0;
+  const vulnObj = plan.vulnerable || {};
+  const vulnKeys = Object.keys(vulnObj);
+  const vulnDone = vulnKeys.filter((k) => !!vulnObj[k]).length;
+  const vulnRatio = vulnKeys.length > 0 ? (vulnDone / vulnKeys.length) : 1;
+  const planRatio = (
+    (hasPe1 ? 0.25 : 0) +
+    (hasPe2 ? 0.2 : 0) +
+    (hasOutCity ? 0.2 : 0) +
+    (hasMembers ? 0.15 : 0) +
+    (vulnRatio * 0.2)
+  );
+
+  // Cálculo ponderado real da prontidão geral (50% BOB + 30% Estoque 72h + 20% Plano)
+  const readiness = Math.round((bobRatio * 0.5 + homeRatio * 0.3 + planRatio * 0.2) * 100);
+  const bobPercent = Math.round(bobRatio * 100);
 
   // Gauge circular SVG
   const gaugePercentEl = document.getElementById('dash-gauge-percent');
@@ -898,16 +1067,19 @@ function updateDashboardMetrics() {
     gaugeCircleEl.style.strokeDashoffset = offset;
   }
 
-  // Valores de água na bento card
+  // Valores de água na bento card (combinando itens hídricos da Mochila e Estoque)
   const dashWaterEl = document.getElementById('dash-water-metric');
   const dashWaterBar = document.getElementById('dash-water-bar');
   const calc = appState.calculator;
-  const totalWater = ((calc.adults * 3.5 + calc.children * 2.5 + calc.elderly * 3.0) * (calc.days || 3) * (calc.heatWave ? 1.3 : 1)).toFixed(0);
-  const reservedEstimate = Math.min(totalWater, Math.round(totalWater * (bobChecked / bobTotal)));
+  const totalWaterNum = Math.round((calc.adults * 3.5 + calc.children * 2.5 + calc.elderly * 3.0 + calc.pets * 1.0) * (calc.days || 3) * (calc.heatWave ? 1.3 : 1) * (calc.medical ? 1.2 : 1));
+  const hasBobWater = bobItems.find((i) => i.id === 'b1')?.checked ? 1 : 0;
+  const hasHomeWater = homeItems.find((i) => i.id === 'h1')?.checked ? 1 : 0;
+  const waterChecklistRatio = (hasBobWater * 0.35) + (hasHomeWater * 0.65);
+  const reservedEstimate = Math.min(totalWaterNum, Math.round(totalWaterNum * waterChecklistRatio));
 
-  if (dashWaterEl) dashWaterEl.textContent = `${reservedEstimate}L / ${totalWater}L`;
+  if (dashWaterEl) dashWaterEl.textContent = `${reservedEstimate}L / ${totalWaterNum}L`;
   if (dashWaterBar) {
-    const wPct = totalWater > 0 ? Math.min(100, Math.round((reservedEstimate / totalWater) * 100)) : 100;
+    const wPct = totalWaterNum > 0 ? Math.min(100, Math.round((reservedEstimate / totalWaterNum) * 100)) : 100;
     dashWaterBar.style.width = `${wPct}%`;
   }
 
@@ -915,13 +1087,13 @@ function updateDashboardMetrics() {
   const dashBobEl = document.getElementById('dash-bob-metric');
   const dashBobBar = document.getElementById('dash-bob-bar');
   if (dashBobEl) dashBobEl.textContent = `${bobChecked} / ${bobTotal} itens`;
-  if (dashBobBar) dashBobBar.style.width = `${readiness}%`;
+  if (dashBobBar) dashBobBar.style.width = `${bobPercent}%`;
 
-  // Pendências
+  // Pendências combinadas (BOB + Estoque)
   const pendingEl = document.getElementById('dash-pending-count');
-  const pendingCount = bobTotal - bobChecked;
+  const pendingCount = (bobTotal - bobChecked) + (homeTotal - homeChecked);
   if (pendingEl) {
-    pendingEl.textContent = pendingCount > 0 ? `${pendingCount} itens pendentes para 72h` : 'Todos os itens conferidos!';
+    pendingEl.textContent = pendingCount > 0 ? `${pendingCount} itens pendentes (BOB + Estoque)` : 'Kit 72H 100% conferido!';
   }
 }
 
@@ -1137,10 +1309,127 @@ window.addEventListener('beforeinstallprompt', (e) => {
   if (installBanner) installBanner.classList.remove('hidden');
 });
 
+// Modal Tático Reutilizável (substitui alert, prompt e confirm nativos)
+let tacticalDialogConfirmHandler = null;
+
+function openTacticalDialog(options = {}) {
+  triggerHaptic(15);
+  const modal = document.getElementById('tactical-dialog-modal');
+  const iconEl = document.getElementById('tactical-dialog-icon');
+  const iconWrap = document.getElementById('tactical-dialog-icon-wrap');
+  const titleEl = document.getElementById('tactical-dialog-title');
+  const subtitleEl = document.getElementById('tactical-dialog-subtitle');
+  const msgEl = document.getElementById('tactical-dialog-message');
+  const inputWrap = document.getElementById('tactical-dialog-input-wrap');
+  const inputEl = document.getElementById('tactical-dialog-input');
+  const cancelBtn = document.getElementById('tactical-dialog-cancel');
+  const confirmBtn = document.getElementById('tactical-dialog-confirm');
+  const actionsWrap = document.getElementById('tactical-dialog-actions');
+
+  if (!modal) return;
+
+  const isDanger = options.tone === 'danger';
+  if (iconEl) iconEl.textContent = options.icon || (isDanger ? 'warning' : 'info');
+  if (iconWrap) {
+    iconWrap.className = isDanger
+      ? 'w-9 h-9 rounded-lg bg-secondary-container text-white flex items-center justify-center flex-shrink-0'
+      : 'w-9 h-9 rounded-lg bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0';
+  }
+  if (titleEl) {
+    titleEl.textContent = options.title || 'Comunicado Tático';
+    titleEl.className = isDanger
+      ? 'font-headline-sm text-headline-sm uppercase text-secondary tracking-wide truncate'
+      : 'font-headline-sm text-headline-sm uppercase text-primary tracking-wide truncate';
+  }
+  if (subtitleEl) subtitleEl.textContent = options.subtitle || 'Protocolo 72H';
+  if (msgEl) msgEl.textContent = options.message || '';
+
+  if (options.showInput) {
+    inputWrap?.classList.remove('hidden');
+    if (inputEl) {
+      inputEl.value = options.inputValue || '';
+      inputEl.placeholder = options.inputPlaceholder || 'https://...';
+    }
+  } else {
+    inputWrap?.classList.add('hidden');
+  }
+
+  const showCancel = options.showCancel !== false;
+  if (cancelBtn) {
+    cancelBtn.classList.toggle('hidden', !showCancel);
+    cancelBtn.textContent = options.cancelLabel || 'Cancelar';
+  }
+  if (actionsWrap) {
+    actionsWrap.className = showCancel
+      ? 'grid grid-cols-2 gap-2 pt-2 border-t border-surface-container-high'
+      : 'grid grid-cols-1 gap-2 pt-2 border-t border-surface-container-high';
+  }
+  if (confirmBtn) {
+    confirmBtn.textContent = options.confirmLabel || 'Confirmar';
+    confirmBtn.className = isDanger
+      ? 'py-2.5 px-3 rounded-lg bg-secondary-container text-white font-headline-sm text-headline-sm uppercase tracking-wide flex items-center justify-center gap-1 shadow-md active:scale-95 transition-all'
+      : 'py-2.5 px-3 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wide flex items-center justify-center gap-1 shadow-md active:scale-95 transition-all';
+  }
+
+  tacticalDialogConfirmHandler = () => {
+    const val = inputEl?.value?.trim() || '';
+    closeTacticalDialog();
+    if (typeof options.onConfirm === 'function') {
+      options.onConfirm(val);
+    }
+  };
+  if (confirmBtn) confirmBtn.onclick = tacticalDialogConfirmHandler;
+
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  if (options.showInput) setTimeout(() => inputEl?.focus(), 60);
+}
+
+function closeTacticalDialog() {
+  const modal = document.getElementById('tactical-dialog-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+  tacticalDialogConfirmHandler = null;
+}
+
+function openRadioModal() {
+  openTacticalDialog({
+    icon: 'radio',
+    title: 'Rádio de Emergência AM/FM',
+    subtitle: 'Comunicação sem Internet',
+    message: 'Em caso de apagão de telefonia ou internet, sintonize seu rádio a pilhas ou manivela na faixa AM 820 kHz ou FM 95.7 MHz (e emissoras públicas locais) para comunicados da Defesa Civil.',
+    showCancel: false,
+    confirmLabel: 'Entendido'
+  });
+}
+
+function openFeedPostDetail(postId) {
+  const post = (appState.admin?.posts || []).find((p) => p.id === postId);
+  if (!post) return;
+  openTacticalDialog({
+    icon: post.type === 'alerta' ? 'warning' : 'menu_book',
+    tone: post.type === 'alerta' ? 'danger' : 'primary',
+    title: post.title,
+    subtitle: post.type === 'alerta' ? 'Alerta Tático' : 'Comunicado / Guia',
+    message: post.desc || 'Sem detalhes adicionais registrados.',
+    showCancel: false,
+    confirmLabel: 'Fechar'
+  });
+}
+
 function installPWA() {
   triggerHaptic(30);
   if (!deferredPrompt) {
-    alert('Para instalar o Protocolo 72H: Toque no menu do navegador (três pontinhos ou botão de compartilhar) e selecione "Adicionar à tela de início" ou "Instalar aplicativo".');
+    openTacticalDialog({
+      icon: 'install_mobile',
+      title: 'Instalar Protocolo 72H',
+      subtitle: 'Acesso 100% Offline',
+      message: 'Toque no menu do navegador (três pontinhos no Android ou botão Compartilhar no iPhone) e selecione "Adicionar à tela de início" ou "Instalar aplicativo".',
+      showCancel: false,
+      confirmLabel: 'Entendido'
+    });
     return;
   }
   deferredPrompt.prompt();
@@ -1422,7 +1711,7 @@ function handleAdminPublish() {
   const desc = descInput?.value?.trim();
 
   if (!title) {
-    alert('Por favor, informe o título do comunicado ou produto.');
+    triggerAdminToast('Informe o título do comunicado ou produto antes de publicar.');
     titleInput?.focus();
     return;
   }
@@ -1552,19 +1841,45 @@ function toggleAdminPostStatus(id) {
 
 function deleteAdminPost(id) {
   triggerHaptic(30);
-  if (!confirm('Deseja realmente excluir este comunicado permanentemente?')) return;
-  appState.admin.posts = appState.admin.posts.filter((p) => p.id !== id);
-  saveState();
-  renderAdminPostsList();
-  renderDynamicFeedCards();
-  triggerAdminToast('Comunicado removido com sucesso.');
+  const post = appState.admin?.posts?.find((p) => p.id === id);
+  openTacticalDialog({
+    icon: 'delete_forever',
+    tone: 'danger',
+    title: 'Excluir Comunicado',
+    subtitle: 'Ação Permanente',
+    message: `Deseja realmente excluir "${post?.title || 'este comunicado'}" do Feed e do painel?`,
+    confirmLabel: 'Excluir',
+    cancelLabel: 'Manter',
+    onConfirm: () => {
+      appState.admin.posts = appState.admin.posts.filter((p) => p.id !== id);
+      saveState();
+      renderAdminPostsList();
+      renderDynamicFeedCards();
+      triggerAdminToast('Comunicado removido com sucesso.');
+    }
+  });
 }
 
 function promptUpdateManual(manualTitle) {
   triggerHaptic(20);
-  const newLink = prompt(`Informe o link ou URL do novo arquivo PDF para "${manualTitle}":`);
-  if (!newLink || newLink.trim() === '') return;
-  triggerAdminToast(`Manual "${manualTitle}" atualizado! Link registrado com sucesso.`);
+  const currentLink = appState.admin?.manuals?.[manualTitle] || '';
+  openTacticalDialog({
+    icon: 'picture_as_pdf',
+    title: 'Atualizar Manual PDF',
+    subtitle: manualTitle,
+    message: `Cole o novo link direto ou URL do arquivo PDF para "${manualTitle}":`,
+    showInput: true,
+    inputValue: currentLink,
+    inputPlaceholder: 'https://seusite.com/manuais/guia-72h.pdf',
+    confirmLabel: 'Salvar Link',
+    onConfirm: (newLink) => {
+      if (!newLink) return;
+      if (!appState.admin.manuals) appState.admin.manuals = {};
+      appState.admin.manuals[manualTitle] = newLink;
+      saveState();
+      triggerAdminToast(`Manual "${manualTitle}" atualizado! Link registrado com sucesso.`);
+    }
+  });
 }
 
 function triggerAdminBroadcast() {
@@ -1648,6 +1963,15 @@ function renderDynamicFeedCards() {
   if (!container) return;
 
   const posts = (appState.admin?.posts || []).filter((p) => p.status === 'active');
+
+  // Atualizar contador da pílula "Todos (N)"
+  const allBtn = document.getElementById('feed-filter-all');
+  if (allBtn) {
+    const baseStaticCount = 4; // Boletim, Lanterna, Sementes, CEMADEN, Filtro => 5 cards estáticos ou dinâmicos
+    const totalCards = document.querySelectorAll('#view-feed .feed-card:not([data-dynamic="true"])').length + posts.length;
+    allBtn.textContent = `Todos (${totalCards || (baseStaticCount + posts.length)})`;
+  }
+
   if (posts.length === 0) {
     container.innerHTML = '';
     return;
@@ -1657,7 +1981,7 @@ function renderDynamicFeedCards() {
   posts.forEach((p) => {
     const isAlerta = p.type === 'alerta';
     const isOferta = p.type === 'oferta';
-    const categoryAttr = isAlerta ? 'alertas' : isOferta ? 'ofertas' : 'links';
+    const categoryAttr = isAlerta ? 'alerta' : isOferta ? 'ofertas' : (p.link ? 'links' : 'protocolo');
 
     let badgeHtml = '';
     if (isAlerta) {
@@ -1693,21 +2017,21 @@ function renderDynamicFeedCards() {
           </div>
           ${p.coupon ? `<span class="px-2 py-1 rounded bg-surface-container font-label-sm text-label-sm text-primary uppercase font-bold border border-primary/30">Cupom: ${p.coupon}</span>` : ''}
         </div>
-        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `claimOffer('${p.coupon || 'PROT15'}', '${p.title}')`}" class="w-full py-3 px-4 rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-md">
+        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `claimOffer('${p.coupon || 'PROT15'}', '${(p.title || '').replace(/'/g, '')}')`}" class="w-full py-3 px-4 rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-md">
           <span>${p.link ? 'ACESSAR PRODUTO NO PARCEIRO' : 'PEGAR CUPOM DE DESCONTO'}</span>
           <span class="material-symbols-outlined text-[18px]">open_in_new</span>
         </button>
       `;
     } else if (isAlerta) {
       actionButtonHtml = `
-        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `alert('${p.desc || p.title}')`}" class="w-full py-3 px-4 rounded-lg bg-secondary-container text-white font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-md">
+        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `openFeedPostDetail('${p.id}')`}" class="w-full py-3 px-4 rounded-lg bg-secondary-container text-white font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform shadow-md">
           <span>${p.link ? 'VER DETALHES DO AVISO' : 'CIENTE DO ALERTA'}</span>
           <span class="material-symbols-outlined text-[18px]">chevron_right</span>
         </button>
       `;
     } else {
       actionButtonHtml = `
-        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `alert('${p.desc}')`}" class="w-full py-3 px-4 rounded-lg bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform hover:bg-surface-container-highest border border-surface-variant">
+        <button onclick="${p.link ? `window.open('${p.link}', '_blank')` : `openFeedPostDetail('${p.id}')`}" class="w-full py-3 px-4 rounded-lg bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-transform hover:bg-surface-container-highest border border-surface-variant">
           <span>${p.link ? 'ACESSAR MANUAL / PDF' : 'LER PROTOCOLO'}</span>
           <span class="material-symbols-outlined text-[18px]">menu_book</span>
         </button>
@@ -1715,7 +2039,7 @@ function renderDynamicFeedCards() {
     }
 
     html += `
-      <div class="feed-card bg-surface-container rounded-xl overflow-hidden shadow-sm flex flex-col border border-surface-container-high" data-category="${categoryAttr}">
+      <div class="feed-card bg-surface-container rounded-xl overflow-hidden shadow-sm flex flex-col border border-surface-container-high" data-category="${categoryAttr}" data-dynamic="true">
         ${p.imageUrl ? `
           <div class="relative h-44 w-full bg-surface-container-high overflow-hidden">
             <img class="w-full h-full object-cover" alt="${p.title}" src="${p.imageUrl}" loading="lazy"/>
@@ -1806,6 +2130,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Renderizar componentes
   renderChecklists();
   renderFamilyMembers();
+  syncVulnerableUI();
   recalculateSupplies();
   updateDashboardMetrics();
   updateNetworkStatus();
