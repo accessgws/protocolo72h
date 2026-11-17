@@ -150,7 +150,12 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2 flex-shrink-0">
+      <div class="flex items-center gap-1.5 flex-shrink-0">
+        <!-- Botão Modo Apagão (Economia OLED) -->
+        <button id="btn-blackout-mode" onclick="toggleBlackoutMode()" class="w-9 h-9 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant flex items-center justify-center border border-surface-container-highest/60 active:scale-95 transition-all" title="Modo Economia Apagão (OLED)">
+          <span id="blackout-icon" class="material-symbols-outlined text-[19px]">battery_saver</span>
+        </button>
+
         <!-- Indicador de Rede / Offline -->
         <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container-high border border-surface-container-highest/60 select-none">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" id="net-dot"></span>
@@ -768,12 +773,12 @@
             <div class="h-full bg-gradient-to-r from-primary-container to-primary rounded-full transition-all duration-300" id="progress-bar" style="width: 83%;"></div>
           </div>
 
-          <div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
-            <span class="flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-              STATUS: OPERACIONAL
+          <div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm gap-2">
+            <span id="checklist-review-status" class="flex items-center gap-1 truncate">
+              <span class="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0"></span>
+              <span class="truncate">STATUS: OPERACIONAL</span>
             </span>
-            <span class="text-tertiary">REVISÃO LOCAL ATIVA</span>
+            <span id="checklist-review-days" class="text-tertiary flex-shrink-0">REVISÃO 90 DIAS</span>
           </div>
         </div>
       </div>
@@ -814,9 +819,9 @@
         </div>
 
         <!-- Botão Primário Alerta SOS / Conclusão -->
-        <button onclick="showToast('✓ Mochila 72H inspecionada e validada!'); triggerHaptic(30);" class="w-full py-3.5 px-4 rounded-xl bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-[0.98] min-h-[48px]">
+        <button onclick="validateKitNow()" class="w-full py-3.5 px-4 rounded-xl bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-[0.98] min-h-[48px]">
           <span class="material-symbols-outlined text-[20px]">verified</span>
-          <span>Validar Kit 72 Horas Agora</span>
+          <span>Validar Kit 72 Horas Agora (Ciclo 90 Dias)</span>
         </button>
       </div>
       <!-- FIM SUB-TELA 2: CHECKLISTS -->
@@ -849,6 +854,40 @@
       </div>
 
       <div class="px-margin flex flex-col gap-space-lg mt-space-md">
+        <!-- Seletor de Cenário de Risco Local -->
+        <div class="flex flex-col gap-space-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-secondary text-[20px]">flood</span>
+              <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Risco Prioritário da Região</h3>
+            </div>
+            <span id="risk-scenario-badge" class="font-label-sm text-label-sm uppercase text-primary">Adaptável</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button type="button" onclick="selectRiskScenario('enchente')" data-risk="enchente" class="risk-scenario-btn py-2.5 px-2.5 rounded-xl bg-primary-container text-on-primary-container font-label-md text-label-md uppercase font-bold flex items-center justify-center gap-1.5 border border-primary/40 transition-all active:scale-95">
+              <span class="material-symbols-outlined text-[18px]">flood</span>
+              <span class="truncate">Enchente</span>
+            </button>
+            <button type="button" onclick="selectRiskScenario('deslizamento')" data-risk="deslizamento" class="risk-scenario-btn py-2.5 px-2.5 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase flex items-center justify-center gap-1.5 border border-surface-container-high transition-all active:scale-95">
+              <span class="material-symbols-outlined text-[18px]">landslide</span>
+              <span class="truncate">Deslizamento</span>
+            </button>
+            <button type="button" onclick="selectRiskScenario('apagao')" data-risk="apagao" class="risk-scenario-btn py-2.5 px-2.5 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase flex items-center justify-center gap-1.5 border border-surface-container-high transition-all active:scale-95">
+              <span class="material-symbols-outlined text-[18px]">power_off</span>
+              <span class="truncate">Apagão</span>
+            </button>
+            <button type="button" onclick="selectRiskScenario('vendaval')" data-risk="vendaval" class="risk-scenario-btn py-2.5 px-2.5 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase flex items-center justify-center gap-1.5 border border-surface-container-high transition-all active:scale-95">
+              <span class="material-symbols-outlined text-[18px]">cyclone</span>
+              <span class="truncate">Vendaval</span>
+            </button>
+          </div>
+
+          <div id="risk-scenario-panel" class="bg-surface-container rounded-xl p-3.5 border border-surface-container-high/60 flex flex-col gap-2">
+            <!-- Preenchido dinamicamente por selectRiskScenario() -->
+          </div>
+        </div>
+
         <!-- Timeline Selector (0h -> 72h) -->
         <div class="flex flex-col gap-space-sm">
           <div class="flex items-center justify-between">
@@ -1136,34 +1175,43 @@
           </button>
         </div>
 
-        <!-- Card Alerta Preventivo -->
+        <!-- Card Alerta Preventivo + Canais Oficiais (Anti-Boato) -->
         <div class="feed-card bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col gap-3 relative overflow-hidden border border-secondary-container/30" data-category="alerta">
           <div class="flex items-center justify-between">
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase tracking-wider font-semibold">
-              <span class="material-symbols-outlined text-[14px]">warning</span>
-              ALERTA PREVENTIVO - DEFESA CIVIL
+              <span class="material-symbols-outlined text-[14px]">cell_tower</span>
+              DEFESA CIVIL ALERTA • CANAIS OFICIAIS
             </span>
-            <span class="font-label-sm text-label-sm text-on-surface-variant">Há 2 horas</span>
+            <span class="font-label-sm text-label-sm text-emerald-400 uppercase font-semibold">Verificado</span>
           </div>
           <div class="flex flex-col gap-1">
-            <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Boletim Meteorológico Integrado #182</h3>
-            <p class="font-body-sm text-body-sm text-on-surface-variant">Frente fria extrema e precipitações atípicas previstas para as regiões Sul e Sudeste nas próximas 48 horas. Risco de corte pontual de fornecimento elétrico e alagamentos em calhas urbanas.</p>
+            <h3 class="font-headline-sm text-headline-sm uppercase text-on-surface">Alertas Cell Broadcast &amp; Canais Oficiais</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">Com a ativação do Defesa Civil Alerta em 100% dos municípios, boatos e mensagens falsas circulam mais rápido. Sempre confira os canais oficiais abaixo antes de entrar em pânico.</p>
           </div>
-          <div class="flex items-center justify-between pt-1 flex-wrap gap-2">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-primary text-[18px]">emergency_home</span>
-              <span class="font-label-sm text-label-sm text-primary uppercase font-medium">Nível Amarelo: Monitoramento</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <a href="sms:40199?body=Cadastrar" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md uppercase active:scale-95 transition-all border border-surface-container-high">
-                <span class="material-symbols-outlined text-[16px] text-secondary">sms</span>
-                <span>SMS 40199</span>
-              </a>
-              <button onclick="openGuideModal('alerta_clima')" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-md text-label-md uppercase active:scale-95 transition-all">
-                <span>Ver Orientações</span>
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </button>
-            </div>
+          <!-- Botões de Canais Oficiais (WhatsApp / Telegram / SMS 40199) -->
+          <div class="grid grid-cols-3 gap-2">
+            <a href="https://wa.me/556120344611?text=Oi" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-emerald-500/30 text-on-surface active:scale-95 transition-all text-center">
+              <span class="material-symbols-outlined text-[20px] text-emerald-400">chat</span>
+              <span class="font-label-sm text-[10px] uppercase font-bold truncate">WhatsApp Gov</span>
+            </a>
+            <a href="sms:40199?body=Cadastrar" class="flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-secondary/30 text-on-surface active:scale-95 transition-all text-center">
+              <span class="material-symbols-outlined text-[20px] text-secondary">sms</span>
+              <span class="font-label-sm text-[10px] uppercase font-bold truncate">SMS 40199</span>
+            </a>
+            <a href="https://t.me/defesacivilalertas" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-tertiary/30 text-on-surface active:scale-95 transition-all text-center">
+              <span class="material-symbols-outlined text-[20px] text-tertiary">send</span>
+              <span class="font-label-sm text-[10px] uppercase font-bold truncate">Telegram</span>
+            </a>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="openGuideModal('cell_broadcast')" class="py-2.5 px-3 rounded-lg bg-surface-container-high hover:bg-surface-bright text-primary font-label-md text-label-md uppercase active:scale-95 transition-all flex items-center justify-center gap-1.5 border border-primary/20">
+              <span class="material-symbols-outlined text-[16px]">verified_user</span>
+              <span class="truncate">Guia Anti-Boato</span>
+            </button>
+            <button onclick="openGuideModal('apagao')" class="py-2.5 px-3 rounded-lg bg-surface-container-high hover:bg-surface-bright text-tertiary font-label-md text-label-md uppercase active:scale-95 transition-all flex items-center justify-center gap-1.5 border border-tertiary/20">
+              <span class="material-symbols-outlined text-[16px]">power_off</span>
+              <span class="truncate">Guia Apagão</span>
+            </button>
           </div>
         </div>
 
@@ -1716,6 +1764,49 @@
         <button onclick="closeSOSModal()" class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface hover:text-white">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
+      </div>
+
+      <!-- Barra de Bateria & Modo Economia Apagão -->
+      <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-surface-container-low border border-surface-container-high">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="material-symbols-outlined text-[18px] text-primary">battery_charging_full</span>
+          <span id="sos-battery-status" class="font-display-code text-xs text-on-surface truncate">Bateria: Verificando...</span>
+        </div>
+        <button id="sos-blackout-btn" onclick="toggleBlackoutMode()" type="button" class="px-2.5 py-1 rounded-lg bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm uppercase border border-surface-container-highest active:scale-95 transition-all flex items-center gap-1 flex-shrink-0">
+          <span class="material-symbols-outlined text-[15px]">battery_saver</span>
+          <span>Modo Apagão</span>
+        </button>
+      </div>
+
+      <!-- Localização GPS Offline (Satélite) -->
+      <div class="flex flex-col gap-2 p-3 rounded-xl bg-surface-container-low border border-tertiary/30">
+        <div class="flex items-center justify-between">
+          <span class="font-label-sm text-label-sm text-tertiary uppercase tracking-wider flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">my_location</span>
+            GPS Offline (Sem Internet)
+          </span>
+          <span id="sos-gps-time" class="font-display-code text-[10px] text-on-surface-variant">Aguardando leitura</span>
+        </div>
+        <div class="flex items-center justify-between gap-2 bg-surface-container-lowest p-2.5 rounded-lg border border-surface-container-high">
+          <div class="flex flex-col min-w-0">
+            <span id="sos-gps-coords" class="font-display-code text-xs text-primary font-bold truncate">Toque para capturar posição</span>
+            <span id="sos-gps-accuracy" class="font-body-sm text-[11px] text-on-surface-variant truncate">Útil para leitura por voz ao 193/199 ou SMS</span>
+          </div>
+          <button onclick="fetchOfflineGPS()" type="button" class="px-2.5 py-1.5 rounded-lg bg-tertiary text-on-tertiary font-label-sm text-label-sm uppercase font-bold flex items-center gap-1 active:scale-95 transition-all flex-shrink-0">
+            <span class="material-symbols-outlined text-[16px]">gps_fixed</span>
+            <span>Capturar</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="copyGPSCoords()" type="button" class="py-2 px-2.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm uppercase flex items-center justify-center gap-1 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[15px] text-primary">content_copy</span>
+            <span>Copiar Coordenadas</span>
+          </button>
+          <button onclick="sendSOSSMS()" type="button" class="py-2 px-2.5 rounded-lg bg-error-container/25 border border-error-container/50 text-error font-label-sm text-label-sm uppercase font-bold flex items-center justify-center gap-1 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[15px]">sms</span>
+            <span>SMS SOS c/ GPS</span>
+          </button>
+        </div>
       </div>
 
       <!-- Discagem Rápida de Emergência no Brasil -->

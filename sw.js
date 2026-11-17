@@ -1,5 +1,5 @@
 // Protocolo 72H - Service Worker Tático de Alta Resiliência
-const CACHE_NAME = 'protocolo-72h-v3';
+const CACHE_NAME = 'protocolo-72h-v4';
 
 const PRECACHE_URLS = [
   './',

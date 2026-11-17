@@ -8,6 +8,8 @@ const STORAGE_KEY = 'PROTOCOLO_72H_STATE_V1';
 
 const defaultState = {
   activeTab: 'inicio',
+  blackoutMode: false,
+  lastGPS: null,
   calculator: {
     adults: 2,
     children: 1,
@@ -19,6 +21,7 @@ const defaultState = {
   },
   checklists: {
     activeSubTab: 'bob', // 'bob' ou 'home'
+    lastInspectedAt: null,
     bobItems: [
       { id: 'b1', title: 'Água potável (garrafas resistentes)', tag: 'Hidratação', detail: '3x 1.5L • 4.5kg', icon: 'water_drop', checked: true, priority: 1 },
       { id: 'b2', title: 'Lanterna tática LED + baterias extras', tag: 'Iluminação', detail: '320g • 800 Lumens', icon: 'flashlight_on', checked: true, priority: 1 },
@@ -45,6 +48,7 @@ const defaultState = {
     ]
   },
   familyPlan: {
+    riskScenario: 'enchente',
     pe1: 'Praça da Matriz - Ao lado do Coreto',
     pe2: 'Estádio Municipal / Ginásio de Esportes Norte',
     outCity: 'Tia Marta - (19) 98765-4321 (Campinas-SP)',
@@ -303,12 +307,16 @@ function toggleScreenStrobe() {
     isStrobeActive = true;
     overlay.classList.remove('hidden');
     overlay.classList.add('strobe-active');
-    if (btn) btn.textContent = 'Desativar Estroboscópio';
+    const lbl = btn?.querySelector('span:last-child');
+    if (lbl) lbl.textContent = 'Desativar Estroboscópio';
+    requestScreenWakeLock();
   } else {
     isStrobeActive = false;
     overlay.classList.add('hidden');
     overlay.classList.remove('strobe-active');
-    if (btn) btn.textContent = 'Ativar Estroboscópio Visual SOS';
+    const lbl = btn?.querySelector('span:last-child');
+    if (lbl) lbl.textContent = 'Ativar Estroboscópio Visual SOS';
+    releaseScreenWakeLock();
   }
 }
 
@@ -720,6 +728,47 @@ function submitCustomItemModal() {
   showToast(`Item "${newItem.title}" cadastrado com sucesso!`);
 }
 
+function validateKitNow() {
+  triggerHaptic(35);
+  appState.checklists.lastInspectedAt = new Date().toISOString();
+  saveState();
+  renderKitReviewStatus();
+  updateDashboardMetrics();
+  showToast('✓ Kit 72H validado! Próxima revisão trimestral em 90 dias.');
+}
+
+function renderKitReviewStatus() {
+  const statusEl = document.getElementById('checklist-review-status');
+  const daysEl = document.getElementById('checklist-review-days');
+  if (!statusEl || !daysEl) return;
+
+  const lastISO = appState.checklists?.lastInspectedAt;
+  if (!lastISO) {
+    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0"></span><span class="truncate">AGUARDANDO 1ª VALIDAÇÃO</span>`;
+    daysEl.textContent = 'CICLO 90 DIAS';
+    daysEl.className = 'text-amber-400 flex-shrink-0 font-bold';
+    return;
+  }
+
+  const lastDate = new Date(lastISO);
+  const diffDays = Math.max(0, Math.floor((Date.now() - lastDate.getTime()) / (1000 * 60 * 60 * 24)));
+  const remaining = 90 - diffDays;
+
+  if (remaining <= 0) {
+    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-error animate-ping flex-shrink-0"></span><span class="truncate text-error font-bold">REVISÃO VENCIDA (+${Math.abs(remaining)}d)</span>`;
+    daysEl.textContent = 'REVISAR VALIDADES';
+    daysEl.className = 'text-error flex-shrink-0 font-bold';
+  } else if (remaining <= 15) {
+    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0"></span><span class="truncate text-amber-400">VALIDADO HÁ ${diffDays}d</span>`;
+    daysEl.textContent = `VENCE EM ${remaining}d`;
+    daysEl.className = 'text-amber-400 flex-shrink-0 font-bold';
+  } else {
+    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0"></span><span class="truncate text-emerald-400">VALIDADO HÁ ${diffDays} DIA(S)</span>`;
+    daysEl.textContent = `PRÓX. EM ${remaining}d`;
+    daysEl.className = 'text-tertiary flex-shrink-0';
+  }
+}
+
 function removeCustomItem(id, listType) {
   triggerHaptic(25);
   const list = listType === 'bob' ? appState.checklists.bobItems : appState.checklists.homeItems;
@@ -735,6 +784,85 @@ function removeCustomItem(id, listType) {
 // ==========================================
 // MÓDULO 3: PLANO FAMILIAR
 // ==========================================
+const riskScenariosData = {
+  enchente: {
+    label: 'Enchente / Alagamento',
+    badge: 'Risco Hidrológico',
+    colorClass: 'text-tertiary',
+    actions: [
+      'Desligar o disjuntor geral antes que a água atinja tomadas ou piso.',
+      'Elevar documentos, eletrônicos e medicamentos para prateleiras acima de 1,5m.',
+      'Nunca atravessar ruas alagadas a pé ou de carro — 15cm de correnteza derrubam um adulto.'
+    ]
+  },
+  deslizamento: {
+    label: 'Deslizamento / Encosta',
+    badge: 'Risco Geológico',
+    colorClass: 'text-secondary',
+    actions: [
+      'Observar rachaduras em paredes, portas emperradas, água barrenta brotando e postes inclinados.',
+      'Ao menor sinal ou sirene da Defesa Civil, evacuar imediatamente sem retornar para buscar bens.',
+      'Dirigir-se ao Ponto de Encontro 2 fora da zona de encosta/talude.'
+    ]
+  },
+  apagao: {
+    label: 'Apagão Prolongado',
+    badge: 'Colapso Elétrico',
+    colorClass: 'text-primary',
+    actions: [
+      'Ativar Modo Apagão no app e modo avião/economia no celular (ou desligar celulares extras).',
+      'Não abrir a geladeira/freezer desnecessariamente — mantém temperatura por até 24h se fechada.',
+      'Evitar velas sem recipiente anti-chamas e nunca usar gerador/fogareiro em ambiente fechado.'
+    ]
+  },
+  vendaval: {
+    label: 'Vendaval / Ciclone',
+    badge: 'Risco Eólico',
+    colorClass: 'text-primary-fixed',
+    actions: [
+      'Afastar-se de janelas envidraçadas, varandas e árvores de grande porte.',
+      'Ficar em cômodo central da casa (corredor ou banheiro sem janelas) durante rajadas extremas.',
+      'Se fios caírem na rua, manter distância mínima de 10m e acionar Bombeiros (193) / concessionária.'
+    ]
+  }
+};
+
+function selectRiskScenario(key) {
+  triggerHaptic(15);
+  const scenario = riskScenariosData[key] || riskScenariosData.enchente;
+  if (!appState.familyPlan) appState.familyPlan = {};
+  appState.familyPlan.riskScenario = key;
+  saveState();
+
+  document.querySelectorAll('.risk-scenario-btn').forEach((btn) => {
+    const isMatch = btn.getAttribute('data-risk') === key;
+    btn.className = isMatch
+      ? 'risk-scenario-btn py-2.5 px-2.5 rounded-xl bg-primary-container text-on-primary-container font-label-md text-label-md uppercase font-bold flex items-center justify-center gap-1.5 border border-primary/40 transition-all active:scale-95'
+      : 'risk-scenario-btn py-2.5 px-2.5 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase flex items-center justify-center gap-1.5 border border-surface-container-high transition-all active:scale-95';
+  });
+
+  const badgeEl = document.getElementById('risk-scenario-badge');
+  if (badgeEl) badgeEl.textContent = scenario.badge;
+
+  const panelEl = document.getElementById('risk-scenario-panel');
+  if (panelEl) {
+    panelEl.innerHTML = `
+      <div class="flex items-center justify-between">
+        <span class="font-headline-sm text-headline-sm uppercase ${scenario.colorClass}">${scenario.label}</span>
+        <span class="font-label-sm text-[10px] uppercase text-on-surface-variant">Ação 0-2h</span>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        ${scenario.actions.map((act, idx) => `
+          <div class="flex items-start gap-2 text-body-sm font-body-sm text-on-surface">
+            <span class="font-display-code text-xs text-primary font-bold mt-0.5">${idx + 1}.</span>
+            <span>${act}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+}
+
 const timelineData = [
   {
     period: "0h - 2h: Alerta & Decisão",
@@ -989,8 +1117,11 @@ function sharePlanViaWhatsApp() {
     .map((m) => `• *${m.name}* (${m.blood}): ${m.note}`)
     .join('\n');
 
+  const scenarioInfo = riskScenariosData[plan.riskScenario] || riskScenariosData.enchente;
+
   const message =
-    `🚨 *PROTOCOLO 72H - NOSSO PLANO FAMILIAR DE PRONTIDÃO*\n\n` +
+    `🚨 *PROTOCOLO 72H - NOSSO PLANO FAMILIAR DE PRONTIDÃO*\n` +
+    `⚠️ *Risco Prioritário:* ${scenarioInfo.label}\n\n` +
     `📍 *Ponto de Encontro 1 (Bairro):* ${plan.pe1}\n` +
     `📍 *Ponto de Encontro 2 (Evacuação Geral):* ${plan.pe2}\n` +
     `📞 *Contato Pivô Fora da Cidade:* ${plan.outCity}\n\n` +
@@ -1226,8 +1357,77 @@ const guidesData = {
       <h3 class="text-secondary font-headline-sm uppercase mb-2">2. Em Caso de Alagamento Imediato</h3>
       <p class="font-body-md text-on-surface mb-3">Corte o disjuntor principal antes de pisar em água acumulada. Mantenha crianças, idosos e animais nos pontos mais altos da residência ou inicie a evacuação antecipada com a Mochila BOB.</p>
     `
+  },
+  cell_broadcast: {
+    title: 'Defesa Civil Alerta (Cell Broadcast) & Anti-Boato',
+    category: 'Verificação Oficial Brasil',
+    cover: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDrzy_3mS0R8jALras9v7s9V3yKWfuxLz_OZUIncjHGfGJ5TBqffPAi0UlhI1YfXlo09cyHk5YRVkkBjiMPs_DjZh9vJoLb98Y-h8ovRSKMsVF_PvIAJDNwHPEkrvdQ2keNYHt_ZEVMGVKb-T8U0BmkLO0M4tRRpYmRbgSyxhfc78cgjBX7NoOZhoYtM-v7LrbYiemcVmzaRpwL-H3cYx8pvqBqBM25-vrarhZMoZP3eX4_ZwutB2phqQ',
+    content: `
+      <h3 class="text-primary font-headline-sm uppercase mb-2">1. Como funciona o Defesa Civil Alerta?</h3>
+      <p class="font-body-md text-on-surface mb-3">Opera via tecnologia <strong>Cell Broadcast</strong> nas antenas 4G/5G em todo o Brasil, sem precisar de cadastro prévio. Em alertas severos ou extremos, aparece um pop-up que sobrepõe a tela com sirene sonora, mesmo no silencioso.</p>
+
+      <h3 class="text-secondary font-headline-sm uppercase mb-2">2. Como Identificar Boatos e Alertas Falsos</h3>
+      <ul class="list-disc list-inside font-body-md text-on-surface-variant space-y-1 mb-4">
+        <li><strong>Nunca clique em links suspeitos:</strong> Alertas oficiais via Cell Broadcast não pedem senhas, PIX nem downloads de aplicativos desconhecidos.</li>
+        <li><strong>Mensagens desconexas ou "Apagão Mundial":</strong> Caso receba correntes alarmistas ou um disparo atípico com texto incoerente, confirme imediatamente nos canais oficiais antes de repassar.</li>
+        <li><strong>Kit 72h é prevenção padrão:</strong> A recomendação da Defesa Civil de ter suprimentos para 72h visa autonomia em chuvas severas, quedas de energia ou isolamento temporário — não significa colapso imediato.</li>
+      </ul>
+
+      <h3 class="text-tertiary font-headline-sm uppercase mb-2">3. Canais Oficiais para Confirmação Rápida</h3>
+      <ul class="list-disc list-inside font-body-md text-on-surface-variant space-y-1">
+        <li><strong>SMS Gratuito:</strong> Envie seu CEP para <strong>40199</strong>.</li>
+        <li><strong>WhatsApp Oficial Gov:</strong> Salve <strong>(61) 2034-4611</strong> e envie "Oi" para cadastrar seus CEPs.</li>
+        <li><strong>Telegram Oficial:</strong> Busque por <strong>Defesa Civil Alertas</strong>.</li>
+      </ul>
+    `
+  },
+  apagao: {
+    title: 'Protocolo de Apagão Prolongado & Calor Extremo',
+    category: 'Autonomia Energética 72H',
+    cover: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCdiAOfIegNlFu5yLcS_Xl_OgoxN6adkom5_KmBNE9cX4GvQYtvOXhV2zW-EiG0lX2bXDwZja7R1hcezE3Jx9wFovL42FjMM6V2_kKMF-6qtbsuXZ95cN_sH6IVd0yigReQKqViIVBgc-dhHEATafWOpQ1wEuH3gzlFKRPFkE1tegcRLAsSnHJEgrPE1KMqxV1FRgcVvvxcurcYor9pzHB4Q-JwEzFTZb36q01jA1Lu',
+    content: `
+      <h3 class="text-primary font-headline-sm uppercase mb-2">1. Protegendo Bateria e Comunicação</h3>
+      <ul class="list-disc list-inside font-body-md text-on-surface-variant space-y-1 mb-4">
+        <li>Ative o <strong>Modo Apagão</strong> no topo deste app (tela preta OLED sem animações) e reduza o brilho ao mínimo.</li>
+        <li>Coloque o celular em <strong>Modo Avião</strong> se não houver sinal — ficar buscando torre drena a bateria rapidamente.</li>
+        <li>Use rádio portátil AM/FM para boletins oficiais sem gastar a bateria do smartphone.</li>
+      </ul>
+
+      <h3 class="text-tertiary font-headline-sm uppercase mb-2">2. Alimentos e Medicamentos Termolábeis</h3>
+      <p class="font-body-md text-on-surface mb-3">Mantenha geladeira e freezer fechados (conservam o frio por 4h na geladeira e até 24h-48h no freezer cheio). Medicamentos como insulina podem ficar em bolsa térmica com gelo reciclável fora da luz direta.</p>
+
+      <h3 class="text-secondary font-headline-sm uppercase mb-2">3. Riscos Invisíveis no Escuro</h3>
+      <ul class="list-disc list-inside font-body-md text-on-surface-variant space-y-1">
+        <li><strong>Monóxido de Carbono:</strong> Nunca ligue geradores a gasolina ou fogareiros a carvão dentro de casa, garagem ou banheiros fechados.</li>
+        <li><strong>Incêndios:</strong> Prefira lanternas LED em vez de velas próximas a cortinas, colchões ou crianças.</li>
+        <li><strong>Dinheiro em Espécie:</strong> Maquininhas e Pix param sem rede elétrica/internet — mantenha notas trocadas na carteira.</li>
+      </ul>
+    `
   }
 };
+
+let wakeLockSentinel = null;
+
+async function requestScreenWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  try {
+    if (!wakeLockSentinel) {
+      wakeLockSentinel = await navigator.wakeLock.request('screen');
+      wakeLockSentinel.addEventListener('release', () => {
+        wakeLockSentinel = null;
+      });
+    }
+  } catch (e) {
+    // Dispositivo ou modo de energia pode recusar wakeLock silenciosamente
+  }
+}
+
+function releaseScreenWakeLock() {
+  if (wakeLockSentinel) {
+    wakeLockSentinel.release().catch(() => {});
+    wakeLockSentinel = null;
+  }
+}
 
 function openGuideModal(guideKey) {
   triggerHaptic(20);
@@ -1248,6 +1448,7 @@ function openGuideModal(guideKey) {
   if (modal) {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    requestScreenWakeLock();
   }
 }
 
@@ -1257,11 +1458,12 @@ function closeGuideModal() {
   if (modal) {
     modal.classList.add('hidden');
     document.body.style.overflow = 'auto';
+    releaseScreenWakeLock();
   }
 }
 
 // ==========================================
-// MÓDULO 6: MODAL SOS IMEDIATO
+// MÓDULO 6: MODAL SOS IMEDIATO, GPS OFFLINE & MODO APAGÃO
 // ==========================================
 function openSOSModal() {
   triggerHaptic(50);
@@ -1269,6 +1471,9 @@ function openSOSModal() {
   if (modal) {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    renderSavedGPS();
+    initBatteryMonitor();
+    requestScreenWakeLock();
   }
 }
 
@@ -1279,7 +1484,151 @@ function closeSOSModal() {
   if (modal) {
     modal.classList.add('hidden');
     document.body.style.overflow = 'auto';
+    releaseScreenWakeLock();
   }
+}
+
+function toggleBlackoutMode() {
+  triggerHaptic(25);
+  appState.blackoutMode = !appState.blackoutMode;
+  saveState();
+  applyBlackoutMode();
+  showToast(appState.blackoutMode
+    ? 'Modo Apagão ativado: tela OLED preta e animações reduzidas.'
+    : 'Modo Apagão desativado.'
+  );
+}
+
+function applyBlackoutMode() {
+  const active = !!appState.blackoutMode;
+  document.body.classList.toggle('blackout-mode', active);
+
+  const headerBtn = document.getElementById('btn-blackout-mode');
+  if (headerBtn) {
+    headerBtn.className = active
+      ? 'w-9 h-9 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center border border-primary active:scale-95 transition-all'
+      : 'w-9 h-9 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant flex items-center justify-center border border-surface-container-highest/60 active:scale-95 transition-all';
+  }
+
+  const sosBtn = document.getElementById('sos-blackout-btn');
+  if (sosBtn) {
+    sosBtn.className = active
+      ? 'px-2.5 py-1 rounded-lg bg-primary-container text-on-primary-container font-label-sm text-label-sm uppercase font-bold border border-primary active:scale-95 transition-all flex items-center gap-1 flex-shrink-0'
+      : 'px-2.5 py-1 rounded-lg bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm uppercase border border-surface-container-highest active:scale-95 transition-all flex items-center gap-1 flex-shrink-0';
+  }
+}
+
+let batteryManagerRef = null;
+
+function updateBatteryLabel(battery) {
+  const el = document.getElementById('sos-battery-status');
+  if (!el || !battery) return;
+  const pct = Math.round((battery.level || 0) * 100);
+  const chargingText = battery.charging ? ' • Carregando' : '';
+  el.textContent = `Bateria: ${pct}%${chargingText}`;
+  el.className = pct <= 20 && !battery.charging
+    ? 'font-display-code text-xs text-error font-bold truncate'
+    : 'font-display-code text-xs text-on-surface truncate';
+}
+
+function initBatteryMonitor() {
+  const el = document.getElementById('sos-battery-status');
+  if (!navigator.getBattery) {
+    if (el) el.textContent = 'Economia: OLED Disponível';
+    return;
+  }
+  if (batteryManagerRef) {
+    updateBatteryLabel(batteryManagerRef);
+    return;
+  }
+  navigator.getBattery().then((battery) => {
+    batteryManagerRef = battery;
+    updateBatteryLabel(battery);
+    battery.addEventListener('levelchange', () => updateBatteryLabel(battery));
+    battery.addEventListener('chargingchange', () => updateBatteryLabel(battery));
+  }).catch(() => {
+    if (el) el.textContent = 'Economia: OLED Disponível';
+  });
+}
+
+function renderSavedGPS() {
+  const coordsEl = document.getElementById('sos-gps-coords');
+  const accEl = document.getElementById('sos-gps-accuracy');
+  const timeEl = document.getElementById('sos-gps-time');
+  const gps = appState.lastGPS;
+
+  if (!gps || !coordsEl) return;
+  coordsEl.textContent = `${gps.lat.toFixed(6)}, ${gps.lon.toFixed(6)}`;
+  if (accEl) accEl.textContent = `Precisão ±${Math.round(gps.accuracy || 0)}m • Última leitura salva`;
+  if (timeEl) timeEl.textContent = gps.timeLabel || 'Salvo';
+}
+
+function fetchOfflineGPS() {
+  triggerHaptic(25);
+  const coordsEl = document.getElementById('sos-gps-coords');
+  const accEl = document.getElementById('sos-gps-accuracy');
+  const timeEl = document.getElementById('sos-gps-time');
+
+  if (!navigator.geolocation) {
+    showToast('GPS não suportado neste dispositivo.');
+    return;
+  }
+
+  if (coordsEl) coordsEl.textContent = 'Buscando sinal de satélite...';
+  if (accEl) accEl.textContent = 'Aproxime-se de janela ou área aberta';
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const now = new Date();
+      const timeLabel = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      appState.lastGPS = {
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+        accuracy: pos.coords.accuracy,
+        timeLabel: `Hoje ${timeLabel}`
+      };
+      saveState();
+      renderSavedGPS();
+      if (timeEl) timeEl.textContent = `Hoje ${timeLabel}`;
+      showToast('Coordenadas GPS capturadas e salvas offline!');
+    },
+    (err) => {
+      const msg = err.code === 1
+        ? 'Permissão de localização negada.'
+        : 'Sinal GPS indisponível no momento.';
+      if (coordsEl && !appState.lastGPS) coordsEl.textContent = msg;
+      else renderSavedGPS();
+      showToast(msg);
+    },
+    { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+  );
+}
+
+function copyGPSCoords() {
+  triggerHaptic(20);
+  const gps = appState.lastGPS;
+  if (!gps) {
+    showToast('Capture a posição GPS primeiro.');
+    return;
+  }
+  const text = `SOS Coordenadas GPS: ${gps.lat.toFixed(6)}, ${gps.lon.toFixed(6)} (https://maps.google.com/?q=${gps.lat.toFixed(6)},${gps.lon.toFixed(6)})`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Coordenadas GPS copiadas!');
+    }).catch(() => showToast(text));
+  } else {
+    showToast(text);
+  }
+}
+
+function sendSOSSMS() {
+  triggerHaptic(35);
+  const gps = appState.lastGPS;
+  const coordsText = gps
+    ? `Minha localizacao GPS: ${gps.lat.toFixed(6)}, ${gps.lon.toFixed(6)} - https://maps.google.com/?q=${gps.lat.toFixed(6)},${gps.lon.toFixed(6)}`
+    : 'Estou em situacao de emergencia e preciso de ajuda.';
+  const body = encodeURIComponent(`SOS EMERGENCIA (Protocolo 72H): ${coordsText}`);
+  window.location.href = `sms:?body=${body}`;
 }
 
 // Toast de feedback
@@ -2128,9 +2477,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Renderizar componentes
+  applyBlackoutMode();
+  initBatteryMonitor();
   renderChecklists();
+  renderKitReviewStatus();
   renderFamilyMembers();
   syncVulnerableUI();
+  selectRiskScenario(appState.familyPlan?.riskScenario || 'enchente');
   recalculateSupplies();
   updateDashboardMetrics();
   updateNetworkStatus();

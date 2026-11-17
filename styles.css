@@ -133,6 +133,37 @@
   background-color: rgba(255, 255, 255, 0.05);
 }
 
+/* Modo Economia "Apagão" (OLED Pure Black + Zero Animações) */
+body.blackout-mode,
+body.blackout-mode main,
+body.blackout-mode .bg-surface,
+body.blackout-mode .bg-surface-dim {
+  background-color: #000000 !important;
+}
+
+body.blackout-mode .bg-surface-container,
+body.blackout-mode .bg-surface-container-low,
+body.blackout-mode .bg-surface-container-high,
+body.blackout-mode .bg-surface-container-highest {
+  background-color: #070709 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: none !important;
+}
+
+body.blackout-mode header,
+body.blackout-mode nav {
+  background-color: #000000 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+body.blackout-mode .animate-pulse,
+body.blackout-mode .animate-ping,
+body.blackout-mode .animate-tactical-pulse {
+  animation: none !important;
+}
+
 /* Fallback para imagens offline */
 img {
   text-indent: -10000px;
